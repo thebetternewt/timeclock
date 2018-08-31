@@ -53,7 +53,6 @@ module.exports = {
 
   Mutation: {
     addUser: async (parent, { password, ...props }) => {
-      console.log('signup called');
       const hashedPass = await bcrypt.hash(password, 10);
       const newUser = new User({ password: hashedPass, ...props });
 
@@ -63,19 +62,19 @@ module.exports = {
       const user = await User.findOne({ netId }).exec();
 
       if (!user) {
-        throw new Error('No user with that netId');
+        throw new Error('Invalid credentials');
       }
 
       const valid = await bcrypt.compare(password, user.password);
 
       if (!valid) {
-        throw new Error('Incorrect password');
+        throw new Error('Invalid credentials');
       }
 
       return jwt.sign(
         { id: user.id, netId: user.netId, admin: user.admin },
         process.env.JWT_SECRET,
-        { expiresIn: '1d' }
+        { expiresIn: '1h' }
       );
     },
     updateUser: async (parent, args, { user }) => {
