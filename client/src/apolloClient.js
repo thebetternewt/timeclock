@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-boost';
-import { AUTH_QUERY, CURRENT_USER_QUERY } from './queries';
+import { AUTH_QUERY } from './queries';
 
 const defaultState = {
   isAuthenticated: false,

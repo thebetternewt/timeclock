@@ -2,6 +2,18 @@ const { Punch } = require('../../models');
 
 module.exports = {
   Query: {
+    lastPunch: async (parent, args, { user }) => {
+      if (!user) {
+        throw new Error('Not authorized');
+      }
+
+      const punches = await Punch.find({ userId: user.id })
+        .sort({ clockInMsTime: 'desc' })
+        .limit(1)
+        .exec();
+
+      return punches[0];
+    },
     punch: async (parent, { id }, { user }) => {
       if (!user) {
         throw new Error('Not authorized');
