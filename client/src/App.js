@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import jwt_decode from 'jwt-decode';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
-import { setAuthenticatedUser, logOutUser } from './apolloClient';
+import { setAuthenticatedUser, logOutUser } from './apollo/client';
 
 import Layout from './components/Layout/index';
 import SignIn from './components/Auth/SignIn';

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SideDrawer from './SideDrawer';
 import TimeClock from '../TimeClock';
-import { CURRENT_USER_QUERY } from '../../queries';
+import { CURRENT_USER_QUERY } from '../../apollo/queries';
 
 const drawerWidth = 240;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import client from './apolloClient';
+import client from './apollo/client';
 import { ApolloProvider } from 'react-apollo';
 import './index.css';
 import App from './App';

@@ -1,6 +1,16 @@
-const { Punch } = require('../../models');
+const { Punch, Department } = require('../../models');
 
 module.exports = {
+  Punch: {
+    department: async parent => {
+      const department = await Department.findOne({ _id: parent.departmentId });
+
+      return {
+        id: department._id,
+        name: department.name
+      };
+    }
+  },
   Query: {
     lastPunch: async (parent, args, { user }) => {
       if (!user) {

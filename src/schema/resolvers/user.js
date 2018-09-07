@@ -19,7 +19,7 @@ module.exports = {
     },
     punches: async (parent, args, { user }) => {
       if (!user) {
-        throw new Error('You are not authenticated!');
+        throw new AuthenticationError('You are not authenticated!');
       }
 
       // user is authenticated
@@ -31,7 +31,7 @@ module.exports = {
   Query: {
     me: async (parent, args, { user }) => {
       if (!user) {
-        throw new Error('You are not authenticated!');
+        throw new AuthenticationError('You are not authenticated!');
       }
 
       // user is authenticated

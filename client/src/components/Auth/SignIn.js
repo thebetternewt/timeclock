@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-import { isAuthenticated, setAuthenticatedUser } from '../../apolloClient';
+import { isAuthenticated, setAuthenticatedUser } from '../../apollo/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -74,7 +74,7 @@ class SignIn extends Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <CssBaseline />
         <main className={classes.layout}>
           <Paper className={classes.paper}>
@@ -83,7 +83,7 @@ class SignIn extends Component {
             </Avatar>
             <Typography variant="headline">Sign in</Typography>
             <Mutation mutation={LOGIN}>
-              {(login, { data, loading, error, client }) => {
+              {(login, { data, loading, error }) => {
                 if (loading) {
                   return <span>Loading...</span>;
                 } else if (data) {
@@ -150,7 +150,7 @@ class SignIn extends Component {
             </Mutation>
           </Paper>
         </main>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

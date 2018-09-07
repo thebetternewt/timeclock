@@ -8,6 +8,10 @@ const CURRENT_USER_QUERY = gql`
       admin
       firstName
       lastName
+      departments {
+        id
+        name
+      }
     }
   }
 `;
@@ -22,10 +26,14 @@ const LAST_PUNCH_QUERY = gql`
   query LastPunchQuery {
     lastPunch {
       id
-      departmentId
       userId
+      departmentId
       clockInMsTime
       clockOutMsTime
+      department {
+        name
+        id
+      }
     }
   }
 `;
