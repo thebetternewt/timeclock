@@ -38,7 +38,7 @@ class App extends Component {
           <Layout>
             <Route exact path="/" component={SignIn} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
             </Switch>
           </Layout>
         </div>

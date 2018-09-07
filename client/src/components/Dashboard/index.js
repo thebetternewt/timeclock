@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 
 import SideDrawer from './SideDrawer';
 import TimeClock from '../TimeClock';
 import { CURRENT_USER_QUERY } from '../../apollo/queries';
+import Users from '../Admin/Users/index';
 
 const drawerWidth = 240;
 
@@ -46,7 +48,8 @@ class Dashboard extends Component {
               return null;
             }}
           </Query>
-          <TimeClock />
+          <Route exact path="/dashboard/timeclock" component={TimeClock} />
+          <Route exact path="/dashboard/user-admin" component={Users} />
         </main>
       </div>
     );

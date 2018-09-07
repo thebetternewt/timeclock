@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -11,12 +12,14 @@ import TimelineIcon from '@material-ui/icons/Timeline';
 
 export const userItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <TimerIcon />
-      </ListItemIcon>
-      <ListItemText primary="TimeClock" />
-    </ListItem>
+    <Link to="/dashboard/timeclock">
+      <ListItem button>
+        <ListItemIcon>
+          <TimerIcon />
+        </ListItemIcon>
+        <ListItemText primary="TimeClock" />
+      </ListItem>
+    </Link>
     <ListItem button>
       <ListItemIcon>
         <TimelineIcon />
@@ -45,12 +48,14 @@ export const supervisorItems = (
 
 export const adminItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <GroupIcon />
-      </ListItemIcon>
-      <ListItemText primary="Users" />
-    </ListItem>
+    <Link to="/dashboard/user-admin">
+      <ListItem button>
+        <ListItemIcon>
+          <GroupIcon />
+        </ListItemIcon>
+        <ListItemText primary="Users" />
+      </ListItem>
+    </Link>
     <ListItem button>
       <ListItemIcon>
         <BusinessIcon />
