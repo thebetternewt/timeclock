@@ -13,11 +13,13 @@ const client = new ApolloClient({
   },
   request: operation => {
     const token = localStorage.getItem('token');
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    });
+    if (token) {
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+    }
   }
 });
 

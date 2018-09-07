@@ -64,10 +64,11 @@ const getUser = async token => {
   );
 
   if (ok) {
-    const user = await User.findById(result.id);
+    const user = await User.findOne({ _id: result.id });
+    console.log(`[ok] user:`, user);
     return user;
   } else {
-    console.error(result);
+    console.error(`[Error]:`, result);
     return null;
   }
 };
