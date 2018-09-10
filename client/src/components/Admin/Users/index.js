@@ -11,21 +11,21 @@ import EditUser from './EditUser';
 export default class Users extends Component {
   state = {
     showAddUser: false,
-    showUpdateUser: false,
+    showEditUser: false,
     selectedUser: null
   };
 
   showAddUser = () => {
-    this.setState({ showAddUser: true, showUpdateUser: false });
+    this.setState({ showAddUser: true, showEditUser: false });
   };
   hideAddUser = () => {
     this.setState({ showAddUser: false });
   };
 
-  showUpdateUser = user => {
+  showEditUser = user => {
     this.setState({
       selectedUser: user,
-      showUpdateUser: true,
+      showEditUser: true,
       showAddUser: false
     });
   };
@@ -33,12 +33,12 @@ export default class Users extends Component {
   hideUpdateUser = user => {
     console.log('hiding update user...');
     this.setState({
-      showUpdateUser: false
+      showEditUser: false
     });
   };
 
   render() {
-    const { showAddUser, showUpdateUser, selectedUser } = this.state;
+    const { showAddUser, showEditUser, selectedUser } = this.state;
 
     return (
       <div>
@@ -54,30 +54,30 @@ export default class Users extends Component {
                   <Fragment>
                     <h2>Manage Users</h2>
 
-                    {showUpdateUser && (
+                    {showEditUser && (
                       <EditUser
                         user={selectedUser}
                         cancelUpdate={this.hideUpdateUser}
                       />
                     )}
                     {!showAddUser &&
-                      !showUpdateUser && (
+                      !showEditUser && (
                         <UserList
-                          selectUser={this.showUpdateUser}
+                          selectUser={this.showEditUser}
                           cancelAdd={this.toggleShowAddUser}
                         />
                       )}
-                    {showAddUser ? (
-                      <AddUser cancelAdd={this.hideAddUser} />
-                    ) : (
-                      <Button
-                        variant="raised"
-                        color="primary"
-                        onClick={this.showAddUser}
-                      >
-                        Add New User
-                      </Button>
-                    )}
+                    {showAddUser && <AddUser cancelAdd={this.hideAddUser} />}
+                    {!showAddUser &&
+                      !showEditUser && (
+                        <Button
+                          variant="raised"
+                          color="primary"
+                          onClick={this.showAddUser}
+                        >
+                          Add New User
+                        </Button>
+                      )}
                   </Fragment>
                 );
               } else {
