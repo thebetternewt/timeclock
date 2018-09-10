@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import { Button, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
 
-import { CLOCK_IN_MUTATION } from '../../apollo/mutations';
+import { CLOCK_IN } from '../../apollo/mutations';
 import DepartmentSelect from './DepartmentSelect';
 
 class ClockIn extends Component {
@@ -33,7 +33,7 @@ class ClockIn extends Component {
           <strong>Department: </strong>
           {department}
         </p>
-        <Mutation mutation={CLOCK_IN_MUTATION}>
+        <Mutation mutation={CLOCK_IN}>
           {(clockIn, { loading, error }) => {
             if (loading) {
               return <CircularProgress size={50} />;

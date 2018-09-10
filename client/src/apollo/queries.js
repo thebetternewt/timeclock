@@ -1,10 +1,27 @@
 import gql from 'graphql-tag';
 
 const CURRENT_USER_QUERY = gql`
-  query current_user {
+  query CurrentUserQuery {
     me {
       id
       netId
+      admin
+      firstName
+      lastName
+      departments {
+        id
+        name
+      }
+    }
+  }
+`;
+
+const USERS_QUERY = gql`
+  query UsersQuery {
+    users {
+      id
+      netId
+      idNumber
       admin
       firstName
       lastName
@@ -38,4 +55,4 @@ const LAST_PUNCH_QUERY = gql`
   }
 `;
 
-export { CURRENT_USER_QUERY, AUTH_QUERY, LAST_PUNCH_QUERY };
+export { CURRENT_USER_QUERY, USERS_QUERY, AUTH_QUERY, LAST_PUNCH_QUERY };

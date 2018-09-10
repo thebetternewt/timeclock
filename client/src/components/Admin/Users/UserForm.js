@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  CircularProgress
-} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { FormControl, InputLabel, Input, Button } from '@material-ui/core';
 
 export default class UserForm extends Component {
   state = {
-    netId: '',
-    idNumber: '',
-    password: '',
-    firstName: '',
-    lastName: ''
+    id: this.props.user.id || '',
+    netId: this.props.user.netId || '',
+    idNumber: this.props.user.idNumber || '',
+    firstName: this.props.user.firstName || '',
+    lastName: this.props.user.lastName || '',
+    password: ''
   };
 
   handleInputChange = e => {
@@ -21,9 +17,34 @@ export default class UserForm extends Component {
   };
 
   render() {
-    const { netId, idNumber, password, firstName, lastName } = this.state;
+    const { id, netId, idNumber, password, firstName, lastName } = this.state;
+    const { user, submit, cancel, error } = this.props;
+
     return (
-      <form>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          submit({
+            variables: {
+              id,
+              netId,
+              idNumber,
+              firstName,
+              lastName,
+              password
+            },
+            refetchQueries: ['UsersQuery']
+          }).catch(err => console.log(err));
+        }}
+      >
+        {error && (
+          <pre style={{ margin: '1rem', color: 'red' }}>
+            Error:{' '}
+            {error.graphQLErrors.map(({ message }, i) => (
+              <span key={i}>{message}</span>
+            ))}
+          </pre>
+        )}
         <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="netId">NetId</InputLabel>
           <Input
@@ -32,6 +53,16 @@ export default class UserForm extends Component {
             name="netId"
             value={netId}
             autoFocus
+            onChange={this.handleInputChange}
+          />
+        </FormControl>
+        <FormControl margin="normal" required fullWidth>
+          <InputLabel htmlFor="idNumber">ID Number (9-digit)</InputLabel>
+          <Input
+            type="text"
+            id="idNumber"
+            name="idNumber"
+            value={idNumber}
             onChange={this.handleInputChange}
           />
         </FormControl>
@@ -55,20 +86,36 @@ export default class UserForm extends Component {
             onChange={this.handleInputChange}
           />
         </FormControl>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            name="password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={this.handleInputChange}
-          />
-        </FormControl>
-        <Button type="submit" fullWidth variant="raised" color="primary">
-          Add User
+        {!user.id && (
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              name="password"
+              type="password"
+              id="password"
+              value={password}
+              onChange={this.handleInputChange}
+            />
+          </FormControl>
+        )}
+        <Button type="submit" variant="raised" color="primary">
+          Submit
+        </Button>
+        <Button variant="raised" color="secondary" onClick={cancel}>
+          Cancel
         </Button>
       </form>
     );
   }
 }
+
+UserForm.defaultProps = {
+  user: {}
+};
+
+UserForm.propTypes = {
+  submit: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
+  user: PropTypes.shape(),
+  newUser: PropTypes.bool
+};

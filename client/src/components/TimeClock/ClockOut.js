@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import { Button, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
 
-import { CLOCK_OUT_MUTATION } from '../../apollo/mutations';
+import { CLOCK_OUT } from '../../apollo/mutations';
 import { LAST_PUNCH_QUERY } from '../../apollo/queries';
 
 import Timer from './Timer';
@@ -18,7 +18,7 @@ const ClockOut = props => {
       <h3>Time Elapsed since clock in:</h3>
       <Timer startTime={clockInMoment} />
       <Mutation
-        mutation={CLOCK_OUT_MUTATION}
+        mutation={CLOCK_OUT}
         update={(cache, { data: { clockOut } }) => {
           cache.writeQuery({
             query: LAST_PUNCH_QUERY,

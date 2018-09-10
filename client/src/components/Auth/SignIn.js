@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+import { LOGIN } from '../../apollo/mutations';
 
 import { isAuthenticated, setAuthenticatedUser } from '../../apollo/client';
 
@@ -160,9 +160,3 @@ SignIn.propTypes = {
 };
 
 export default withStyles(styles)(SignIn);
-
-const LOGIN = gql`
-  mutation login($netId: String!, $password: String!) {
-    login(netId: $netId, password: $password)
-  }
-`;

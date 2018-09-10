@@ -1,6 +1,12 @@
 import gql from 'graphql-tag';
 
-const CLOCK_IN_MUTATION = gql`
+const LOGIN = gql`
+  mutation login($netId: String!, $password: String!) {
+    login(netId: $netId, password: $password)
+  }
+`;
+
+const CLOCK_IN = gql`
   mutation ClockInMutation($departmentId: ID!) {
     clockIn(departmentId: $departmentId) {
       id
@@ -12,7 +18,7 @@ const CLOCK_IN_MUTATION = gql`
   }
 `;
 
-const CLOCK_OUT_MUTATION = gql`
+const CLOCK_OUT = gql`
   mutation ClockOutMutation {
     clockOut {
       id
@@ -28,8 +34,8 @@ const CLOCK_OUT_MUTATION = gql`
   }
 `;
 
-const ADD_USER_MUTATION = gql`
-  mutation AddUserMutation(
+const ADD_USER = gql`
+  mutation AddUser(
     $netId: String!
     $idNumber: String!
     $password: String!
@@ -48,4 +54,26 @@ const ADD_USER_MUTATION = gql`
   }
 `;
 
-export { CLOCK_IN_MUTATION, CLOCK_OUT_MUTATION, ADD_USER_MUTATION };
+const UPDATE_USER = gql`
+  mutation UpdateUser(
+    $id: ID!
+    $netId: String!
+    $idNumber: String!
+    $password: String!
+    $firstName: String!
+    $lastName: String!
+  ) {
+    updateUser(
+      id: $id
+      netId: $netId
+      idNumber: $idNumber
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+    ) {
+      id
+    }
+  }
+`;
+
+export { LOGIN, CLOCK_IN, CLOCK_OUT, ADD_USER, UPDATE_USER };
