@@ -18,7 +18,7 @@ export default class UserForm extends Component {
 
   render() {
     const { id, netId, idNumber, password, firstName, lastName } = this.state;
-    const { user, submit, cancel, error } = this.props;
+    const { user, submit, close, error } = this.props;
 
     return (
       <form
@@ -34,7 +34,9 @@ export default class UserForm extends Component {
               password
             },
             refetchQueries: ['UsersQuery']
-          }).catch(err => console.log(err));
+          })
+            .then(() => close())
+            .catch(err => console.log(err));
         }}
       >
         {error && (
@@ -101,7 +103,7 @@ export default class UserForm extends Component {
         <Button type="submit" variant="raised" color="primary">
           Submit
         </Button>
-        <Button variant="raised" color="secondary" onClick={cancel}>
+        <Button variant="raised" color="secondary" onClick={close}>
           Cancel
         </Button>
       </form>
@@ -115,7 +117,6 @@ UserForm.defaultProps = {
 
 UserForm.propTypes = {
   submit: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired,
-  user: PropTypes.shape(),
-  newUser: PropTypes.bool
+  close: PropTypes.func.isRequired,
+  user: PropTypes.shape()
 };

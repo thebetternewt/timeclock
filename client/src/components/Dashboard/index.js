@@ -6,7 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import SideDrawer from './SideDrawer';
 import TimeClock from '../TimeClock';
 import { CURRENT_USER_QUERY } from '../../apollo/queries';
-import Users from '../Admin/Users/index';
+import Users from '../Admin/Users';
+import Departments from '../Admin/Departments';
 
 const drawerWidth = 240;
 
@@ -50,6 +51,11 @@ class Dashboard extends Component {
           </Query>
           <Route exact path="/dashboard/timeclock" component={TimeClock} />
           <Route exact path="/dashboard/user-admin" component={Users} />
+          <Route
+            exact
+            path="/dashboard/department-admin"
+            component={Departments}
+          />
         </main>
       </div>
     );

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import UserForm from './UserForm';
+import DepartmentForm from './DepartmentForm';
 import { Mutation } from 'react-apollo';
-import { ADD_USER } from '../../../apollo/mutations';
+import { ADD_DEPARTMENT } from '../../../apollo/mutations';
 
 import { Paper, CircularProgress } from '@material-ui/core';
 
-export default class AddUser extends Component {
+export default class AddDepartment extends Component {
   render() {
     const { cancelAdd } = this.props;
 
     return (
       <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-        <h3>Add User</h3>
-        <Mutation mutation={ADD_USER}>
-          {(addUser, { data, loading, error }) => {
+        <h3>Add Department</h3>
+        <Mutation mutation={ADD_DEPARTMENT}>
+          {(addDepartment, { data, loading, error }) => {
             if (loading) {
               return <CircularProgress />;
             }
@@ -23,7 +23,11 @@ export default class AddUser extends Component {
             }
 
             return (
-              <UserForm submit={addUser} error={error} close={cancelAdd} />
+              <DepartmentForm
+                submit={addDepartment}
+                error={error}
+                close={cancelAdd}
+              />
             );
           }}
         </Mutation>

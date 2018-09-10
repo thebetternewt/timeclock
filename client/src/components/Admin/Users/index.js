@@ -30,9 +30,15 @@ export default class Users extends Component {
     });
   };
 
-  hideUpdateUser = user => {
-    console.log('hiding update user...');
+  hideEditUser = user => {
     this.setState({
+      showEditUser: false
+    });
+  };
+
+  hideForms = () => {
+    this.setState({
+      showAddUser: false,
       showEditUser: false
     });
   };
@@ -57,7 +63,7 @@ export default class Users extends Component {
                     {showEditUser && (
                       <EditUser
                         user={selectedUser}
-                        cancelUpdate={this.hideUpdateUser}
+                        cancelEdit={this.hideEditUser}
                       />
                     )}
                     {!showAddUser &&

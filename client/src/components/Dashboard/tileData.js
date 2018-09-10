@@ -56,11 +56,13 @@ export const adminItems = (
         <ListItemText primary="Users" />
       </ListItem>
     </Link>
-    <ListItem button>
-      <ListItemIcon>
-        <BusinessIcon />
-      </ListItemIcon>
-      <ListItemText primary="Departments" />
-    </ListItem>
+    <Link to="/dashboard/department-admin">
+      <ListItem button>
+        <ListItemIcon>
+          <BusinessIcon />
+        </ListItemIcon>
+        <ListItemText primary="Departments" />
+      </ListItem>
+    </Link>
   </div>
 );

@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import UserForm from './UserForm';
+import DepartmentForm from './DepartmentForm';
 import { Mutation } from 'react-apollo';
-import { UPDATE_USER } from '../../../apollo/mutations';
+import { UPDATE_DEPARTMENT } from '../../../apollo/mutations';
 
 import { Paper, CircularProgress } from '@material-ui/core';
 
-export default class EditUser extends Component {
+export default class EditDepartment extends Component {
+  static getDerivedStateFromProps(nextProps) {
+    console.log('[nextProps from Update]:', nextProps);
+    return { department: nextProps.department };
+  }
+
   state = {
-    user: this.props.user
+    department: this.props
   };
 
   render() {
-    const { user } = this.state;
+    const { department } = this.state;
     const { cancelEdit } = this.props;
 
     return (
       <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-        <h3>Edit User</h3>
-        <Mutation mutation={UPDATE_USER}>
-          {(updateUser, { data, loading, error }) => {
+        <h3>Edit Department</h3>
+        <Mutation mutation={UPDATE_DEPARTMENT}>
+          {(updateDepartment, { data, loading, error }) => {
             if (loading) {
               return <CircularProgress />;
             }
@@ -29,10 +34,10 @@ export default class EditUser extends Component {
             }
 
             return (
-              <UserForm
-                submit={updateUser}
+              <DepartmentForm
+                submit={updateDepartment}
                 error={error}
-                user={user}
+                department={department}
                 close={cancelEdit}
               />
             );
@@ -43,7 +48,7 @@ export default class EditUser extends Component {
   }
 }
 
-EditUser.propTypes = {
-  user: PropTypes.shape().isRequired,
+EditDepartment.propTypes = {
+  department: PropTypes.shape().isRequired,
   cancelEdit: PropTypes.func.isRequired
 };

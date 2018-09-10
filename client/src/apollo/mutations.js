@@ -76,4 +76,37 @@ const UPDATE_USER = gql`
   }
 `;
 
-export { LOGIN, CLOCK_IN, CLOCK_OUT, ADD_USER, UPDATE_USER };
+// Departments
+const ADD_DEPARTMENT = gql`
+  mutation AddDepartment($name: String!, $representativeId: ID!) {
+    addDepartment(name: $name, representativeId: $representativeId) {
+      id
+      name
+      representativeId
+    }
+  }
+`;
+
+const UPDATE_DEPARTMENT = gql`
+  mutation UpdateDepartment($id: ID!, $name: String!, $representativeId: ID!) {
+    updateDepartment(
+      id: $id
+      name: $name
+      representativeId: $representativeId
+    ) {
+      id
+      name
+      representativeId
+    }
+  }
+`;
+
+export {
+  LOGIN,
+  CLOCK_IN,
+  CLOCK_OUT,
+  ADD_USER,
+  UPDATE_USER,
+  ADD_DEPARTMENT,
+  UPDATE_DEPARTMENT
+};
