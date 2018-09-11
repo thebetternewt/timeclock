@@ -14,6 +14,10 @@ const CLOCK_IN = gql`
       userId
       clockInMsTime
       clockOutMsTime
+      department {
+        name
+        id
+      }
     }
   }
 `;

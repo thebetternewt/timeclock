@@ -31,7 +31,6 @@ class PunchList extends Component {
   };
 
   render() {
-    console.log(this.props);
     const { selectPunch, user } = this.props;
     const { selectedId } = this.state;
 
@@ -45,7 +44,7 @@ class PunchList extends Component {
 
             if (data) {
               const { punches } = data;
-              console.log(punches);
+
               return (
                 <div>
                   <p>Click on a punch to view or edit.</p>

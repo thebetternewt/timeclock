@@ -3,7 +3,7 @@ import { Mutation, Query } from 'react-apollo';
 import { Button, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
 
-import { CURRENT_USER_QUERY } from '../../apollo/queries';
+import { CURRENT_USER_QUERY, LAST_PUNCH_QUERY } from '../../apollo/queries';
 import { CLOCK_IN } from '../../apollo/mutations';
 import DepartmentSelect from '../common/DepartmentSelect';
 
@@ -17,6 +17,7 @@ class ClockIn extends Component {
   };
 
   render() {
+    const { toggleClockingIn } = this.props;
     const { selectedDepartmentId } = this.state;
 
     const { clockInMsTime, clockOutMsTime } = this.props.lastPunch;
@@ -34,7 +35,15 @@ class ClockIn extends Component {
           <strong>Department: </strong>
           {department}
         </p>
-        <Mutation mutation={CLOCK_IN}>
+        <Mutation
+          mutation={CLOCK_IN}
+          update={(cache, { data: { clockIn } }) => {
+            cache.writeQuery({
+              query: LAST_PUNCH_QUERY,
+              data: { lastPunch: clockIn }
+            });
+          }}
+        >
           {(clockIn, { loading, error }) => {
             if (loading) {
               return <CircularProgress size={50} />;
@@ -61,7 +70,6 @@ class ClockIn extends Component {
                   <Query query={CURRENT_USER_QUERY}>
                     {({ data }) => {
                       if (data) {
-                        console.log(data);
                         return (
                           <DepartmentSelect
                             departments={data.me.departments}

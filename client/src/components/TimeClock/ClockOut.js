@@ -9,12 +9,15 @@ import { LAST_PUNCH_QUERY } from '../../apollo/queries';
 import Timer from './Timer';
 
 const ClockOut = props => {
-  const { clockInMsTime } = props.lastPunch;
+  const { clockInMsTime, department } = props.lastPunch;
   const clockInMoment = moment(clockInMsTime, 'x');
   return (
     <Fragment>
       <h3>Last Clock In:</h3>
-      <p>{clockInMoment.format('YYYY-MM-DD hh:mm:ssa')}</p>
+      <p>
+        {clockInMoment.format('YYYY-MM-DD hh:mm:ssa')} in{' '}
+        <em>{department.name}</em>
+      </p>
       <h3>Time Elapsed since clock in:</h3>
       <Timer startTime={clockInMoment} />
       <Mutation

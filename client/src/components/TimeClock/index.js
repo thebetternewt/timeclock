@@ -9,7 +9,7 @@ export default class TimeClock extends Component {
   render() {
     return (
       <div>
-        <Query query={LAST_PUNCH_QUERY} pollInterval={100}>
+        <Query query={LAST_PUNCH_QUERY}>
           {({ loading, data }) => {
             if (loading) {
               return <span>Loading...</span>;
