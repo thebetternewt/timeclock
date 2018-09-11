@@ -9,6 +9,12 @@ const { User } = require('./models');
 
 const PORT = process.env.PORT || 4000;
 
+// Server static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  // app.use(express.static('client/build'));
+}
+
 mongoose
   .connect(
     process.env.MONGO_URI,
@@ -39,8 +45,9 @@ mongoose
       }
     }).listen(PORT);
   })
-  .then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+  .then(server => {
+    console.log(server);
+    console.log(`🚀  Server ready at ${server.url}`);
   })
   .catch(console.error);
 
