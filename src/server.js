@@ -8,7 +8,6 @@ const { typeDefs, resolvers } = require('./schema');
 const { User } = require('./models');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
@@ -52,9 +51,10 @@ mongoose
 
     server.applyMiddleware({ app });
 
-    app.listen({ port: PORT }, () => {
-      console.log(server);
-      console.log(`🚀  Server ready at ${server.graphqlPath}`);
+    const port = process.env.PORT || 4000;
+
+    app.listen(port, () => {
+      console.log(`🚀  Server ready at localhost:${port}${server.graphqlPath}`);
     });
   })
   .catch(console.error);
@@ -82,10 +82,8 @@ const getUser = async token => {
 
   if (ok) {
     const user = await User.findOne({ _id: result.id });
-    // console.log(`[ok] user:`, user);
     return user;
   } else {
-    console.error(`[Error]:`, result);
     return null;
   }
 };
