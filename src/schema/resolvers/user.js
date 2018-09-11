@@ -52,9 +52,26 @@ module.exports = {
   },
 
   Mutation: {
-    addUser: async (parent, { password, ...props }) => {
+    addUser: async (parent, { password, admin, ...rest }, { user }) => {
+      // Users can only be added internally. There is no external facing
+      // signup page for the Timeclock application.
+
+      if (!user || !user.admin) {
+        throw new AuthenticationError('Not authorized');
+      }
+
+      const userProperties = { ...rest };
+
+      // Only allow admin=true if logged in user is admin.
+      if (user.admin !== undefined) {
+        userProperties.admin = admin;
+      }
+
+      // Hash password
       const hashedPass = await bcrypt.hash(password, 10);
-      const newUser = new User({ password: hashedPass, ...props });
+      userProperties.password = hashedPass;
+
+      const newUser = new User({ ...userProperties });
 
       return await newUser.save();
     },
@@ -62,7 +79,7 @@ module.exports = {
       const user = await User.findOne({ netId }).exec();
 
       if (!user) {
-        throw new Error('Invalid credentials');
+        throw new Error("User doesn't exist");
       }
 
       const valid = await bcrypt.compare(password, user.password);
@@ -78,23 +95,29 @@ module.exports = {
       );
     },
     updateUser: async (parent, args, { user }) => {
-      const { id, admin, departments, ...updatedProperties } = args;
+      const { id, admin, departments, password, ...updatedProperties } = args;
 
+      // Only allow update of a user if the user is the currently logged in user
+      // or if the currently logged in user is an admin.
       if (!user || (!(user.id === id) && !user.admin)) {
         throw new Error('Not authorized');
       }
 
       // Only allow update of admin if current user is admin and
       // only update admin if specified args
-      if (user.admin && args.admin !== undefined) {
+      if (user.admin && admin !== undefined) {
         updatedProperties.admin = admin;
       }
 
+      if (password) {
+        // Hash new password
+        const hashedPass = await bcrypt.hash(password, 10);
+        updatedProperties.password = hashedPass;
+      }
+
       // Split departments string into array of department IDs
-      if (args.departments) {
-        const departmentArray = args.departments
-          .split(',')
-          .map(dept => dept.trim());
+      if (departments) {
+        const departmentArray = departments.split(',').map(dept => dept.trim());
         updatedProperties.departments = departmentArray;
       }
 

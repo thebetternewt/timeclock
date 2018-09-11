@@ -29,9 +29,9 @@ const USERS_QUERY = gql`
       id
       netId
       idNumber
-      admin
       firstName
       lastName
+      admin
       departments {
         id
         name

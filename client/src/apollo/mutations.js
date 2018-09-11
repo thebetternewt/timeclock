@@ -41,6 +41,7 @@ const ADD_USER = gql`
     $password: String!
     $firstName: String!
     $lastName: String!
+    $admin: Boolean
   ) {
     addUser(
       netId: $netId
@@ -48,6 +49,7 @@ const ADD_USER = gql`
       password: $password
       firstName: $firstName
       lastName: $lastName
+      admin: $admin
     ) {
       id
     }
@@ -59,9 +61,10 @@ const UPDATE_USER = gql`
     $id: ID!
     $netId: String!
     $idNumber: String!
-    $password: String!
     $firstName: String!
     $lastName: String!
+    $password: String
+    $admin: Boolean
   ) {
     updateUser(
       id: $id
@@ -70,6 +73,7 @@ const UPDATE_USER = gql`
       password: $password
       firstName: $firstName
       lastName: $lastName
+      admin: $admin
     ) {
       id
     }

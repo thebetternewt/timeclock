@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Input, Button } from '@material-ui/core';
+import { Query } from 'react-apollo';
+import { CURRENT_USER_QUERY } from '../../../apollo/queries';
+
+import {
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  Input,
+  Button,
+  Checkbox
+} from '@material-ui/core';
 
 export default class UserForm extends Component {
   state = {
@@ -9,30 +19,51 @@ export default class UserForm extends Component {
     idNumber: this.props.user.idNumber || '',
     firstName: this.props.user.firstName || '',
     lastName: this.props.user.lastName || '',
-    password: ''
+    password: null,
+    admin: this.props.user.admin || false
   };
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  handleCheck = e => {
+    console.log(e.target.value, e.target.checked);
+    this.setState({ [e.target.value]: e.target.checked });
+  };
+
   render() {
-    const { id, netId, idNumber, password, firstName, lastName } = this.state;
     const { user, submit, close, error } = this.props;
+    const {
+      id,
+      netId,
+      idNumber,
+      firstName,
+      lastName,
+      password,
+      admin
+    } = this.state;
 
     return (
       <form
         onSubmit={e => {
           e.preventDefault();
+          const variables = {
+            id,
+            netId,
+            idNumber,
+            firstName,
+            lastName,
+            admin
+          };
+
+          // Only submit password if value in state
+          if (password) {
+            variables.password = password;
+          }
+
           submit({
-            variables: {
-              id,
-              netId,
-              idNumber,
-              firstName,
-              lastName,
-              password
-            },
+            variables,
             refetchQueries: ['UsersQuery']
           })
             .then(() => close())
@@ -100,6 +131,28 @@ export default class UserForm extends Component {
             />
           </FormControl>
         )}
+        <Query query={CURRENT_USER_QUERY}>
+          {({ data }) => {
+            if (data && data.me.admin) {
+              console.log(data);
+              return (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={admin}
+                      onChange={e => this.handleCheck(e)}
+                      value="admin"
+                      color="primary"
+                    />
+                  }
+                  label="Admin"
+                />
+              );
+            }
+
+            return null;
+          }}
+        </Query>
         <Button type="submit" variant="raised" color="primary">
           Submit
         </Button>

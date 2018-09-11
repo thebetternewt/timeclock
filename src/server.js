@@ -68,7 +68,7 @@ const getUser = async token => {
     // console.log(`[ok] user:`, user);
     return user;
   } else {
-    // console.error(`[Error]:`, result);
+    console.error(`[Error]:`, result);
     return null;
   }
 };
