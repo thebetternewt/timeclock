@@ -11,7 +11,7 @@ module.exports = gql`
   }
 
   extend type Query {
-    lastPunch: Punch!
+    lastPunch: Punch
     punch(id: ID!): Punch
     punches(
       userId: ID

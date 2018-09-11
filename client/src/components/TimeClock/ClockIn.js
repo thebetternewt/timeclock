@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Mutation, Query } from 'react-apollo';
 import { Button, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
@@ -17,24 +18,33 @@ class ClockIn extends Component {
   };
 
   render() {
-    const { toggleClockingIn } = this.props;
     const { selectedDepartmentId } = this.state;
 
-    const { clockInMsTime, clockOutMsTime } = this.props.lastPunch;
-    const department = this.props.lastPunch.department.name;
-    const clockInMoment = moment(clockInMsTime, 'x');
-    const clockOutMoment = moment(clockOutMsTime, 'x');
+    console.log('clockIn props', this.props);
+
+    let lastPunch, department, clockInMoment, clockOutMoment;
+
+    if (this.props.lastPunch) {
+      const { clockInMsTime, clockOutMsTime } = this.props.lastPunch;
+      department = this.props.lastPunch.department.name;
+      clockInMoment = moment(clockInMsTime, 'x');
+      clockOutMoment = moment(clockOutMsTime, 'x');
+    }
 
     return (
       <div>
-        <h3>Last Shift:</h3>
-        <p>
-          {clockInMoment.format('YYYY-MM-DD hh:mm:ssa')} -{' '}
-          {clockOutMoment.format('YYYY-MM-DD hh:mm:ssa')}
-          <br />
-          <strong>Department: </strong>
-          {department}
-        </p>
+        {lastPunch && (
+          <Fragment>
+            <h3>Last Shift:</h3>
+            <p>
+              {clockInMoment.format('YYYY-MM-DD hh:mm:ssa')} -{' '}
+              {clockOutMoment.format('YYYY-MM-DD hh:mm:ssa')}
+              <br />
+              <strong>Department: </strong>
+              {department}
+            </p>
+          </Fragment>
+        )}
         <Mutation
           mutation={CLOCK_IN}
           update={(cache, { data: { clockIn } }) => {
@@ -99,5 +109,13 @@ class ClockIn extends Component {
     );
   }
 }
+
+ClockIn.defaultProps = {
+  lastPunch: {}
+};
+
+ClockIn.propTypes = {
+  lastPunch: PropTypes.shape()
+};
 
 export default ClockIn;

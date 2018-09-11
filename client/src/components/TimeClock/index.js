@@ -15,12 +15,13 @@ export default class TimeClock extends Component {
               return <span>Loading...</span>;
             }
 
-            if (data && data.lastPunch) {
+            if (data) {
               const { lastPunch } = data;
+              console.log('lastPunch', lastPunch);
 
               return (
                 <div>
-                  {lastPunch.clockOutMsTime ? (
+                  {!lastPunch || lastPunch.clockOutMsTime ? (
                     <ClockIn lastPunch={lastPunch} />
                   ) : (
                     <ClockOut lastPunch={lastPunch} />
