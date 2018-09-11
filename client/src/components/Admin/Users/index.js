@@ -7,6 +7,7 @@ import { CircularProgress, Button } from '@material-ui/core';
 import UserList from './UserList';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
+import Punches from '../Punches';
 
 export default class Users extends Component {
   state = {
@@ -30,7 +31,7 @@ export default class Users extends Component {
     });
   };
 
-  hideEditUser = user => {
+  hideEditUser = () => {
     this.setState({
       showEditUser: false
     });
@@ -61,17 +62,17 @@ export default class Users extends Component {
                     <h2>Manage Users</h2>
 
                     {showEditUser && (
-                      <EditUser
-                        user={selectedUser}
-                        cancelEdit={this.hideEditUser}
-                      />
+                      <Fragment>
+                        <EditUser
+                          user={selectedUser}
+                          cancelEdit={this.hideEditUser}
+                        />
+                        <Punches user={selectedUser} />
+                      </Fragment>
                     )}
                     {!showAddUser &&
                       !showEditUser && (
-                        <UserList
-                          selectUser={this.showEditUser}
-                          cancelAdd={this.toggleShowAddUser}
-                        />
+                        <UserList selectUser={this.showEditUser} />
                       )}
                     {showAddUser && <AddUser cancelAdd={this.hideAddUser} />}
                     {!showAddUser &&

@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import { Button, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
 
+import { CURRENT_USER_QUERY } from '../../apollo/queries';
 import { CLOCK_IN } from '../../apollo/mutations';
-import DepartmentSelect from './DepartmentSelect';
+import DepartmentSelect from '../common/DepartmentSelect';
 
 class ClockIn extends Component {
   state = {
@@ -57,10 +58,22 @@ class ClockIn extends Component {
                     }).catch(err => console.log(err.message));
                   }}
                 >
-                  <DepartmentSelect
-                    handleSelect={this.handleDepartmentSelect}
-                    selectedDepartmentId={selectedDepartmentId}
-                  />
+                  <Query query={CURRENT_USER_QUERY}>
+                    {({ data }) => {
+                      if (data) {
+                        console.log(data);
+                        return (
+                          <DepartmentSelect
+                            departments={data.me.departments}
+                            handleSelect={this.handleDepartmentSelect}
+                            selectedDepartmentId={selectedDepartmentId}
+                          />
+                        );
+                      }
+
+                      return null;
+                    }}
+                  </Query>
                   <Button
                     variant="contained"
                     color="primary"

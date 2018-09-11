@@ -142,6 +142,7 @@ export default class UserForm extends Component {
                       onChange={e => this.handleCheck(e)}
                       value="admin"
                       color="primary"
+                      disabled={data.me.id === user.id}
                     />
                   }
                   label="Admin"

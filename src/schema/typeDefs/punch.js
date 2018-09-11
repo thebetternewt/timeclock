@@ -15,7 +15,6 @@ module.exports = gql`
     punch(id: ID!): Punch
     punches(
       userId: ID
-      netId: ID
       departmentId: ID
       beginMsTime: String
       endMsTime: String
@@ -29,11 +28,11 @@ module.exports = gql`
       userId: ID!
       departmentId: ID!
       clockInMsTime: String!
-      clockOutMsTime: String
+      clockOutMsTime: String!
     ): Punch!
     updatePunch(
       id: ID!
-      userId: ID
+      departmentId: ID
       clockInMsTime: String
       clockOutMsTime: String
     ): Punch!

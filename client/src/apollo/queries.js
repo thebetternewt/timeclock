@@ -57,6 +57,22 @@ const LAST_PUNCH_QUERY = gql`
   }
 `;
 
+const PUNCHES_QUERY = gql`
+  query PunchesQuery($userId: ID, $departmentId: ID) {
+    punches(userId: $userId, departmentId: $departmentId) {
+      id
+      userId
+      departmentId
+      clockInMsTime
+      clockOutMsTime
+      department {
+        name
+        id
+      }
+    }
+  }
+`;
+
 // Departments
 const DEPARTMENTS_QUERY = gql`
   query DepartmentsQuery {
@@ -73,5 +89,6 @@ export {
   USERS_QUERY,
   AUTH_QUERY,
   LAST_PUNCH_QUERY,
+  PUNCHES_QUERY,
   DEPARTMENTS_QUERY
 };

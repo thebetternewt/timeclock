@@ -80,6 +80,59 @@ const UPDATE_USER = gql`
   }
 `;
 
+// Punches
+const ADD_PUNCH = gql`
+  mutation AddPunch(
+    $userId: ID!
+    $departmentId: ID!
+    $clockInMsTime: String!
+    $clockOutMsTime: String!
+  ) {
+    addPunch(
+      userId: $userId
+      departmentId: $departmentId
+      clockInMsTime: $clockInMsTime
+      clockOutMsTime: $clockOutMsTime
+    ) {
+      id
+      userId
+      departmentId
+      clockInMsTime
+      clockOutMsTime
+      department {
+        name
+        id
+      }
+    }
+  }
+`;
+
+const UPDATE_PUNCH = gql`
+  mutation UpdatePunch(
+    $id: ID!
+    $departmentId: ID!
+    $clockInMsTime: String!
+    $clockOutMsTime: String!
+  ) {
+    updatePunch(
+      id: $id
+      departmentId: $departmentId
+      clockInMsTime: $clockInMsTime
+      clockOutMsTime: $clockOutMsTime
+    ) {
+      id
+      userId
+      departmentId
+      clockInMsTime
+      clockOutMsTime
+      department {
+        name
+        id
+      }
+    }
+  }
+`;
+
 // Departments
 const ADD_DEPARTMENT = gql`
   mutation AddDepartment($name: String!, $representativeId: ID!) {
@@ -111,6 +164,8 @@ export {
   CLOCK_OUT,
   ADD_USER,
   UPDATE_USER,
+  ADD_PUNCH,
+  UPDATE_PUNCH,
   ADD_DEPARTMENT,
   UPDATE_DEPARTMENT
 };

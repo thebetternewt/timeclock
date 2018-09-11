@@ -10,11 +10,11 @@ module.exports = {
         throw new Error('You are not authenticated!');
       }
 
-      const currentUser = await User.findOne({ _id: user.id }).exec();
+      const parentUser = await User.findOne({ _id: parent.id }).exec();
 
       // user is authenticated
       return await Department.where('_id')
-        .in(currentUser.departments)
+        .in(parentUser.departments)
         .exec();
     },
     punches: async (parent, args, { user }) => {

@@ -46,9 +46,9 @@ module.exports = {
         throw new Error('Not authorized');
       }
 
-      const { userId, netId, departmentId, beginMsTime, endMsTime } = args;
-      // const searchParams = {};
-      let punchQuery = Punch.find();
+      const { userId, departmentId, beginMsTime, endMsTime } = args;
+
+      let punchQuery = Punch.find().sort('-clockInMsTime');
 
       // Conditionally set search params
       if (!user.admin) {
@@ -59,12 +59,10 @@ module.exports = {
         punchQuery = punchQuery.where('userId').equals(userId);
       }
 
-      if (netId) {
-        punchQuery = punchQuery.where('netId').equals(netId);
-      }
       if (departmentId) {
         punchQuery = punchQuery.where('departmentId').equals(departmentId);
       }
+
       if (beginMsTime) {
         punchQuery = punchQuery
           .where('clockInMsTime')

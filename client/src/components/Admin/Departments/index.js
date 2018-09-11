@@ -67,7 +67,6 @@ export default class Departments extends Component {
                       !showEditDepartment && (
                         <DepartmentList
                           selectDepartment={this.showEditDepartment}
-                          cancelAdd={this.showAddDepartment}
                         />
                       )}
                     {showAddDepartment && (
