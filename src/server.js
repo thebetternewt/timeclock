@@ -7,6 +7,8 @@ const { typeDefs, resolvers } = require('./schema');
 
 const { User } = require('./models');
 
+const PORT = process.env.PORT || 4000;
+
 mongoose
   .connect(
     process.env.MONGO_URI,
@@ -35,7 +37,7 @@ mongoose
         // add the user to the context
         return { user };
       }
-    }).listen();
+    }).listen(PORT);
   })
   .then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
