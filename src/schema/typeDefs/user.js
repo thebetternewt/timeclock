@@ -24,6 +24,7 @@ module.exports = gql`
       password: String!
       firstName: String!
       lastName: String!
+      admin: Boolean
     ): User!
     login(netId: String!, password: String!): String!
     updateUser(
