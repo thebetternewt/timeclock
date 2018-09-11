@@ -34,51 +34,55 @@ class DepartmentList extends Component {
     const { selectedId } = this.state;
 
     return (
-      <Query query={DEPARTMENTS_QUERY}>
-        {({ data, loading }) => {
-          if (loading) {
-            return <CircularProgress size={50} />;
-          }
+      <div>
+        <p>Click on a department to view or edit.</p>
 
-          if (data) {
-            const { departments } = data;
-            return (
-              <Paper elevation={12} style={{ margin: '2rem 0' }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Representative</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {departments.map(dept => {
-                      return (
-                        <TableRow
-                          hover
-                          key={dept.id}
-                          selected={dept.id === selectedId}
-                          onClick={() => {
-                            this.handleRowSelect(dept.id);
-                            selectDepartment(dept);
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {dept.name}
-                          </TableCell>
-                          <TableCell>{dept.representativeId}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </Paper>
-            );
-          }
+        <Query query={DEPARTMENTS_QUERY}>
+          {({ data, loading }) => {
+            if (loading) {
+              return <CircularProgress size={50} />;
+            }
 
-          return null;
-        }}
-      </Query>
+            if (data) {
+              const { departments } = data;
+              return (
+                <Paper elevation={12} style={{ margin: '2rem 0', padding: 15 }}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Representative</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {departments.map(dept => {
+                        return (
+                          <TableRow
+                            hover
+                            key={dept.id}
+                            selected={dept.id === selectedId}
+                            onClick={() => {
+                              this.handleRowSelect(dept.id);
+                              selectDepartment(dept);
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {dept.name}
+                            </TableCell>
+                            <TableCell>{dept.representativeId}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              );
+            }
+
+            return null;
+          }}
+        </Query>
+      </div>
     );
   }
 }

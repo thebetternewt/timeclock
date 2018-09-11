@@ -19,7 +19,7 @@ export default class UserForm extends Component {
     idNumber: this.props.user.idNumber || '',
     firstName: this.props.user.firstName || '',
     lastName: this.props.user.lastName || '',
-    password: null,
+    password: '',
     admin: this.props.user.admin || false
   };
 
@@ -58,7 +58,7 @@ export default class UserForm extends Component {
           };
 
           // Only submit password if value in state
-          if (password) {
+          if (password.trim().length > 0) {
             variables.password = password;
           }
 
@@ -134,7 +134,6 @@ export default class UserForm extends Component {
         <Query query={CURRENT_USER_QUERY}>
           {({ data }) => {
             if (data && data.me.admin) {
-              console.log(data);
               return (
                 <FormControlLabel
                   control={

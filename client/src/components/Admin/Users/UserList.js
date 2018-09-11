@@ -13,6 +13,7 @@ import {
   TableCell
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import CircleLoader from '../../common/CircleLoader';
 
 const styles = {
   selected: {
@@ -34,58 +35,65 @@ class UserList extends Component {
     const { selectedId } = this.state;
 
     return (
-      <Query query={USERS_QUERY}>
-        {({ data, loading }) => {
-          if (loading) {
-            return <CircularProgress size={50} />;
-          }
+      <div>
+        <Query query={USERS_QUERY}>
+          {({ data, loading }) => {
+            if (loading) {
+              return <CircleLoader />;
+            }
 
-          if (data) {
-            console.log(data);
-            const { users } = data;
-            return (
-              <Paper elevation={12} style={{ margin: '2rem 0' }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>NetId</TableCell>
-                      <TableCell numeric>First Name</TableCell>
-                      <TableCell numeric>Last Name</TableCell>
-                      <TableCell numeric>Admin</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {users.map(user => {
-                      return (
-                        <TableRow
-                          hover
-                          key={user.id}
-                          selected={user.id === selectedId}
-                          onClick={() => {
-                            this.handleRowSelect(user.id);
-                            selectUser(user);
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {user.netId}
-                          </TableCell>
-                          <TableCell numeric>{user.firstName}</TableCell>
-                          <TableCell numeric>{user.lastName}</TableCell>
-                          <TableCell numeric>
-                            {user.admin ? 'Y' : '--'}
-                          </TableCell>
+            if (data) {
+              const { users } = data;
+              return (
+                <div>
+                  <p>Click on a user to view or edit.</p>
+                  <Paper
+                    elevation={12}
+                    style={{ margin: '2rem 0', padding: 15 }}
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>NetId</TableCell>
+                          <TableCell numeric>First Name</TableCell>
+                          <TableCell numeric>Last Name</TableCell>
+                          <TableCell numeric>Admin</TableCell>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </Paper>
-            );
-          }
+                      </TableHead>
+                      <TableBody>
+                        {users.map(user => {
+                          return (
+                            <TableRow
+                              hover
+                              key={user.id}
+                              selected={user.id === selectedId}
+                              onClick={() => {
+                                this.handleRowSelect(user.id);
+                                selectUser(user);
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {user.netId}
+                              </TableCell>
+                              <TableCell numeric>{user.firstName}</TableCell>
+                              <TableCell numeric>{user.lastName}</TableCell>
+                              <TableCell numeric>
+                                {user.admin ? 'Y' : '--'}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                </div>
+              );
+            }
 
-          return null;
-        }}
-      </Query>
+            return null;
+          }}
+        </Query>
+      </div>
     );
   }
 }
