@@ -70,7 +70,7 @@ class SignIn extends Component {
     const { classes } = this.props;
     const { netId, password } = this.state;
     if (isAuthenticated()) {
-      return <Redirect to="/dashboard" />;
+      return <Redirect to="/dashboard/timeclock" />;
     }
 
     return (

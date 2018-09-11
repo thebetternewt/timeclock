@@ -17,7 +17,6 @@ export default class TimeClock extends Component {
 
             if (data) {
               const { lastPunch } = data;
-              console.log('lastPunch', lastPunch);
 
               return (
                 <div>

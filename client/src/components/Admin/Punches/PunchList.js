@@ -62,39 +62,41 @@ class PunchList extends Component {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {punches.map(punch => {
-                          return (
-                            <TableRow
-                              hover
-                              key={punch.id}
-                              selected={punch.id === selectedId}
-                              onClick={() => {
-                                this.handleRowSelect(punch.id);
-                                selectPunch(punch);
-                              }}
-                            >
-                              <TableCell component="th" scope="row">
-                                {moment(punch.clockInMsTime, 'x').format(
-                                  'YYYY-MM-DD h:mm a'
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {moment(punch.clockOutMsTime, 'x').format(
-                                  'YYYY-MM-DD h:mm a'
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {moment
-                                  .duration(
-                                    punch.clockOutMsTime - punch.clockInMsTime
-                                  )
-                                  .asHours()
-                                  .toFixed(2)}
-                              </TableCell>
-                              <TableCell>{punch.department.name}</TableCell>
-                            </TableRow>
-                          );
-                        })}
+                        {punches
+                          .filter(punch => punch.clockOutMsTime !== null)
+                          .map(punch => {
+                            return (
+                              <TableRow
+                                hover
+                                key={punch.id}
+                                selected={punch.id === selectedId}
+                                onClick={() => {
+                                  this.handleRowSelect(punch.id);
+                                  selectPunch(punch);
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {moment(punch.clockInMsTime, 'x').format(
+                                    'YYYY-MM-DD h:mm a'
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {moment(punch.clockOutMsTime, 'x').format(
+                                    'YYYY-MM-DD h:mm a'
+                                  )}
+                                </TableCell>
+                                <TableCell>
+                                  {moment
+                                    .duration(
+                                      punch.clockOutMsTime - punch.clockInMsTime
+                                    )
+                                    .asHours()
+                                    .toFixed(2)}
+                                </TableCell>
+                                <TableCell>{punch.department.name}</TableCell>
+                              </TableRow>
+                            );
+                          })}
                       </TableBody>
                     </Table>
                   </Paper>

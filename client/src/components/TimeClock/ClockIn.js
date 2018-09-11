@@ -20,8 +20,6 @@ class ClockIn extends Component {
   render() {
     const { selectedDepartmentId } = this.state;
 
-    console.log('clockIn props', this.props);
-
     let lastPunch, department, clockInMoment, clockOutMoment;
 
     if (this.props.lastPunch) {
@@ -79,7 +77,7 @@ class ClockIn extends Component {
                 >
                   <Query query={CURRENT_USER_QUERY}>
                     {({ data }) => {
-                      if (data) {
+                      if (data && data.me) {
                         return (
                           <DepartmentSelect
                             departments={data.me.departments}

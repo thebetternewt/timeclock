@@ -1,4 +1,5 @@
 const { User, Department, Punch } = require('../../models');
+const { AuthenticationError } = require('apollo-server');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -24,18 +25,22 @@ module.exports = {
 
       // user is authenticated
       return await Punch.where('userId')
-        .equals(user.id)
+        .equals(parent.id)
         .exec();
     }
   },
   Query: {
     me: async (parent, args, { user }) => {
-      if (!user) {
-        throw new AuthenticationError('You are not authenticated!');
-      }
+      try {
+        if (!user) {
+          throw new AuthenticationError('You are not authenticated!');
+        }
 
-      // user is authenticated
-      return await User.findOne({ _id: user.id }).exec();
+        // user is authenticated
+        return await User.findOne({ _id: user.id }).exec();
+      } catch (err) {
+        console.error(err.message);
+      }
     },
     user: async (parent, { id }, { user }) => {
       if (!user.id === id && !user.admin) {

@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Query } from 'react-apollo';
+import { CURRENT_USER_QUERY } from '../../apollo/queries';
+
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -44,28 +47,46 @@ const SideDrawer = props => {
       >
         {userItems}
       </List>
-      <Divider />
-      <List
-        component="nav"
-        subheader={
-          <ListSubheader component="div" className={classes.subheader}>
-            Supervisor
-          </ListSubheader>
-        }
-      >
-        {supervisorItems}
-      </List>
-      <Divider />
-      <List
-        component="nav"
-        subheader={
-          <ListSubheader component="div" className={classes.subheader}>
-            Admin
-          </ListSubheader>
-        }
-      >
-        {adminItems}
-      </List>
+      <Query query={CURRENT_USER_QUERY}>
+        {({ data }) => {
+          if (data && data.me && data.me.admin) {
+            return (
+              <Fragment>
+                <Divider />
+                <List
+                  component="nav"
+                  subheader={
+                    <ListSubheader
+                      component="div"
+                      className={classes.subheader}
+                    >
+                      Supervisor
+                    </ListSubheader>
+                  }
+                >
+                  {supervisorItems}
+                </List>
+                <Divider />
+                <List
+                  component="nav"
+                  subheader={
+                    <ListSubheader
+                      component="div"
+                      className={classes.subheader}
+                    >
+                      Admin
+                    </ListSubheader>
+                  }
+                >
+                  {adminItems}
+                </List>
+              </Fragment>
+            );
+          }
+
+          return null;
+        }}
+      </Query>
     </Drawer>
   );
 };

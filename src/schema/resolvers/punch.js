@@ -53,7 +53,7 @@ module.exports = {
       // Conditionally set search params
       if (!user.admin) {
         // If user isn't admin, restrict query to user's punches
-        punchQuery = punchQuery.where('userId').equals(user.id);
+        punchQuery = punchQuery.where('userId').equals(userId);
       } else if (userId) {
         // Allow admin users to query punches by any userId
         punchQuery = punchQuery.where('userId').equals(userId);
@@ -86,9 +86,11 @@ module.exports = {
 
       // Check if user is already clocked in
       const clockedInPunch = await Punch.findOne({
-        clockOutMsTime: null
+        clockOutMsTime: null,
+        userId: user.id
       }).exec();
 
+      console.log('[ClockedInPunch]:', clockedInPunch);
       // Throw error if clocked in
       if (clockedInPunch) {
         throw new Error(`Already clocked in`);
@@ -112,7 +114,10 @@ module.exports = {
       }
 
       // Check if user is clocked in
-      const punch = await Punch.findOne({ clockOutMsTime: null }).exec();
+      const punch = await Punch.findOne({
+        clockOutMsTime: null,
+        userId: user.id
+      }).exec();
 
       // Throw error if not clocked in
       if (!punch) {
@@ -121,7 +126,6 @@ module.exports = {
 
       // Else clock user into selected department
       const msTime = new Date().getTime();
-      console.log(msTime);
 
       punch.set({ clockOutMsTime: msTime });
 
