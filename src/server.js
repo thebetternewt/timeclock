@@ -1,18 +1,23 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
+const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const { ApolloServer } = require('apollo-server');
 
 const { typeDefs, resolvers } = require('./schema');
-
 const { User } = require('./models');
 
+const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  // app.use(express.static('client/build'));
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendfile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 mongoose
@@ -27,7 +32,7 @@ mongoose
       }
     };
 
-    return new ApolloServer({
+    const server = new ApolloServer({
       typeDefs,
       resolvers,
       playground,
@@ -43,11 +48,14 @@ mongoose
         // add the user to the context
         return { user };
       }
-    }).listen(PORT);
-  })
-  .then(server => {
-    console.log(server);
-    console.log(`🚀  Server ready at ${server.url}`);
+    });
+
+    server.applyMiddleware({ app });
+
+    app.listen({ port: PORT }, () => {
+      console.log(server);
+      console.log(`🚀  Server ready at ${server.graphqlPath}`);
+    });
   })
   .catch(console.error);
 

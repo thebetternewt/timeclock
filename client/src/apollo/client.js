@@ -1,13 +1,15 @@
 import ApolloClient from 'apollo-boost';
 import { AUTH_QUERY } from './queries';
 
+const PORT = process.env.PORT || 4000;
+
 const defaultState = {
   isAuthenticated: false,
   user: null
 };
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: `http://localhost:${PORT}/graphql`,
   clientState: {
     defaults: defaultState
   },
