@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import { CURRENT_USER_QUERY } from '../../../apollo/queries';
+import { DEACTIVATE_USER, ACTIVATE_USER } from '../../../apollo/mutations';
 
 import {
   FormControl,
@@ -20,7 +21,8 @@ export default class UserForm extends Component {
     firstName: this.props.user.firstName || '',
     lastName: this.props.user.lastName || '',
     password: '',
-    admin: this.props.user.admin || false
+    admin: this.props.user.admin || false,
+    active: this.props.user.active
   };
 
   handleInputChange = e => {
@@ -28,7 +30,6 @@ export default class UserForm extends Component {
   };
 
   handleCheck = e => {
-    console.log(e.target.value, e.target.checked);
     this.setState({ [e.target.value]: e.target.checked });
   };
 
@@ -153,6 +154,51 @@ export default class UserForm extends Component {
             return null;
           }}
         </Query>
+        {user.id && user.active ? (
+          <Mutation mutation={DEACTIVATE_USER}>
+            {deactivateUser => {
+              return (
+                <Button
+                  type="button"
+                  variant="raised"
+                  color="primary"
+                  onClick={() => {
+                    deactivateUser({
+                      variables: { id },
+                      refetchQueries: ['UsersQuery']
+                    })
+                      .then(() => close())
+                      .catch(err => console.error);
+                  }}
+                >
+                  Deactivate
+                </Button>
+              );
+            }}
+          </Mutation>
+        ) : (
+          <Mutation mutation={ACTIVATE_USER}>
+            {activateUser => {
+              return (
+                <Button
+                  type="button"
+                  variant="raised"
+                  color="primary"
+                  onClick={() => {
+                    activateUser({
+                      variables: { id },
+                      refetchQueries: ['UsersQuery']
+                    })
+                      .then(() => close())
+                      .catch(err => console.error);
+                  }}
+                >
+                  Activate
+                </Button>
+              );
+            }}
+          </Mutation>
+        )}
         <Button type="submit" variant="raised" color="primary">
           Submit
         </Button>

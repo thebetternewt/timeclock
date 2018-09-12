@@ -141,7 +141,7 @@ module.exports = {
       return updatedUser;
     },
     removeUser: async (parent, { id }, { user }) => {
-      if (!user.id === id && !user.admin) {
+      if (!user.admin) {
         throw new Error('Not authorized');
       }
       const removedUser = await User.findOneAndRemove({ _id: id }).exec();
@@ -151,6 +151,42 @@ module.exports = {
       }
 
       return removedUser._id;
+    },
+    deactivateUser: async (parent, { id }, { user }) => {
+      if (!user.admin) {
+        throw new Error('Not authorized');
+      }
+      const deactivatedUser = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: { active: false }
+        },
+        { new: true }
+      ).exec();
+
+      if (!deactivatedUser) {
+        throw new Error('User not found');
+      }
+
+      return deactivatedUser._id;
+    },
+    activateUser: async (parent, { id }, { user }) => {
+      if (!user.admin) {
+        throw new Error('Not authorized');
+      }
+      const activatedUser = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: { active: true }
+        },
+        { new: true }
+      ).exec();
+
+      if (!activatedUser) {
+        throw new Error('User not found');
+      }
+
+      return activatedUser._id;
     }
   }
 };

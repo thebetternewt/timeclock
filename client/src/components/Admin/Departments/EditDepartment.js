@@ -8,7 +8,6 @@ import { Paper, CircularProgress } from '@material-ui/core';
 
 export default class EditDepartment extends Component {
   static getDerivedStateFromProps(nextProps) {
-    console.log('[nextProps from Update]:', nextProps);
     return { department: nextProps.department };
   }
 
@@ -27,10 +26,6 @@ export default class EditDepartment extends Component {
           {(updateDepartment, { data, loading, error }) => {
             if (loading) {
               return <CircularProgress />;
-            }
-
-            if (data) {
-              console.log('data:', data);
             }
 
             return (

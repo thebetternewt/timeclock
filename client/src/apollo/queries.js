@@ -32,6 +32,7 @@ const USERS_QUERY = gql`
       firstName
       lastName
       admin
+      active
       departments {
         id
         name

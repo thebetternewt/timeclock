@@ -9,6 +9,7 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     admin: Boolean
+    active: Boolean!
     departments: [Department!]!
     punches: [Punch!]!
   }
@@ -38,5 +39,7 @@ module.exports = gql`
       admin: Boolean
     ): User!
     removeUser(id: ID!): String
+    deactivateUser(id: ID!): String
+    activateUser(id: ID!): String
   }
 `;

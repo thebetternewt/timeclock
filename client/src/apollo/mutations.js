@@ -84,6 +84,18 @@ const UPDATE_USER = gql`
   }
 `;
 
+const DEACTIVATE_USER = gql`
+  mutation DeactivateUser($id: ID!) {
+    deactivateUser(id: $id)
+  }
+`;
+
+const ACTIVATE_USER = gql`
+  mutation ActivateUser($id: ID!) {
+    activateUser(id: $id)
+  }
+`;
+
 // Punches
 const ADD_PUNCH = gql`
   mutation AddPunch(
@@ -168,6 +180,8 @@ export {
   CLOCK_OUT,
   ADD_USER,
   UPDATE_USER,
+  DEACTIVATE_USER,
+  ACTIVATE_USER,
   ADD_PUNCH,
   UPDATE_PUNCH,
   ADD_DEPARTMENT,

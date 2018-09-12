@@ -4,7 +4,6 @@ import { Query } from 'react-apollo';
 import { USERS_QUERY } from '../../../apollo/queries';
 
 import {
-  CircularProgress,
   Paper,
   Table,
   TableHead,
@@ -61,7 +60,47 @@ class UserList extends Component {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {users.map(user => {
+                        {users.filter(user => user.active).map(user => {
+                          return (
+                            <TableRow
+                              hover
+                              key={user.id}
+                              selected={user.id === selectedId}
+                              onClick={() => {
+                                this.handleRowSelect(user.id);
+                                selectUser(user);
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {user.netId}
+                              </TableCell>
+                              <TableCell numeric>{user.firstName}</TableCell>
+                              <TableCell numeric>{user.lastName}</TableCell>
+                              <TableCell numeric>
+                                {user.admin ? 'Y' : '--'}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                  <h4>Inactive Users</h4>
+                  <Paper
+                    elevation={12}
+                    style={{ margin: '2rem 0', padding: 15 }}
+                  >
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>NetId</TableCell>
+                          <TableCell numeric>First Name</TableCell>
+                          <TableCell numeric>Last Name</TableCell>
+                          <TableCell numeric>Admin</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {users.filter(user => !user.active).map(user => {
                           return (
                             <TableRow
                               hover

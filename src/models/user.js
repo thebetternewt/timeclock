@@ -30,6 +30,10 @@ module.exports = mongoose.model(
       admin: {
         type: Boolean
       },
+      active: {
+        type: Boolean,
+        default: true
+      },
       departments: {
         type: Array,
         default: []
