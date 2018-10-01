@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
+import { CURRENT_USER_QUERY, DEPARTMENTS_QUERY } from '../../../apollo/queries';
 import { DEACTIVATE_USER, ACTIVATE_USER } from '../../../apollo/mutations';
 
 import {
@@ -12,6 +12,7 @@ import {
   Button,
   Checkbox
 } from '@material-ui/core';
+import DepartmentSelect from '../../common/DepartmentSelect';
 
 export default class UserForm extends Component {
   state = {
@@ -21,6 +22,7 @@ export default class UserForm extends Component {
     firstName: this.props.user.firstName || '',
     lastName: this.props.user.lastName || '',
     password: '',
+    departments: this.props.user.departments || [],
     admin: this.props.user.admin || false,
     active: this.props.user.active
   };
@@ -33,6 +35,12 @@ export default class UserForm extends Component {
     this.setState({ [e.target.value]: e.target.checked });
   };
 
+  handleDepartmentSelect = e => {
+    console.log('department select:', e.target.value);
+    this.setState({ departments: e.target.value });
+    console.log(this.state);
+  };
+
   render() {
     const { user, submit, close, error } = this.props;
     const {
@@ -42,8 +50,11 @@ export default class UserForm extends Component {
       firstName,
       lastName,
       password,
-      admin
+      admin,
+      departments
     } = this.state;
+
+    console.log('userDepartments:', departments);
 
     return (
       <form
@@ -132,6 +143,22 @@ export default class UserForm extends Component {
             />
           </FormControl>
         )}
+        <Query query={DEPARTMENTS_QUERY}>
+          {({ data, loading }) => {
+            if (data && data.departments) {
+              console.log('data:', data);
+              return (
+                <DepartmentSelect
+                  departments={data.departments}
+                  handleSelect={this.handleDepartmentSelect}
+                  selectedDepartmentIds={departments.map(dept => dept.id)}
+                  multiple
+                />
+              );
+            }
+            return null;
+          }}
+        </Query>
         <Query query={CURRENT_USER_QUERY}>
           {({ data }) => {
             if (data && data.me.admin) {
