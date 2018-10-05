@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
-import { DEPARTMENTS_QUERY } from '../../../apollo/queries';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Query } from "react-apollo";
+import { DEPARTMENTS_QUERY } from "../../../apollo/queries";
 
 import {
   CircularProgress,
@@ -11,18 +11,18 @@ import {
   TableBody,
   TableRow,
   TableCell
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = {
   selected: {
-    backgroundColor: 'green'
+    backgroundColor: "green"
   }
 };
 
 class DepartmentList extends Component {
   state = {
-    selectedId: ''
+    selectedId: ""
   };
 
   handleRowSelect = id => {
@@ -46,7 +46,7 @@ class DepartmentList extends Component {
             if (data) {
               const { departments } = data;
               return (
-                <Paper elevation={12} style={{ margin: '2rem 0', padding: 15 }}>
+                <Paper elevation={12} style={{ margin: "2rem 0", padding: 15 }}>
                   <Table>
                     <TableHead>
                       <TableRow>
