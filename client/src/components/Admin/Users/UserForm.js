@@ -9,7 +9,9 @@ import {
   Button,
   Checkbox,
 } from '@material-ui/core';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
+import { CURRENT_USER_QUERY, DEPARTMENTS_QUERY } from '../../../apollo/queries';
+
+import DepartmentSelect from '../../common/DepartmentSelect';
 
 export default class UserForm extends Component {
   state = {
@@ -20,6 +22,7 @@ export default class UserForm extends Component {
     firstName: this.props.user.firstName || '',
     lastName: this.props.user.lastName || '',
     password: '',
+    departmentIds: this.props.user.departments.map(dept => dept.id) || [],
     admin: this.props.user.admin || false,
     active: this.props.user.active,
     /* eslint-enable react/destructuring-assignment */
@@ -33,6 +36,10 @@ export default class UserForm extends Component {
     this.setState({ [e.target.value]: e.target.checked });
   };
 
+  handleDepartmentSelect = e => {
+    this.setState({ departmentIds: e.target.value });
+  };
+
   render() {
     const { user, submit, close, error } = this.props;
     const {
@@ -44,6 +51,7 @@ export default class UserForm extends Component {
       password,
       admin,
       active,
+      departmentIds,
     } = this.state;
 
     return (
@@ -58,6 +66,7 @@ export default class UserForm extends Component {
             lastName,
             admin,
             active,
+            departments: departmentIds.join(', '),
           };
 
           // Only submit password if value in state
@@ -134,6 +143,21 @@ export default class UserForm extends Component {
             />
           </FormControl>
         )}
+        <Query query={DEPARTMENTS_QUERY}>
+          {({ data }) => {
+            if (data && data.departments) {
+              return (
+                <DepartmentSelect
+                  departments={data.departments}
+                  handleSelect={this.handleDepartmentSelect}
+                  selectedDepartmentIds={departmentIds}
+                  multiple
+                />
+              );
+            }
+            return null;
+          }}
+        </Query>
         <Query query={CURRENT_USER_QUERY}>
           {({ data }) => {
             if (data && data.me.admin) {

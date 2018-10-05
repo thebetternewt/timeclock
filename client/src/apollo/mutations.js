@@ -70,6 +70,7 @@ const UPDATE_USER = gql`
     $password: String
     $admin: Boolean
     $active: Boolean
+    $departments: String
   ) {
     updateUser(
       id: $id
@@ -80,6 +81,7 @@ const UPDATE_USER = gql`
       lastName: $lastName
       admin: $admin
       active: $active
+      departments: $departments
     ) {
       id
     }

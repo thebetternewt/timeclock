@@ -10,6 +10,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TablePagination,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { PUNCHES_QUERY } from '../../../apollo/queries';
@@ -24,6 +25,8 @@ const styles = {
 class PunchList extends Component {
   state = {
     selectedId: '',
+    page: 0,
+    rowsPerPage: 10,
   };
 
   handleRowSelect = id => {
@@ -32,9 +35,17 @@ class PunchList extends Component {
     selectPunch(id);
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
     const { userId } = this.props;
-    const { selectedId } = this.state;
+    const { selectedId, page, rowsPerPage } = this.state;
 
     return (
       <div>
@@ -54,50 +65,75 @@ class PunchList extends Component {
                     elevation={12}
                     style={{ margin: '2rem 0', padding: 15 }}
                   >
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Clock In</TableCell>
-                          <TableCell>Clock Out</TableCell>
-                          <TableCell>Hours Elapsed</TableCell>
-                          <TableCell>Department</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {punches
-                          .filter(punch => punch.clockOutMsTime !== null)
-                          .map(punch => (
-                            <TableRow
-                              hover
-                              key={punch.id}
-                              selected={punch.id === selectedId}
-                              onClick={() => {
-                                this.handleRowSelect(punch.id);
-                              }}
-                            >
-                              <TableCell component="th" scope="row">
-                                {moment(punch.clockInMsTime, 'x').format(
-                                  'YYYY-MM-DD h:mm a'
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {moment(punch.clockOutMsTime, 'x').format(
-                                  'YYYY-MM-DD h:mm a'
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                {moment
-                                  .duration(
-                                    punch.clockOutMsTime - punch.clockInMsTime
-                                  )
-                                  .asHours()
-                                  .toFixed(2)}
-                              </TableCell>
-                              <TableCell>{punch.department.name}</TableCell>
+                    {punches.length > 0 ? (
+                      <div>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Clock In</TableCell>
+                              <TableCell>Clock Out</TableCell>
+                              <TableCell>Hours Elapsed</TableCell>
+                              <TableCell>Department</TableCell>
                             </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
+                          </TableHead>
+                          <TableBody>
+                            {punches
+                              .filter(punch => punch.clockOutMsTime !== null)
+                              .slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              .map(punch => (
+                                <TableRow
+                                  hover
+                                  key={punch.id}
+                                  selected={punch.id === selectedId}
+                                  onClick={() => {
+                                    this.handleRowSelect(punch.id);
+                                  }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {moment(punch.clockInMsTime, 'x').format(
+                                      'YYYY-MM-DD h:mma'
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {moment(punch.clockOutMsTime, 'x').format(
+                                      'YYYY-MM-DD h:mma'
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {moment
+                                      .duration(
+                                        punch.clockOutMsTime -
+                                          punch.clockInMsTime
+                                      )
+                                      .asHours()
+                                      .toFixed(2)}
+                                  </TableCell>
+                                  <TableCell>{punch.department.name}</TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                        <TablePagination
+                          component="div"
+                          count={punches.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          backIconButtonProps={{
+                            'aria-label': 'Previous Page',
+                          }}
+                          nextIconButtonProps={{
+                            'aria-label': 'Next Page',
+                          }}
+                          onChangePage={this.handleChangePage}
+                          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        />
+                      </div>
+                    ) : (
+                      <p>No punches yet!</p>
+                    )}
                   </Paper>
                 </div>
               );

@@ -67,13 +67,13 @@ export default class User extends Component {
                     <strong>NetID:</strong> {netId}
                   </p>
                   <p>
-                    <strong>idNumber:</strong> {idNumber}
+                    <strong>ID Number:</strong> {idNumber}
                   </p>
                   <p>
-                    <strong>firstName:</strong> {firstName}
+                    <strong>First Name:</strong> {firstName}
                   </p>
                   <p>
-                    <strong>lastName:</strong> {lastName}
+                    <strong>Last Name:</strong> {lastName}
                   </p>
 
                   <Button

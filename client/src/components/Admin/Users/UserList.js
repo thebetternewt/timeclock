@@ -9,6 +9,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TablePagination,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { USERS_QUERY } from '../../../apollo/queries';
@@ -23,6 +24,8 @@ const styles = {
 class UserList extends Component {
   state = {
     selectedId: '',
+    page: 0,
+    rowsPerPage: 10,
   };
 
   handleRowSelect = id => {
@@ -31,8 +34,16 @@ class UserList extends Component {
     selectUser(id);
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
-    const { selectedId } = this.state;
+    const { selectedId, page, rowsPerPage } = this.state;
 
     return (
       <div>
@@ -51,38 +62,60 @@ class UserList extends Component {
                     elevation={12}
                     style={{ margin: '2rem 0', padding: 15 }}
                   >
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>NetId</TableCell>
-                          <TableCell numeric>First Name</TableCell>
-                          <TableCell numeric>Last Name</TableCell>
-                          <TableCell numeric>Admin</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {users.filter(user => user.active).map(user => (
-                          <TableRow
-                            hover
-                            key={user.id}
-                            selected={user.id === selectedId}
-                            onClick={() => {
-                              this.handleRowSelect(user.id);
-                            }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {user.netId}
-                            </TableCell>
-                            <TableCell numeric>{user.firstName}</TableCell>
-                            <TableCell numeric>{user.lastName}</TableCell>
-                            <TableCell numeric>
-                              {user.admin ? 'Y' : '--'}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    {users.length > 0 ? (
+                      <div>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>NetId</TableCell>
+                              <TableCell numeric>First Name</TableCell>
+                              <TableCell numeric>Last Name</TableCell>
+                              <TableCell numeric>Admin</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {users.filter(user => user.active).map(user => (
+                              <TableRow
+                                hover
+                                key={user.id}
+                                selected={user.id === selectedId}
+                                onClick={() => {
+                                  this.handleRowSelect(user.id);
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {user.netId}
+                                </TableCell>
+                                <TableCell numeric>{user.firstName}</TableCell>
+                                <TableCell numeric>{user.lastName}</TableCell>
+                                <TableCell numeric>
+                                  {user.admin ? 'Y' : '--'}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                        <TablePagination
+                          component="div"
+                          count={users.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          backIconButtonProps={{
+                            'aria-label': 'Previous Page',
+                          }}
+                          nextIconButtonProps={{
+                            'aria-label': 'Next Page',
+                          }}
+                          onChangePage={this.handleChangePage}
+                          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        />
+                      </div>
+                    ) : (
+                      <p>No users yet!</p>
+                    )}
                   </Paper>
+
+                  {/* TODO: Extract users table into separate component to avoid duplication */}
                   <h4>Inactive Users</h4>
                   <Paper
                     elevation={12}

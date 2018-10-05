@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Query, Mutation } from 'react-apollo';
 import { Paper, CircularProgress, Button } from '@material-ui/core';
 import PunchForm from './PunchForm';
@@ -32,12 +33,10 @@ export default class Punch extends Component {
             }
 
             if (data && data.punch) {
-              console.log(data.punch);
               const {
-                userId,
                 clockInMsTime,
                 clockOutMsTime,
-                department: { name: deptName, id: deptId },
+                department: { name: deptName },
                 user,
               } = data.punch;
 
@@ -65,15 +64,13 @@ export default class Punch extends Component {
 
               return (
                 <Fragment>
-                  <h3>Detail:</h3>
                   <p>
-                    <strong>User Id:</strong> {userId}
+                    <strong>Clock In:</strong>{' '}
+                    {moment(clockInMsTime, 'x').format('YYYY-MM-DD h:mma')}
                   </p>
                   <p>
-                    <strong>Clock In:</strong> {clockInMsTime}
-                  </p>
-                  <p>
-                    <strong>Clock Out:</strong> {clockOutMsTime}
+                    <strong>Clock Out:</strong>{' '}
+                    {moment(clockOutMsTime, 'x').format('YYYY-MM-DD h:mma')}
                   </p>
                   <p>
                     <strong>Department:</strong> {deptName}

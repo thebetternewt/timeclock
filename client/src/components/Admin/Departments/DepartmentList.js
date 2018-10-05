@@ -10,6 +10,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TablePagination,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { DEPARTMENTS_QUERY } from '../../../apollo/queries';
@@ -23,6 +24,8 @@ const styles = {
 class DepartmentList extends Component {
   state = {
     selectedId: '',
+    page: 0,
+    rowsPerPage: 10,
   };
 
   handleRowSelect = id => {
@@ -32,8 +35,16 @@ class DepartmentList extends Component {
     selectDepartment(id);
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
-    const { selectedId } = this.state;
+    const { selectedId, page, rowsPerPage } = this.state;
 
     return (
       <div>
@@ -49,31 +60,51 @@ class DepartmentList extends Component {
               const { departments } = data;
               return (
                 <Paper elevation={12} style={{ margin: '2rem 0', padding: 15 }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Representative</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {departments.map(dept => (
-                        <TableRow
-                          hover
-                          key={dept.id}
-                          selected={dept.id === selectedId}
-                          onClick={() => {
-                            this.handleRowSelect(dept.id);
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {dept.name}
-                          </TableCell>
-                          <TableCell>{dept.representativeId}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                  {departments.length > 0 ? (
+                    <div>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Representative</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {departments.map(dept => (
+                            <TableRow
+                              hover
+                              key={dept.id}
+                              selected={dept.id === selectedId}
+                              onClick={() => {
+                                this.handleRowSelect(dept.id);
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {dept.name}
+                              </TableCell>
+                              <TableCell>{dept.representativeId}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                      <TablePagination
+                        component="div"
+                        count={departments.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        backIconButtonProps={{
+                          'aria-label': 'Previous Page',
+                        }}
+                        nextIconButtonProps={{
+                          'aria-label': 'Next Page',
+                        }}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                      />
+                    </div>
+                  ) : (
+                    <p>Not departments yet!</p>
+                  )}
                 </Paper>
               );
             }
