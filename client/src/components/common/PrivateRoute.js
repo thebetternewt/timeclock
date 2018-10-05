@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         return <Component {...props} />;
       }
 
-      setRedirectPath(props.match.path);
+      setRedirectPath(props.location.pathname);
 
       return <Redirect to="/" />;
     }}

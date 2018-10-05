@@ -4,6 +4,7 @@ import { AUTH_QUERY, REDIRECT_QUERY } from './queries';
 const defaultState = {
   isAuthenticated: false,
   user: null,
+  redirectPath: null,
 };
 
 const client = new ApolloClient({
@@ -56,7 +57,7 @@ const getRedirectPath = () => {
   const { redirectPath } = client.readQuery({
     query: REDIRECT_QUERY,
   });
-  return redirectPath || '/dashboard/timeclock';
+  return redirectPath;
 };
 
 export default client;
