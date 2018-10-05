@@ -1,51 +1,52 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 import { CircularProgress, Button } from '@material-ui/core';
+import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 
 import UserList from './UserList';
 import AddUser from './AddUser';
-import EditUser from './EditUser';
+import User from './User';
 import Punches from '../Punches';
 
 export default class Users extends Component {
   state = {
     showAddUser: false,
-    showEditUser: false,
-    selectedUser: null
+    showUser: false,
+    selectedUserId: null,
   };
 
   showAddUser = () => {
-    this.setState({ showAddUser: true, showEditUser: false });
+    this.setState({ showAddUser: true, showUser: false });
   };
+
   hideAddUser = () => {
     this.setState({ showAddUser: false });
   };
 
-  showEditUser = user => {
+  showUser = id => {
     this.setState({
-      selectedUser: user,
-      showEditUser: true,
-      showAddUser: false
+      selectedUserId: id,
+      showUser: true,
+      showAddUser: false,
     });
   };
 
-  hideEditUser = () => {
+  hideUser = () => {
     this.setState({
-      showEditUser: false
+      showUser: false,
     });
   };
 
   hideForms = () => {
     this.setState({
       showAddUser: false,
-      showEditUser: false
+      showUser: false,
     });
   };
 
   render() {
-    const { showAddUser, showEditUser, selectedUser } = this.state;
+    const { showAddUser, showUser, selectedUserId } = this.state;
 
     return (
       <div>
@@ -61,35 +62,29 @@ export default class Users extends Component {
                   <Fragment>
                     <h2>Manage Users</h2>
 
-                    {showEditUser && (
+                    {showUser && (
                       <Fragment>
-                        <EditUser
-                          user={selectedUser}
-                          cancelEdit={this.hideEditUser}
-                        />
-                        <Punches user={selectedUser} />
+                        <User id={selectedUserId} cancelEdit={this.hideUser} />
+                        <Punches userId={selectedUserId} />
                       </Fragment>
                     )}
-                    {!showAddUser &&
-                      !showEditUser && (
-                        <UserList selectUser={this.showEditUser} />
-                      )}
+                    {!(showAddUser || showUser) && (
+                      <UserList selectUser={this.showUser} />
+                    )}
                     {showAddUser && <AddUser cancelAdd={this.hideAddUser} />}
-                    {!showAddUser &&
-                      !showEditUser && (
-                        <Button
-                          variant="raised"
-                          color="primary"
-                          onClick={this.showAddUser}
-                        >
-                          Add New User
-                        </Button>
-                      )}
+                    {!(showAddUser || showUser) && (
+                      <Button
+                        variant="raised"
+                        color="primary"
+                        onClick={this.showAddUser}
+                      >
+                        Add New User
+                      </Button>
+                    )}
                   </Fragment>
                 );
-              } else {
-                return <Redirect to="/dashboard" />;
               }
+              return <Redirect to="/dashboard" />;
             }
 
             return null;

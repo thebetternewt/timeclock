@@ -1,46 +1,47 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 import { CircularProgress, Button } from '@material-ui/core';
+import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 
 import DepartmentList from './DepartmentList';
 import AddDepartment from './AddDepartment';
-import EditDepartment from './EditDepartment';
+import Department from './Department';
 
 export default class Departments extends Component {
   state = {
     showAddDepartment: false,
-    showEditDepartment: false,
-    selectedDepartment: null
+    showDepartment: false,
+    selectedDepartmentId: null,
   };
 
   showAddDepartment = () => {
-    this.setState({ showAddDepartment: true, showEditDepartment: false });
+    this.setState({ showAddDepartment: true, showDepartment: false });
   };
+
   hideAddDepartment = () => {
     this.setState({ showAddDepartment: false });
   };
 
-  showEditDepartment = department => {
+  showDepartment = id => {
     this.setState({
-      selectedDepartment: department,
-      showEditDepartment: true,
-      showAddDepartment: false
+      selectedDepartmentId: id,
+      showDepartment: true,
+      showAddDepartment: false,
     });
   };
 
-  hideEditDepartment = department => {
+  hideDepartment = () => {
     this.setState({
-      showEditDepartment: false
+      showDepartment: false,
     });
   };
 
   render() {
     const {
       showAddDepartment,
-      showEditDepartment,
-      selectedDepartment
+      showDepartment,
+      selectedDepartmentId,
     } = this.state;
 
     return (
@@ -57,36 +58,31 @@ export default class Departments extends Component {
                   <Fragment>
                     <h2>Manage Departments</h2>
 
-                    {showEditDepartment && (
-                      <EditDepartment
-                        department={selectedDepartment}
-                        cancelEdit={this.hideEditDepartment}
+                    {showDepartment && (
+                      <Department
+                        id={selectedDepartmentId}
+                        cancelEdit={this.hideDepartment}
                       />
                     )}
-                    {!showAddDepartment &&
-                      !showEditDepartment && (
-                        <DepartmentList
-                          selectDepartment={this.showEditDepartment}
-                        />
-                      )}
+                    {!(showAddDepartment || showDepartment) && (
+                      <DepartmentList selectDepartment={this.showDepartment} />
+                    )}
                     {showAddDepartment && (
                       <AddDepartment cancelAdd={this.hideAddDepartment} />
                     )}
-                    {!showAddDepartment &&
-                      !showEditDepartment && (
-                        <Button
-                          variant="raised"
-                          color="primary"
-                          onClick={this.showAddDepartment}
-                        >
-                          Add New Department
-                        </Button>
-                      )}
+                    {!(showAddDepartment || showDepartment) && (
+                      <Button
+                        variant="raised"
+                        color="primary"
+                        onClick={this.showAddDepartment}
+                      >
+                        Add New Department
+                      </Button>
+                    )}
                   </Fragment>
                 );
-              } else {
-                return <Redirect to="/dashboard" />;
               }
+              return <Redirect to="/dashboard" />;
             }
 
             return null;

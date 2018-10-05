@@ -1,15 +1,16 @@
-const { Punch, Department } = require('../../models');
+const { Punch, Department, User } = require('../../models');
 
 module.exports = {
   Punch: {
+    user: async parent => User.findOne({ _id: parent.userId }).exec(),
     department: async parent => {
       const department = await Department.findOne({ _id: parent.departmentId });
 
       return {
-        id: department._id,
-        name: department.name
+        id: department.id,
+        name: department.name,
       };
-    }
+    },
   },
   Query: {
     lastPunch: async (parent, args, { user }) => {
@@ -74,8 +75,8 @@ module.exports = {
         }
       }
 
-      return await punchQuery.exec();
-    }
+      return punchQuery.exec();
+    },
   },
 
   Mutation: {
@@ -87,13 +88,13 @@ module.exports = {
       // Check if user is already clocked in
       const clockedInPunch = await Punch.findOne({
         clockOutMsTime: null,
-        userId: user.id
+        userId: user.id,
       }).exec();
 
       console.log('[ClockedInPunch]:', clockedInPunch);
       // Throw error if clocked in
       if (clockedInPunch) {
-        throw new Error(`Already clocked in`);
+        throw new Error('Already clocked in');
       }
 
       // Else clock user into selected department
@@ -102,10 +103,10 @@ module.exports = {
       const newPunch = new Punch({
         userId: user.id,
         departmentId,
-        clockInMsTime: msTime
+        clockInMsTime: msTime,
       });
 
-      return await newPunch.save();
+      return newPunch.save();
     },
 
     clockOut: async (parent, args, { user }) => {
@@ -116,12 +117,12 @@ module.exports = {
       // Check if user is clocked in
       const punch = await Punch.findOne({
         clockOutMsTime: null,
-        userId: user.id
+        userId: user.id,
       }).exec();
 
       // Throw error if not clocked in
       if (!punch) {
-        throw new Error(`Not clocked in`);
+        throw new Error('Not clocked in');
       }
 
       // Else clock user into selected department
@@ -129,7 +130,7 @@ module.exports = {
 
       punch.set({ clockOutMsTime: msTime });
 
-      return await punch.save();
+      return punch.save();
     },
     addPunch: async (parent, args, { user }) => {
       if (!user || !user.admin) {
@@ -138,7 +139,7 @@ module.exports = {
 
       const punch = new Punch(args);
 
-      return await punch.save();
+      return punch.save();
     },
     updatePunch: async (parent, args, { user }) => {
       if (!user || !user.admin) {
@@ -150,7 +151,7 @@ module.exports = {
       const updatedPunch = await Punch.findOneAndUpdate(
         { _id: id },
         {
-          $set: { ...updatedProperties }
+          $set: { ...updatedProperties },
         },
         { new: true }
       ).exec();
@@ -160,6 +161,6 @@ module.exports = {
       }
 
       return updatedPunch;
-    }
-  }
+    },
+  },
 };

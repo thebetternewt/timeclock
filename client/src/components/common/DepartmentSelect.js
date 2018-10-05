@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
 import {
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText
+  FormHelperText,
 } from '@material-ui/core';
 
 const DepartmentSelect = props => {
@@ -19,17 +18,16 @@ const DepartmentSelect = props => {
   ));
 
   return (
-    <FormControl required>
+    <FormControl fullWidth required style={{ padding: '1rem 0' }}>
       <InputLabel htmlFor="age-required">Department</InputLabel>
       <Select
         value={selectedDepartmentId}
         onChange={handleSelect}
         name="department"
         inputProps={{
-          id: 'department-required'
+          id: 'department-required',
         }}
         displayEmpty
-        style={{ width: 300 }}
       >
         <MenuItem value="" disabled>
           Department
@@ -41,9 +39,14 @@ const DepartmentSelect = props => {
   );
 };
 
+DepartmentSelect.defaultProps = {
+  selectedDepartmentId: '',
+};
+
 DepartmentSelect.propTypes = {
   handleSelect: PropTypes.func.isRequired,
-  departments: PropTypes.arrayOf(PropTypes.shape()).isRequired
+  departments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  selectedDepartmentId: PropTypes.string,
 };
 
 export default DepartmentSelect;

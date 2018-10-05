@@ -6,6 +6,12 @@ const AUTH_QUERY = gql`
   }
 `;
 
+const REDIRECT_QUERY = gql`
+  query RedirectQuery {
+    redirectPath @client
+  }
+`;
+
 // Users
 const CURRENT_USER_QUERY = gql`
   query CurrentUserQuery {
@@ -41,10 +47,29 @@ const USERS_QUERY = gql`
   }
 `;
 
+const USER_QUERY = gql`
+  query UserQuery($id: ID!) {
+    user(id: $id) {
+      id
+      netId
+      idNumber
+      firstName
+      lastName
+      admin
+      active
+      departments {
+        id
+        name
+      }
+    }
+  }
+`;
+
 // Punches
-const LAST_PUNCH_QUERY = gql`
-  query LastPunchQuery {
-    lastPunch {
+
+const PUNCHES_QUERY = gql`
+  query PunchesQuery($userId: ID, $departmentId: ID) {
+    punches(userId: $userId, departmentId: $departmentId) {
       id
       userId
       departmentId
@@ -58,9 +83,33 @@ const LAST_PUNCH_QUERY = gql`
   }
 `;
 
-const PUNCHES_QUERY = gql`
-  query PunchesQuery($userId: ID, $departmentId: ID) {
-    punches(userId: $userId, departmentId: $departmentId) {
+const PUNCH_QUERY = gql`
+  query PunchQuery($id: ID!) {
+    punch(id: $id) {
+      id
+      userId
+      departmentId
+      clockInMsTime
+      clockOutMsTime
+      department {
+        name
+        id
+      }
+      user {
+        id
+        netId
+        departments {
+          name
+          id
+        }
+      }
+    }
+  }
+`;
+
+const LAST_PUNCH_QUERY = gql`
+  query LastPunchQuery {
+    lastPunch {
       id
       userId
       departmentId
@@ -85,11 +134,25 @@ const DEPARTMENTS_QUERY = gql`
   }
 `;
 
+const DEPARTMENT_QUERY = gql`
+  query DepartmentsQuery($id: ID!) {
+    department(id: $id) {
+      id
+      name
+      representativeId
+    }
+  }
+`;
+
 export {
+  AUTH_QUERY,
+  REDIRECT_QUERY,
   CURRENT_USER_QUERY,
   USERS_QUERY,
-  AUTH_QUERY,
-  LAST_PUNCH_QUERY,
+  USER_QUERY,
   PUNCHES_QUERY,
-  DEPARTMENTS_QUERY
+  PUNCH_QUERY,
+  LAST_PUNCH_QUERY,
+  DEPARTMENTS_QUERY,
+  DEPARTMENT_QUERY,
 };

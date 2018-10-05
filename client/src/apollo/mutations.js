@@ -69,6 +69,7 @@ const UPDATE_USER = gql`
     $lastName: String!
     $password: String
     $admin: Boolean
+    $active: Boolean
   ) {
     updateUser(
       id: $id
@@ -78,6 +79,7 @@ const UPDATE_USER = gql`
       firstName: $firstName
       lastName: $lastName
       admin: $admin
+      active: $active
     ) {
       id
     }
@@ -185,5 +187,5 @@ export {
   ADD_PUNCH,
   UPDATE_PUNCH,
   ADD_DEPARTMENT,
-  UPDATE_DEPARTMENT
+  UPDATE_DEPARTMENT,
 };

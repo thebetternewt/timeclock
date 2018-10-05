@@ -1,33 +1,31 @@
-import React, { Component } from 'react';
-import UserForm from './UserForm';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
+import { Paper, CircularProgress } from '@material-ui/core';
+import UserForm from './UserForm';
 import { ADD_USER } from '../../../apollo/mutations';
 
-import { Paper, CircularProgress } from '@material-ui/core';
+const AddUser = props => {
+  const { cancelAdd } = props;
 
-export default class AddUser extends Component {
-  render() {
-    const { cancelAdd } = this.props;
+  return (
+    <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
+      <h3>Add User</h3>
+      <Mutation mutation={ADD_USER}>
+        {(addUser, { loading, error }) => {
+          if (loading) {
+            return <CircularProgress />;
+          }
 
-    return (
-      <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-        <h3>Add User</h3>
-        <Mutation mutation={ADD_USER}>
-          {(addUser, { data, loading, error }) => {
-            if (loading) {
-              return <CircularProgress />;
-            }
+          return <UserForm submit={addUser} error={error} close={cancelAdd} />;
+        }}
+      </Mutation>
+    </Paper>
+  );
+};
 
-            if (data) {
-              console.log(data);
-            }
+AddUser.propTypes = {
+  cancelAdd: PropTypes.func.isRequired,
+};
 
-            return (
-              <UserForm submit={addUser} error={error} close={cancelAdd} />
-            );
-          }}
-        </Mutation>
-      </Paper>
-    );
-  }
-}
+export default AddUser;

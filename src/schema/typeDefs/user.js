@@ -37,6 +37,7 @@ module.exports = gql`
       lastName: String
       departments: String
       admin: Boolean
+      active: Boolean
     ): User!
     removeUser(id: ID!): String
     deactivateUser(id: ID!): String

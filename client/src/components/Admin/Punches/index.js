@@ -2,51 +2,52 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 import { CircularProgress, Button } from '@material-ui/core';
+import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 
 import PunchList from './PunchList';
 import AddPunch from './AddPunch';
-import EditPunch from './EditPunch';
+import Punch from './Punch';
 
 export default class Punches extends Component {
   state = {
     showAddPunch: false,
-    showEditPunch: false,
-    selectedPunch: null
+    showPunch: false,
+    selectedPunchId: null,
   };
 
   showAddPunch = () => {
-    this.setState({ showAddPunch: true, showEditPunch: false });
+    this.setState({ showAddPunch: true, showPunch: false });
   };
+
   hideAddPunch = () => {
     this.setState({ showAddPunch: false });
   };
 
-  showEditPunch = punch => {
+  showPunch = id => {
     this.setState({
-      selectedPunch: punch,
-      showEditPunch: true,
-      showAddPunch: false
+      selectedPunchId: id,
+      showPunch: true,
+      showAddPunch: false,
     });
   };
 
-  hideEditPunch = () => {
+  hidePunch = () => {
     this.setState({
-      showEditPunch: false
+      showPunch: false,
     });
   };
 
   hideForms = () => {
     this.setState({
       showAddPunch: false,
-      showEditPunch: false
+      showPunch: false,
     });
   };
 
   render() {
-    const { user } = this.props;
-    const { showAddPunch, showEditPunch, selectedPunch } = this.state;
+    const { userId } = this.props;
+    const { showAddPunch, showPunch, selectedPunchId } = this.state;
 
     return (
       <div>
@@ -62,38 +63,28 @@ export default class Punches extends Component {
                   <Fragment>
                     <h2>Punches</h2>
 
-                    {showEditPunch && (
-                      <EditPunch
-                        user={user}
-                        punch={selectedPunch}
-                        cancelEdit={this.hideEditPunch}
-                      />
+                    {showPunch && (
+                      <Punch id={selectedPunchId} cancelEdit={this.hidePunch} />
                     )}
-                    {!showAddPunch &&
-                      !showEditPunch && (
-                        <PunchList
-                          user={user}
-                          selectPunch={this.showEditPunch}
-                        />
-                      )}
+                    {!(showAddPunch || showPunch) && (
+                      <PunchList userId={userId} selectPunch={this.showPunch} />
+                    )}
                     {showAddPunch && (
-                      <AddPunch cancelAdd={this.hideAddPunch} user={user} />
+                      <AddPunch cancelAdd={this.hideAddPunch} userId={userId} />
                     )}
-                    {!showAddPunch &&
-                      !showEditPunch && (
-                        <Button
-                          variant="raised"
-                          color="primary"
-                          onClick={this.showAddPunch}
-                        >
-                          Add New Punch
-                        </Button>
-                      )}
+                    {!(showAddPunch || showPunch) && (
+                      <Button
+                        variant="raised"
+                        color="primary"
+                        onClick={this.showAddPunch}
+                      >
+                        Add New Punch
+                      </Button>
+                    )}
                   </Fragment>
                 );
-              } else {
-                return <Redirect to="/dashboard" />;
               }
+              return <Redirect to="/dashboard" />;
             }
 
             return null;
@@ -105,9 +96,9 @@ export default class Punches extends Component {
 }
 
 Punches.defaultProps = {
-  user: null
+  userId: null,
 };
 
 Punches.propTypes = {
-  user: PropTypes.shape()
+  userId: PropTypes.string,
 };

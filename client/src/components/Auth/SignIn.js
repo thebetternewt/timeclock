@@ -2,9 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
-import { LOGIN } from '../../apollo/mutations';
-
-import { isAuthenticated, setAuthenticatedUser } from '../../apollo/client';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,8 +12,16 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { CircularProgress } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
+import {
+  isAuthenticated,
+  setAuthenticatedUser,
+  getRedirectPath,
+  setRedirectPath,
+} from '../../apollo/client';
+import { LOGIN } from '../../apollo/mutations';
 
 const styles = theme => ({
   layout: {
@@ -27,8 +32,8 @@ const styles = theme => ({
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
       marginLeft: 'auto',
-      marginRight: 'auto'
-    }
+      marginRight: 'auto',
+    },
   },
   paper: {
     marginTop: theme.spacing.unit * 8,
@@ -36,34 +41,29 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
+      .spacing.unit * 3}px`,
   },
   avatar: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE11 issue.
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing.unit,
   },
   submit: {
-    marginTop: theme.spacing.unit * 3
-  }
+    marginTop: theme.spacing.unit * 3,
+  },
 });
 
 class SignIn extends Component {
   state = {
     netId: '',
-    password: ''
+    password: '',
   };
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    console.log('Submitted!');
   };
 
   render() {
@@ -85,20 +85,32 @@ class SignIn extends Component {
             <Mutation mutation={LOGIN}>
               {(login, { data, loading, error }) => {
                 if (loading) {
-                  return <span>Loading...</span>;
-                } else if (data) {
+                  return (
+                    <CircularProgress
+                      color="secondary"
+                      style={{ margin: '1rem 0' }}
+                    />
+                  );
+                }
+
+                if (data) {
                   const token = data.login;
                   localStorage.setItem('token', token);
-                  setAuthenticatedUser(jwt_decode(token));
-                  return <Redirect to="/dashboard" />;
+                  setAuthenticatedUser(jwtDecode(token));
+                  const path = getRedirectPath();
+                  if (path) {
+                    setRedirectPath(null);
+                    return <Redirect to={path} />;
+                  }
+                  return <Redirect to="/dashboard/timeclock" />;
                 }
                 return (
                   <Fragment>
                     {error && (
                       <pre>
                         Bad:{' '}
-                        {error.graphQLErrors.map(({ message }, i) => (
-                          <span key={i}>{message}</span>
+                        {error.graphQLErrors.map(({ message }) => (
+                          <span key={message}>{message}</span>
                         ))}
                       </pre>
                     )}
@@ -107,7 +119,7 @@ class SignIn extends Component {
                       onSubmit={e => {
                         e.preventDefault();
                         login({
-                          variables: { netId, password }
+                          variables: { netId, password },
                         }).catch(err => console.log(err.message));
                         this.setState({ netId: '', password: '' });
                       }}
@@ -156,7 +168,7 @@ class SignIn extends Component {
 }
 
 SignIn.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.shape().isRequired,
 };
 
 export default withStyles(styles)(SignIn);

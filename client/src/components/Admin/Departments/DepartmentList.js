@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Query } from "react-apollo";
-import { DEPARTMENTS_QUERY } from "../../../apollo/queries";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Query } from 'react-apollo';
 
 import {
   CircularProgress,
@@ -10,27 +9,30 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  TableCell
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+  TableCell,
+} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { DEPARTMENTS_QUERY } from '../../../apollo/queries';
 
 const styles = {
   selected: {
-    backgroundColor: "green"
-  }
+    backgroundColor: 'green',
+  },
 };
 
 class DepartmentList extends Component {
   state = {
-    selectedId: ""
+    selectedId: '',
   };
 
   handleRowSelect = id => {
+    const { selectDepartment } = this.props;
+
     this.setState({ selectedId: id });
+    selectDepartment(id);
   };
 
   render() {
-    const { selectDepartment } = this.props;
     const { selectedId } = this.state;
 
     return (
@@ -46,7 +48,7 @@ class DepartmentList extends Component {
             if (data) {
               const { departments } = data;
               return (
-                <Paper elevation={12} style={{ margin: "2rem 0", padding: 15 }}>
+                <Paper elevation={12} style={{ margin: '2rem 0', padding: 15 }}>
                   <Table>
                     <TableHead>
                       <TableRow>
@@ -55,24 +57,21 @@ class DepartmentList extends Component {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {departments.map(dept => {
-                        return (
-                          <TableRow
-                            hover
-                            key={dept.id}
-                            selected={dept.id === selectedId}
-                            onClick={() => {
-                              this.handleRowSelect(dept.id);
-                              selectDepartment(dept);
-                            }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {dept.name}
-                            </TableCell>
-                            <TableCell>{dept.representativeId}</TableCell>
-                          </TableRow>
-                        );
-                      })}
+                      {departments.map(dept => (
+                        <TableRow
+                          hover
+                          key={dept.id}
+                          selected={dept.id === selectedId}
+                          onClick={() => {
+                            this.handleRowSelect(dept.id);
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {dept.name}
+                          </TableCell>
+                          <TableCell>{dept.representativeId}</TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </Paper>
@@ -88,7 +87,7 @@ class DepartmentList extends Component {
 }
 
 DepartmentList.propTypes = {
-  selectDepartment: PropTypes.func.isRequired
+  selectDepartment: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(DepartmentList);

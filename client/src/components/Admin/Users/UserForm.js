@@ -1,20 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Query, Mutation } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../../apollo/queries';
-import { DEACTIVATE_USER, ACTIVATE_USER } from '../../../apollo/mutations';
-
+import { Query } from 'react-apollo';
 import {
   FormControl,
   FormControlLabel,
   InputLabel,
   Input,
   Button,
-  Checkbox
+  Checkbox,
 } from '@material-ui/core';
+import { CURRENT_USER_QUERY } from '../../../apollo/queries';
 
 export default class UserForm extends Component {
   state = {
+    /* eslint-disable react/destructuring-assignment */
     id: this.props.user.id || '',
     netId: this.props.user.netId || '',
     idNumber: this.props.user.idNumber || '',
@@ -22,7 +21,8 @@ export default class UserForm extends Component {
     lastName: this.props.user.lastName || '',
     password: '',
     admin: this.props.user.admin || false,
-    active: this.props.user.active
+    active: this.props.user.active,
+    /* eslint-enable react/destructuring-assignment */
   };
 
   handleInputChange = e => {
@@ -42,7 +42,8 @@ export default class UserForm extends Component {
       firstName,
       lastName,
       password,
-      admin
+      admin,
+      active,
     } = this.state;
 
     return (
@@ -55,7 +56,8 @@ export default class UserForm extends Component {
             idNumber,
             firstName,
             lastName,
-            admin
+            admin,
+            active,
           };
 
           // Only submit password if value in state
@@ -65,7 +67,7 @@ export default class UserForm extends Component {
 
           submit({
             variables,
-            refetchQueries: ['UsersQuery']
+            refetchQueries: ['UsersQuery'],
           })
             .then(() => close())
             .catch(err => console.log(err));
@@ -74,8 +76,8 @@ export default class UserForm extends Component {
         {error && (
           <pre style={{ margin: '1rem', color: 'red' }}>
             Error:{' '}
-            {error.graphQLErrors.map(({ message }, i) => (
-              <span key={i}>{message}</span>
+            {error.graphQLErrors.map(({ message }) => (
+              <span key={message}>{message}</span>
             ))}
           </pre>
         )}
@@ -136,69 +138,40 @@ export default class UserForm extends Component {
           {({ data }) => {
             if (data && data.me.admin) {
               return (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={admin}
-                      onChange={e => this.handleCheck(e)}
-                      value="admin"
-                      color="primary"
-                      disabled={data.me.id === user.id}
-                    />
-                  }
-                  label="Admin"
-                />
+                <Fragment>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={admin}
+                        onChange={e => this.handleCheck(e)}
+                        value="admin"
+                        color="primary"
+                        disabled={data.me.id === user.id}
+                      />
+                    }
+                    label="Admin"
+                  />
+
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={active}
+                        onChange={e => this.handleCheck(e)}
+                        value="active"
+                        color="primary"
+                        disabled={data.me.id === user.id}
+                      />
+                    }
+                    label="Active"
+                  />
+                </Fragment>
               );
             }
 
             return null;
           }}
         </Query>
-        {user.id && user.active ? (
-          <Mutation mutation={DEACTIVATE_USER}>
-            {deactivateUser => {
-              return (
-                <Button
-                  type="button"
-                  variant="raised"
-                  color="primary"
-                  onClick={() => {
-                    deactivateUser({
-                      variables: { id },
-                      refetchQueries: ['UsersQuery']
-                    })
-                      .then(() => close())
-                      .catch(err => console.error);
-                  }}
-                >
-                  Deactivate
-                </Button>
-              );
-            }}
-          </Mutation>
-        ) : (
-          <Mutation mutation={ACTIVATE_USER}>
-            {activateUser => {
-              return (
-                <Button
-                  type="button"
-                  variant="raised"
-                  color="primary"
-                  onClick={() => {
-                    activateUser({
-                      variables: { id },
-                      refetchQueries: ['UsersQuery']
-                    })
-                      .then(() => close())
-                      .catch(err => console.error);
-                  }}
-                >
-                  Activate
-                </Button>
-              );
-            }}
-          </Mutation>
-        )}
+
         <Button type="submit" variant="raised" color="primary">
           Submit
         </Button>
@@ -211,11 +184,13 @@ export default class UserForm extends Component {
 }
 
 UserForm.defaultProps = {
-  user: {}
+  user: {},
+  error: null,
 };
 
 UserForm.propTypes = {
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  user: PropTypes.shape()
+  user: PropTypes.shape(),
+  error: PropTypes.shape(),
 };

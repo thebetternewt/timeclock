@@ -5,11 +5,13 @@ import DepartmentSelect from '../../common/DepartmentSelect';
 
 export default class PunchForm extends Component {
   state = {
+    /* eslint-disable react/destructuring-assignment */
     id: this.props.punch.id || '',
     userId: this.props.punch.userId || this.props.user.id,
     clockInMsTime: this.props.punch.clockInMsTime || '',
     clockOutMsTime: this.props.punch.clockOutMsTime || '',
-    departmentId: this.props.punch.departmentId || ''
+    departmentId: this.props.punch.departmentId || '',
+    /* eslint-enable react/destructuring-assignment */
   };
 
   handleInputChange = e => {
@@ -26,12 +28,13 @@ export default class PunchForm extends Component {
       userId,
       clockInMsTime,
       clockOutMsTime,
-      departmentId
+      departmentId,
     } = this.state;
     const { submit, close, error, user } = this.props;
 
     return (
       <form
+        style={{ maxWidth: 400 }}
         onSubmit={e => {
           e.preventDefault();
           submit({
@@ -40,9 +43,9 @@ export default class PunchForm extends Component {
               userId,
               clockInMsTime,
               clockOutMsTime,
-              departmentId
+              departmentId,
             },
-            refetchQueries: ['PunchesQuery']
+            refetchQueries: ['PunchesQuery'],
           })
             .then(() => close())
             .catch(err => console.log(err));
@@ -51,8 +54,8 @@ export default class PunchForm extends Component {
         {error && (
           <pre style={{ margin: '1rem', color: 'red' }}>
             Error:{' '}
-            {error.graphQLErrors.map(({ message }, i) => (
-              <span key={i}>{message}</span>
+            {error.graphQLErrors.map(({ message }) => (
+              <span key={message}>{message}</span>
             ))}
           </pre>
         )}
@@ -96,12 +99,14 @@ export default class PunchForm extends Component {
 
 PunchForm.defaultProps = {
   punch: {},
-  user: {}
+  user: {},
+  error: null,
 };
 
 PunchForm.propTypes = {
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   punch: PropTypes.shape(),
-  user: PropTypes.shape()
+  user: PropTypes.shape(),
+  error: PropTypes.shape(),
 };

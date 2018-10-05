@@ -7,7 +7,8 @@ module.exports = gql`
     departmentId: ID!
     clockInMsTime: String!
     clockOutMsTime: String
-    department: Department
+    department: Department!
+    user: User!
   }
 
   extend type Query {
