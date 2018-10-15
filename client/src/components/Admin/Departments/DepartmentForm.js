@@ -1,13 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, InputLabel, Input, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class DepartmentForm extends Component {
-  state = {
-    id: this.props.department.id || '',
-    name: this.props.department.name || '',
-    representativeId: this.props.department.representativeId || '',
-  };
+const styles = theme => ({
+  FormControl: {
+    margin: `${theme.spacing.unit}px 0`,
+  },
+  Button: {
+    margin: theme.spacing.unit * 2,
+    marginLeft: 0,
+  },
+});
+
+class DepartmentForm extends Component {
+  state = this.getInitState();
+
+  getInitState() {
+    const { department } = this.props;
+
+    return (
+      department || {
+        name: '',
+        representativeId: '',
+      }
+    );
+  }
+
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  // state = {
+  //   id: this.props.department.id || '',
+  //   name: this.props.department.name || '',
+  //   representativeId: this.props.department.representativeId || '',
+  // };
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -15,7 +41,7 @@ export default class DepartmentForm extends Component {
 
   render() {
     const { id, name, representativeId } = this.state;
-    const { submit, close, error } = this.props;
+    const { classes, submit, close, error } = this.props;
 
     return (
       <form
@@ -41,7 +67,7 @@ export default class DepartmentForm extends Component {
             ))}
           </pre>
         )}
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="name">Name</InputLabel>
           <Input
             type="text"
@@ -52,7 +78,7 @@ export default class DepartmentForm extends Component {
             onChange={this.handleInputChange}
           />
         </FormControl>
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="representativeId">
             Representative NetID
           </InputLabel>
@@ -65,10 +91,15 @@ export default class DepartmentForm extends Component {
           />
         </FormControl>
 
-        <Button type="submit" variant="raised" color="primary">
+        <Button
+          type="submit"
+          variant="raised"
+          color="primary"
+          className={classes.Button}
+        >
           Submit
         </Button>
-        <Button variant="raised" color="secondary" onClick={close}>
+        <Button variant="raised" onClick={close} className={classes.Button}>
           Cancel
         </Button>
       </form>
@@ -77,13 +108,16 @@ export default class DepartmentForm extends Component {
 }
 
 DepartmentForm.defaultProps = {
-  department: {},
+  department: null,
   error: null,
 };
 
 DepartmentForm.propTypes = {
+  classes: PropTypes.shape().isRequired,
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   department: PropTypes.shape(),
   error: PropTypes.shape(),
 };
+
+export default withStyles(styles)(DepartmentForm);

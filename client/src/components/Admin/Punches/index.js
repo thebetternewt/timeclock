@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import { CircularProgress } from '@material-ui/core';
 import { USER_QUERY } from '../../../apollo/queries';
@@ -39,44 +38,34 @@ export default class Punches extends Component {
     const { showPunch, selectedPunchId } = this.state;
 
     return (
-      <div>
+      <Fragment>
         <Query query={USER_QUERY} variables={{ id: userId }}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircularProgress size={50} />;
+              return <CircularProgress />;
             }
 
-            if (data) {
-              if (data.user) {
-                return (
-                  <Fragment>
-                    <h2>Punches</h2>
-
-                    {showPunch ? (
-                      <Punch
-                        id={selectedPunchId}
-                        cancelEdit={this.hidePunch}
-                        open={showPunch}
-                      />
-                    ) : (
-                      <Fragment>
-                        <PunchList
-                          userId={userId}
-                          selectPunch={this.showPunch}
-                        />
-                        <AddPunch user={data.user} />
-                      </Fragment>
-                    )}
-                  </Fragment>
-                );
-              }
-              return <Redirect to="/dashboard" />;
+            if (data && data.user) {
+              return (
+                <Fragment>
+                  <h2>Punches</h2>
+                  {showPunch && (
+                    <Punch
+                      id={selectedPunchId}
+                      close={this.hidePunch}
+                      isOpen={showPunch}
+                    />
+                  )}
+                  <AddPunch user={data.user} />
+                  <PunchList userId={userId} selectPunch={this.showPunch} />
+                </Fragment>
+              );
             }
 
             return null;
           }}
         </Query>
-      </div>
+      </Fragment>
     );
   }
 }

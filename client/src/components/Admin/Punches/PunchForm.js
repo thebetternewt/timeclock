@@ -55,8 +55,6 @@ class PunchForm extends Component {
 
     const { classes, submit, close, error } = this.props;
 
-    console.log(this.props);
-
     return (
       <form
         onSubmit={e => {

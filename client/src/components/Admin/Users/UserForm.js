@@ -9,24 +9,44 @@ import {
   Button,
   Checkbox,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import { CURRENT_USER_QUERY, DEPARTMENTS_QUERY } from '../../../apollo/queries';
-
 import DepartmentSelect from '../../common/DepartmentSelect';
 
-export default class UserForm extends Component {
-  state = {
-    /* eslint-disable react/destructuring-assignment */
-    id: this.props.user.id || '',
-    netId: this.props.user.netId || '',
-    idNumber: this.props.user.idNumber || '',
-    firstName: this.props.user.firstName || '',
-    lastName: this.props.user.lastName || '',
-    password: '',
-    departmentIds: this.props.user.departments.map(dept => dept.id) || [],
-    admin: this.props.user.admin || false,
-    active: this.props.user.active,
-    /* eslint-enable react/destructuring-assignment */
-  };
+const styles = theme => ({
+  FormControl: {
+    margin: `${theme.spacing.unit}px 0`,
+  },
+  Button: {
+    margin: theme.spacing.unit * 2,
+    marginLeft: 0,
+  },
+});
+
+class UserForm extends Component {
+  state = this.getInitState();
+
+  getInitState() {
+    const { user } = this.props;
+
+    if (user) {
+      return {
+        ...user,
+        departmentIds: user.departments.map(dept => dept.id),
+      };
+    }
+
+    return {
+      netId: '',
+      idNumber: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      departmentIds: [],
+      admin: false,
+      active: true,
+    };
+  }
 
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -41,7 +61,7 @@ export default class UserForm extends Component {
   };
 
   render() {
-    const { user, submit, close, error } = this.props;
+    const { classes, submit, close, error } = this.props;
     const {
       id,
       netId,
@@ -70,7 +90,7 @@ export default class UserForm extends Component {
           };
 
           // Only submit password if value in state
-          if (password.trim().length > 0) {
+          if (password && password.trim().length > 0) {
             variables.password = password;
           }
 
@@ -90,7 +110,7 @@ export default class UserForm extends Component {
             ))}
           </pre>
         )}
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="netId">NetId</InputLabel>
           <Input
             type="text"
@@ -101,17 +121,17 @@ export default class UserForm extends Component {
             onChange={this.handleInputChange}
           />
         </FormControl>
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="idNumber">ID Number (9-digit)</InputLabel>
           <Input
-            type="text"
+            type="number"
             id="idNumber"
             name="idNumber"
             value={idNumber}
             onChange={this.handleInputChange}
           />
         </FormControl>
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="firstName">First Name</InputLabel>
           <Input
             type="text"
@@ -121,7 +141,7 @@ export default class UserForm extends Component {
             onChange={this.handleInputChange}
           />
         </FormControl>
-        <FormControl margin="normal" required fullWidth>
+        <FormControl required fullWidth className={classes.FormControl}>
           <InputLabel htmlFor="lastName">Last Name</InputLabel>
           <Input
             type="text"
@@ -131,8 +151,8 @@ export default class UserForm extends Component {
             onChange={this.handleInputChange}
           />
         </FormControl>
-        {!user.id && (
-          <FormControl margin="normal" required fullWidth>
+        {!id && (
+          <FormControl required fullWidth className={classes.FormControl}>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input
               name="password"
@@ -152,6 +172,7 @@ export default class UserForm extends Component {
                   handleSelect={this.handleDepartmentSelect}
                   selectedDepartmentIds={departmentIds}
                   multiple
+                  className={classes.FormControl}
                 />
               );
             }
@@ -170,7 +191,7 @@ export default class UserForm extends Component {
                         onChange={e => this.handleCheck(e)}
                         value="admin"
                         color="primary"
-                        disabled={data.me.id === user.id}
+                        disabled={data.me.id === id}
                       />
                     }
                     label="Admin"
@@ -183,7 +204,7 @@ export default class UserForm extends Component {
                         onChange={e => this.handleCheck(e)}
                         value="active"
                         color="primary"
-                        disabled={data.me.id === user.id}
+                        disabled={data.me.id === id}
                       />
                     }
                     label="Active"
@@ -196,10 +217,20 @@ export default class UserForm extends Component {
           }}
         </Query>
 
-        <Button type="submit" variant="raised" color="primary">
+        <Button
+          type="submit"
+          variant="raised"
+          color="primary"
+          className={classes.Button}
+        >
           Submit
         </Button>
-        <Button variant="raised" color="secondary" onClick={close}>
+        <Button
+          type="button"
+          variant="raised"
+          onClick={close}
+          className={classes.Button}
+        >
           Cancel
         </Button>
       </form>
@@ -208,13 +239,16 @@ export default class UserForm extends Component {
 }
 
 UserForm.defaultProps = {
-  user: {},
+  user: null,
   error: null,
 };
 
 UserForm.propTypes = {
+  classes: PropTypes.shape().isRequired,
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   user: PropTypes.shape(),
   error: PropTypes.shape(),
 };
+
+export default withStyles(styles)(UserForm);

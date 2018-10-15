@@ -23,7 +23,7 @@ const styles = theme => ({
 
 class Punch extends Component {
   state = {
-    id: this.props.id, // eslint-disable-line react/destructuring-assignment
+    id: this.props.id,
     editMode: false,
   };
 
@@ -35,11 +35,11 @@ class Punch extends Component {
 
   render() {
     const { id, editMode } = this.state;
-    const { classes, cancelEdit, open } = this.props;
+    const { classes, close, isOpen } = this.props;
 
     return (
       <Dialog
-        open={open}
+        open={isOpen}
         onClose={this.handleToggle}
         aria-labelledby="form-dialog-title"
         fullWidth
@@ -109,16 +109,16 @@ class Punch extends Component {
                     </Button>
                     <Button
                       variant="raised"
-                      onClick={cancelEdit}
+                      onClick={close}
                       className={classes.Button}
                     >
-                      Close
+                      Back
                     </Button>
                   </Fragment>
                 );
               }
 
-              return <p>Pilgrim not found.</p>;
+              return <p>Punch not found.</p>;
             }}
           </Query>
         </DialogContent>
@@ -130,8 +130,8 @@ class Punch extends Component {
 Punch.propTypes = {
   classes: PropTypes.shape().isRequired,
   id: PropTypes.string.isRequired,
-  cancelEdit: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(Punch);

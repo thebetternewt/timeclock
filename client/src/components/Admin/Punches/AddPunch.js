@@ -13,17 +13,16 @@ import { ADD_PUNCH } from '../../../apollo/mutations';
 
 class AddPunch extends Component {
   state = {
-    open: false,
+    isOpen: false,
   };
 
-  handleToggle = () => {
-    this.setState({
-      open: !this.state.open, // eslint-disable-line
-    });
-  };
+  handleToggle = () =>
+    this.setState(({ isOpen }) => ({
+      isOpen: !isOpen, // eslint-disable-line
+    }));
 
   render() {
-    const { open } = this.state;
+    const { isOpen } = this.state;
     const { user } = this.props;
 
     return (
@@ -32,7 +31,7 @@ class AddPunch extends Component {
           Add Punch
         </Button>
         <Dialog
-          open={open}
+          open={isOpen}
           onClose={this.handleToggle}
           aria-labelledby="form-dialog-title"
           fullWidth

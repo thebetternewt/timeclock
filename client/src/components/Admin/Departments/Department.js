@@ -2,27 +2,36 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Query, Mutation } from 'react-apollo';
 import { Paper, CircularProgress, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import DepartmentForm from './DepartmentForm';
 import { DEPARTMENT_QUERY } from '../../../apollo/queries';
 import { UPDATE_DEPARTMENT } from '../../../apollo/mutations';
 
-export default class Department extends Component {
+const styles = theme => ({
+  Paper: {
+    padding: theme.spacing.unit * 3,
+  },
+  Button: {
+    marginRight: theme.spacing.unit * 2,
+  },
+});
+
+class Department extends Component {
   state = {
-    id: this.props.id, // eslint-disable-line react/destructuring-assignment
-    showEditMode: false,
+    id: this.props.id,
+    editMode: false,
   };
 
   toggleEditMode = () => {
-    const { showEditMode } = this.state;
-    this.setState({ showEditMode: !showEditMode });
+    this.setState(({ editMode }) => ({ editMode: !editMode }));
   };
 
   render() {
-    const { id, showEditMode } = this.state;
-    const { cancelEdit } = this.props;
+    const { id, editMode } = this.state;
+    const { classes, cancelEdit } = this.props;
 
     return (
-      <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
+      <Paper elevation={12} className={classes.Paper}>
         <h3>Department Details</h3>
         <Query query={DEPARTMENT_QUERY} variables={{ id }}>
           {({ data, loading }) => {
@@ -33,7 +42,7 @@ export default class Department extends Component {
             if (data && data.department) {
               const { name, representativeId } = data.department;
 
-              if (showEditMode) {
+              if (editMode) {
                 return (
                   <Mutation mutation={UPDATE_DEPARTMENT}>
                     {(updateDepartment, { loading: updating, error }) => {
@@ -66,15 +75,16 @@ export default class Department extends Component {
                     variant="raised"
                     color="primary"
                     onClick={this.toggleEditMode}
+                    className={classes.Button}
                   >
                     Edit
                   </Button>
                   <Button
                     variant="raised"
-                    color="secondary"
                     onClick={cancelEdit}
+                    className={classes.Button}
                   >
-                    Close
+                    Back
                   </Button>
                 </Fragment>
               );
@@ -89,6 +99,9 @@ export default class Department extends Component {
 }
 
 Department.propTypes = {
+  classes: PropTypes.shape().isRequired,
   id: PropTypes.string.isRequired,
   cancelEdit: PropTypes.func.isRequired,
 };
+
+export default withStyles(styles)(Department);

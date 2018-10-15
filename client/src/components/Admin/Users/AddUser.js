@@ -1,31 +1,63 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
 import { Mutation } from 'react-apollo';
-import { Paper, CircularProgress } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  CircularProgress,
+} from '@material-ui/core';
 import UserForm from './UserForm';
 import { ADD_USER } from '../../../apollo/mutations';
 
-const AddUser = props => {
-  const { cancelAdd } = props;
+class AddUser extends Component {
+  state = {
+    isOpen: false,
+  };
 
-  return (
-    <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-      <h3>Add User</h3>
-      <Mutation mutation={ADD_USER}>
-        {(addUser, { loading, error }) => {
-          if (loading) {
-            return <CircularProgress />;
-          }
+  handleToggle = () => {
+    this.setState(({ isOpen }) => ({
+      isOpen: !isOpen, // eslint-disable-line
+    }));
+  };
 
-          return <UserForm submit={addUser} error={error} close={cancelAdd} />;
-        }}
-      </Mutation>
-    </Paper>
-  );
-};
+  render() {
+    const { isOpen } = this.state;
 
-AddUser.propTypes = {
-  cancelAdd: PropTypes.func.isRequired,
-};
+    return (
+      <Fragment>
+        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+          Add User
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={this.handleToggle}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+          <DialogContent>
+            <Mutation mutation={ADD_USER}>
+              {(addUser, { loading, error }) => {
+                if (loading) {
+                  return <CircularProgress />;
+                }
+
+                return (
+                  <UserForm
+                    submit={addUser}
+                    error={error}
+                    close={this.handleToggle}
+                  />
+                );
+              }}
+            </Mutation>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    );
+  }
+}
 
 export default AddUser;

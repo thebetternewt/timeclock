@@ -1,37 +1,62 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
 import { Mutation } from 'react-apollo';
-import { Paper, CircularProgress } from '@material-ui/core';
+import {
+  CircularProgress,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from '@material-ui/core';
 import DepartmentForm from './DepartmentForm';
 import { ADD_DEPARTMENT } from '../../../apollo/mutations';
 
-const AddDepartment = props => {
-  const { cancelAdd } = props;
+class AddDepartment extends Component {
+  state = {
+    isOpen: false,
+  };
 
-  return (
-    <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-      <h3>Add Department</h3>
-      <Mutation mutation={ADD_DEPARTMENT}>
-        {(addDepartment, { loading, error }) => {
-          if (loading) {
-            return <CircularProgress />;
-          }
+  handleToggle = () =>
+    this.setState(({ isOpen }) => ({
+      isOpen: !isOpen, // eslint-disable-line
+    }));
 
-          return (
-            <DepartmentForm
-              submit={addDepartment}
-              error={error}
-              close={cancelAdd}
-            />
-          );
-        }}
-      </Mutation>
-    </Paper>
-  );
-};
+  render() {
+    const { isOpen } = this.state;
 
-AddDepartment.propTypes = {
-  cancelAdd: PropTypes.func.isRequired,
-};
+    return (
+      <Fragment>
+        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+          Add Department
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={this.handleToggle}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle id="form-dialog-title">Add Department</DialogTitle>
+          <DialogContent>
+            <Mutation mutation={ADD_DEPARTMENT}>
+              {(addDepartment, { loading, error }) => {
+                if (loading) {
+                  return <CircularProgress />;
+                }
+
+                return (
+                  <DepartmentForm
+                    submit={addDepartment}
+                    error={error}
+                    close={this.handleToggle}
+                  />
+                );
+              }}
+            </Mutation>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    );
+  }
+}
 
 export default AddDepartment;

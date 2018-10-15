@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   FormControl,
@@ -28,53 +28,57 @@ const DepartmentSelect = props => {
 
   return (
     <FormControl fullWidth required className={className}>
-      <InputLabel shrink htmlFor="department">
-        Department
-      </InputLabel>
       {multiple ? (
-        <Select
-          multiple
-          value={selectedDepartmentIds}
-          onChange={handleSelect}
-          name="department"
-          renderValue={selected =>
-            // Filter out and join department names for selected departments
-            departments
-              .filter(dept => selected.indexOf(dept.id) > -1)
-              .map(dept => dept.name)
-              .join(', ')
-          }
-          fullWidth
-          displayEmpty
-        >
-          <MenuItem value="" disabled>
-            Department
-          </MenuItem>
-          {departments.map(dept => (
-            <MenuItem key={dept.id} value={dept.id}>
-              <Checkbox checked={selectedDepartmentIds.indexOf(dept.id) > -1} />
-              <ListItemText primary={dept.name} />
+        <Fragment>
+          <InputLabel htmlFor="departments">Departments</InputLabel>
+
+          <Select
+            multiple
+            value={selectedDepartmentIds}
+            onChange={handleSelect}
+            name="departments"
+            renderValue={selected =>
+              // Filter out and join department names for selected departments
+              departments
+                .filter(dept => selected.indexOf(dept.id) > -1)
+                .map(dept => dept.name)
+                .join(', ')
+            }
+            fullWidth
+          >
+            <MenuItem value="" disabled>
+              Department
             </MenuItem>
-          ))}
-        </Select>
+            {departments.map(dept => (
+              <MenuItem key={dept.id} value={dept.id}>
+                <Checkbox
+                  checked={selectedDepartmentIds.indexOf(dept.id) > -1}
+                />
+                <ListItemText primary={dept.name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </Fragment>
       ) : (
-        <Select
-          value={selectedDepartmentId}
-          onChange={handleSelect}
-          name="department"
-          inputProps={{
-            id: 'department-required',
-          }}
-          fullWidth
-          displayEmpty
-        >
-          <MenuItem value="" disabled>
+        <Fragment>
+          <InputLabel shrink htmlFor="departments">
             Department
-          </MenuItem>
-          {departmentMenuItems}
-        </Select>
+          </InputLabel>
+          <Select
+            value={selectedDepartmentId}
+            onChange={handleSelect}
+            name="department"
+            fullWidth
+            displayEmpty
+          >
+            <MenuItem value="" disabled>
+              Department
+            </MenuItem>
+            {departmentMenuItems}
+          </Select>
+          <FormHelperText>Required</FormHelperText>
+        </Fragment>
       )}
-      <FormHelperText>Required</FormHelperText>
     </FormControl>
   );
 };
