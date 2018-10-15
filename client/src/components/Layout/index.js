@@ -1,46 +1,31 @@
-import React, { Component } from 'react';
-import MenuBar from './MenuBar';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import MenuBar from './MenuBar';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    minHeight: '100vh',
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex'
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1
-  },
-  flex: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     marginTop: '60px',
     padding: theme.spacing.unit * 3,
-    minWidth: 0 // So the Typography noWrap works
-  }
+    minWidth: 0, // So the Typography noWrap works
+  },
 });
 
-class Layout extends Component {
-  render() {
-    const { classes, children } = this.props;
-    return (
-      <div style={{ minHeight: '100vh' }}>
-        <MenuBar />
-        <main className={classes.content}>{children}</main>
-      </div>
-    );
-  }
-}
+const Layout = props => {
+  const { classes, children } = props;
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <MenuBar />
+      <main className={classes.content}>{children}</main>
+    </div>
+  );
+};
+
+Layout.propTypes = {
+  classes: PropTypes.shape().isRequired,
+  children: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+};
 
 export default withStyles(styles)(Layout);

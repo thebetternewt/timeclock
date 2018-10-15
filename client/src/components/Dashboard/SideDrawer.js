@@ -1,15 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../../apollo/queries';
 
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
+import { withRouter } from 'react-router-dom';
+import { CURRENT_USER_QUERY } from '../../apollo/queries';
 
-import { userItems, supervisorItems, adminItems } from './tileData';
+import { userItems, supervisorItems, adminItems } from './SideDrawerItems';
 
 const drawerWidth = 240;
 
@@ -18,22 +19,22 @@ const styles = theme => ({
     position: 'fixed',
     top: 0,
     left: 0,
-    width: drawerWidth
+    width: drawerWidth,
   },
   toolbar: theme.mixins.toolbar,
   subheader: {
-    textTransform: 'uppercase'
-  }
+    textTransform: 'uppercase',
+  },
 });
 
 const SideDrawer = props => {
-  const { classes } = props;
+  const { classes, match } = props;
 
   return (
     <Drawer
       variant="permanent"
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
     >
       <div className={classes.toolbar} />
@@ -45,7 +46,7 @@ const SideDrawer = props => {
           </ListSubheader>
         }
       >
-        {userItems}
+        {userItems(match.url)}
       </List>
       <Query query={CURRENT_USER_QUERY}>
         {({ data }) => {
@@ -64,7 +65,7 @@ const SideDrawer = props => {
                     </ListSubheader>
                   }
                 >
-                  {supervisorItems}
+                  {supervisorItems(match.url)}
                 </List>
                 <Divider />
                 <List
@@ -78,7 +79,7 @@ const SideDrawer = props => {
                     </ListSubheader>
                   }
                 >
-                  {adminItems}
+                  {adminItems(match.url)}
                 </List>
               </Fragment>
             );
@@ -92,7 +93,8 @@ const SideDrawer = props => {
 };
 
 SideDrawer.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.shape().isRequired,
+  match: PropTypes.shape().isRequired,
 };
 
-export default withStyles(styles)(SideDrawer);
+export default withRouter(withStyles(styles)(SideDrawer));

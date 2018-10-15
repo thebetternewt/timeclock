@@ -1,43 +1,70 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import PunchForm from './PunchForm';
 import { Mutation } from 'react-apollo';
+import {
+  CircularProgress,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from '@material-ui/core';
+import PunchForm from './PunchForm';
 import { ADD_PUNCH } from '../../../apollo/mutations';
 
-import { Paper, CircularProgress } from '@material-ui/core';
+class AddPunch extends Component {
+  state = {
+    open: false,
+  };
 
-export default class AddPunch extends Component {
+  handleToggle = () => {
+    this.setState({
+      open: !this.state.open, // eslint-disable-line
+    });
+  };
+
   render() {
-    const { cancelAdd, user } = this.props;
+    const { open } = this.state;
+    const { user } = this.props;
 
     return (
-      <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
-        <h3>Add User</h3>
-        <Mutation mutation={ADD_PUNCH}>
-          {(addPunch, { data, loading, error }) => {
-            if (loading) {
-              return <CircularProgress />;
-            }
+      <Fragment>
+        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+          Add Punch
+        </Button>
+        <Dialog
+          open={open}
+          onClose={this.handleToggle}
+          aria-labelledby="form-dialog-title"
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle id="form-dialog-title">Add Punch</DialogTitle>
+          <DialogContent>
+            <Mutation mutation={ADD_PUNCH}>
+              {(addPunch, { loading, error }) => {
+                if (loading) {
+                  return <CircularProgress />;
+                }
 
-            if (data) {
-              console.log(data);
-            }
-
-            return (
-              <PunchForm
-                submit={addPunch}
-                error={error}
-                close={cancelAdd}
-                user={user}
-              />
-            );
-          }}
-        </Mutation>
-      </Paper>
+                return (
+                  <PunchForm
+                    submit={addPunch}
+                    error={error}
+                    close={this.handleToggle}
+                    user={user}
+                  />
+                );
+              }}
+            </Mutation>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
     );
   }
 }
 
 AddPunch.propTypes = {
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
 };
+
+export default AddPunch;

@@ -6,7 +6,7 @@ export default class DepartmentForm extends Component {
   state = {
     id: this.props.department.id || '',
     name: this.props.department.name || '',
-    representativeId: this.props.department.representativeId || ''
+    representativeId: this.props.department.representativeId || '',
   };
 
   handleInputChange = e => {
@@ -25,9 +25,9 @@ export default class DepartmentForm extends Component {
             variables: {
               id,
               name,
-              representativeId
+              representativeId,
             },
-            refetchQueries: ['DepartmentsQuery']
+            refetchQueries: ['DepartmentsQuery'],
           })
             .then(() => close())
             .catch(err => console.log(err));
@@ -36,8 +36,8 @@ export default class DepartmentForm extends Component {
         {error && (
           <pre style={{ margin: '1rem', color: 'red' }}>
             Error:{' '}
-            {error.graphQLErrors.map(({ message }, i) => (
-              <span key={i}>{message}</span>
+            {error.graphQLErrors.map(({ message }) => (
+              <span key={message}>{message}</span>
             ))}
           </pre>
         )}
@@ -77,11 +77,13 @@ export default class DepartmentForm extends Component {
 }
 
 DepartmentForm.defaultProps = {
-  department: {}
+  department: {},
+  error: null,
 };
 
 DepartmentForm.propTypes = {
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  department: PropTypes.shape()
+  department: PropTypes.shape(),
+  error: PropTypes.shape(),
 };

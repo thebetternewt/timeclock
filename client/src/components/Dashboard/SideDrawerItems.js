@@ -10,9 +10,9 @@ import BusinessIcon from '@material-ui/icons/Business';
 import TimerIcon from '@material-ui/icons/Timer';
 import TimelineIcon from '@material-ui/icons/Timeline';
 
-export const userItems = (
+export const userItems = path => (
   <div>
-    <Link to="/dashboard/timeclock">
+    <Link to={`${path}/timeclock`}>
       <ListItem button>
         <ListItemIcon>
           <TimerIcon />
@@ -29,7 +29,7 @@ export const userItems = (
   </div>
 );
 
-export const supervisorItems = (
+export const supervisorItems = path => (
   <div>
     <ListItem button>
       <ListItemIcon>
@@ -46,9 +46,9 @@ export const supervisorItems = (
   </div>
 );
 
-export const adminItems = (
+export const adminItems = path => (
   <div>
-    <Link to="/dashboard/user-admin">
+    <Link to={`${path}/users`}>
       <ListItem button>
         <ListItemIcon>
           <GroupIcon />
@@ -56,7 +56,7 @@ export const adminItems = (
         <ListItemText primary="Users" />
       </ListItem>
     </Link>
-    <Link to="/dashboard/department-admin">
+    <Link to={`${path}/departments`}>
       <ListItem button>
         <ListItemIcon>
           <BusinessIcon />

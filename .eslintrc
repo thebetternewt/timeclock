@@ -38,7 +38,10 @@
       2,
       "single"
     ],
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off",
+    "react/destructuring-assignment": "off"
   },
   "plugins": [
     "prettier"

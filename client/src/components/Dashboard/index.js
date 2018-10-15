@@ -26,20 +26,20 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     minWidth: 0, // So the Typography noWrap works
   },
-  toolbar: theme.mixins.toolbar,
 });
 
 const Dashboard = props => {
-  const { classes } = props;
+  const { classes, match } = props;
+
   return (
     <div className={classes.root}>
       <SideDrawer width={drawerWidth} />
       <main className={classes.content}>
-        <Route exact path="/dashboard/timeclock" component={TimeClock} />
-        <Route exact path="/dashboard/user-admin" component={Users} />
+        <Route exact path={`${match.path}/timeclock`} component={TimeClock} />
+        <Route exact path={`${match.path}/users`} component={Users} />
         <Route
           exact
-          path="/dashboard/department-admin"
+          path={`${match.path}/departments`}
           component={Departments}
         />
       </main>
@@ -49,6 +49,7 @@ const Dashboard = props => {
 
 Dashboard.propTypes = {
   classes: PropTypes.shape().isRequired,
+  match: PropTypes.shape().isRequired,
 };
 
 export default withStyles(styles)(Dashboard);

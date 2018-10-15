@@ -21,6 +21,8 @@ export default class User extends Component {
     const { id, showEditMode } = this.state;
     const { cancelEdit } = this.props;
 
+    console.log(this.props);
+
     return (
       <Paper elevation={12} style={{ padding: '1rem', margin: '2rem 0' }}>
         <h3>User Detail</h3>

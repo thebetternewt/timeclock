@@ -94,12 +94,12 @@ class PunchList extends Component {
                                 >
                                   <TableCell component="th" scope="row">
                                     {moment(punch.clockInMsTime, 'x').format(
-                                      'YYYY-MM-DD h:mma'
+                                      'YYYY-MM-DD h:mm A'
                                     )}
                                   </TableCell>
                                   <TableCell>
                                     {moment(punch.clockOutMsTime, 'x').format(
-                                      'YYYY-MM-DD h:mma'
+                                      'YYYY-MM-DD h:mm A'
                                     )}
                                   </TableCell>
                                   <TableCell>

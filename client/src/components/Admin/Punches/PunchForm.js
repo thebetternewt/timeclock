@@ -1,46 +1,70 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Input, Button } from '@material-ui/core';
+import moment from 'moment';
+import { TextField, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import DepartmentSelect from '../../common/DepartmentSelect';
 
-export default class PunchForm extends Component {
-  state = {
-    /* eslint-disable react/destructuring-assignment */
-    id: this.props.punch.id || '',
-    userId: this.props.punch.userId || this.props.user.id,
-    clockInMsTime: this.props.punch.clockInMsTime || '',
-    clockOutMsTime: this.props.punch.clockOutMsTime || '',
-    departmentId: this.props.punch.departmentId || '',
-    /* eslint-enable react/destructuring-assignment */
+const styles = theme => ({
+  FormControl: {
+    margin: `${theme.spacing.unit}px 0`,
+  },
+  Button: {
+    margin: theme.spacing.unit * 2,
+    marginLeft: 0,
+  },
+});
+
+class PunchForm extends Component {
+  state = this.getInitState();
+
+  getInitState() {
+    const { punch, user } = this.props;
+
+    return (
+      punch || {
+        id: '',
+        clockInMsTime: '',
+        clockOutMsTime: '',
+        departmentId: '',
+        user,
+      }
+    );
+  }
+
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  handleDateTimeChange = ({ target: { name, value } }) => {
+    // Convert time back to msTime format
+    this.setState({ [name]: moment(value, 'YYYY-MM-DDTHH:mm').format('x') });
   };
 
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+  handleDepartmentSelect = e => this.setState({ departmentId: e.target.value });
 
-  handleDepartmentSelect = e => {
-    this.setState({ departmentId: e.target.value });
-  };
+  // Convert msTime to format for datetime picker
+  toInputTime = msTime => moment(msTime, 'x').format('YYYY-MM-DDTHH:mm');
 
   render() {
     const {
       id,
-      userId,
+      user,
       clockInMsTime,
       clockOutMsTime,
       departmentId,
     } = this.state;
-    const { submit, close, error, user } = this.props;
+
+    const { classes, submit, close, error } = this.props;
+
+    console.log(this.props);
 
     return (
       <form
-        style={{ maxWidth: 400 }}
         onSubmit={e => {
           e.preventDefault();
           submit({
             variables: {
               id,
-              userId,
+              userId: user.id,
               clockInMsTime,
               clockOutMsTime,
               departmentId,
@@ -59,37 +83,57 @@ export default class PunchForm extends Component {
             ))}
           </pre>
         )}
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="clockInMsTime">Clock In</InputLabel>
-          <Input
-            type="text"
-            id="clockInMsTime"
-            name="clockInMsTime"
-            value={clockInMsTime}
-            autoFocus
-            onChange={this.handleInputChange}
-          />
-        </FormControl>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="clockOutMsTime">Clock Out</InputLabel>
-          <Input
-            type="text"
-            id="clockOutMsTime"
-            name="clockOutMsTime"
-            value={clockOutMsTime}
-            onChange={this.handleInputChange}
-          />
-        </FormControl>
+
+        <TextField
+          id="clock-in-time"
+          name="clockInMsTime"
+          label="Clock-in Time"
+          type="datetime-local"
+          value={this.toInputTime(clockInMsTime)}
+          onChange={this.handleDateTimeChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+          className={classes.FormControl}
+        />
+
+        <TextField
+          id="clock-out-time"
+          name="clockOutMsTime"
+          label="Clock-out Time"
+          type="datetime-local"
+          value={this.toInputTime(clockOutMsTime)}
+          onChange={this.handleDateTimeChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+          className={classes.FormControl}
+        />
+
         <DepartmentSelect
           departments={user.departments}
           handleSelect={this.handleDepartmentSelect}
           selectedDepartmentId={departmentId}
+          className={classes.FormControl}
         />
 
-        <Button type="submit" variant="raised" color="primary">
+        <Button
+          type="submit"
+          variant="raised"
+          color="primary"
+          className={classes.Button}
+        >
           Submit
         </Button>
-        <Button variant="raised" color="secondary" onClick={close}>
+
+        <Button
+          type="button"
+          variant="raised"
+          onClick={close}
+          className={classes.Button}
+        >
           Cancel
         </Button>
       </form>
@@ -98,15 +142,17 @@ export default class PunchForm extends Component {
 }
 
 PunchForm.defaultProps = {
-  punch: {},
-  user: {},
+  punch: null,
   error: null,
 };
 
 PunchForm.propTypes = {
+  classes: PropTypes.shape().isRequired,
   submit: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
+  user: PropTypes.shape().isRequired,
   punch: PropTypes.shape(),
-  user: PropTypes.shape(),
   error: PropTypes.shape(),
 };
+
+export default withStyles(styles)(PunchForm);

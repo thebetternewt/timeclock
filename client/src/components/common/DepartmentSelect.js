@@ -17,6 +17,7 @@ const DepartmentSelect = props => {
     selectedDepartmentIds,
     departments,
     multiple,
+    className,
   } = props;
 
   const departmentMenuItems = departments.map(dept => (
@@ -26,8 +27,10 @@ const DepartmentSelect = props => {
   ));
 
   return (
-    <FormControl fullWidth required style={{ padding: '1rem 0' }}>
-      <InputLabel htmlFor="age-required">Department</InputLabel>
+    <FormControl fullWidth required className={className}>
+      <InputLabel shrink htmlFor="department">
+        Department
+      </InputLabel>
       {multiple ? (
         <Select
           multiple
@@ -41,8 +44,8 @@ const DepartmentSelect = props => {
               .map(dept => dept.name)
               .join(', ')
           }
-          // displayEmpty
-          style={{ width: 300 }}
+          fullWidth
+          displayEmpty
         >
           <MenuItem value="" disabled>
             Department
@@ -62,8 +65,8 @@ const DepartmentSelect = props => {
           inputProps={{
             id: 'department-required',
           }}
-          // displayEmpty
-          style={{ width: 300 }}
+          fullWidth
+          displayEmpty
         >
           <MenuItem value="" disabled>
             Department
@@ -77,12 +80,14 @@ const DepartmentSelect = props => {
 };
 
 DepartmentSelect.defaultProps = {
+  className: '',
   selectedDepartmentId: '',
   selectedDepartmentIds: [],
   multiple: false,
 };
 
 DepartmentSelect.propTypes = {
+  className: PropTypes.string,
   handleSelect: PropTypes.func.isRequired,
   departments: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   selectedDepartmentId: PropTypes.string,
