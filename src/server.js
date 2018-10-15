@@ -1,8 +1,11 @@
+/* eslint-disable no-console */
+
 require('dotenv').config();
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const { typeDefs, resolvers } = require('./schema');
 const { User } = require('./models');
@@ -27,8 +30,8 @@ mongoose
   .then(() => {
     const playground = {
       settings: {
-        'editor.cursorShape': 'block'
-      }
+        'editor.cursorShape': 'block',
+      },
     };
 
     const server = new ApolloServer({
@@ -46,7 +49,7 @@ mongoose
 
         // add the user to the context
         return { user };
-      }
+      },
     });
 
     server.applyMiddleware({ app });
@@ -65,16 +68,16 @@ const getUser = async token => {
   }
 
   const { ok, result } = await new Promise(resolve =>
-    jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, jwtResult) => {
       if (err) {
         resolve({
           ok: false,
-          result: err
+          result: err,
         });
       } else {
         resolve({
           ok: true,
-          result
+          result: jwtResult,
         });
       }
     })
@@ -83,7 +86,6 @@ const getUser = async token => {
   if (ok) {
     const user = await User.findOne({ _id: result.id });
     return user;
-  } else {
-    return null;
   }
+  return null;
 };

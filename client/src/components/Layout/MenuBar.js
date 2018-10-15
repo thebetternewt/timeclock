@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
-import { logOutUser } from '../../apollo/client';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
+import { logOutUser, isAuthenticated } from '../../apollo/client';
 
 const drawerWidth = 240;
 
@@ -21,46 +19,33 @@ const styles = theme => ({
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
-    display: 'flex'
+    display: 'flex',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1
+    zIndex: theme.zIndex.drawer + 1,
   },
   flex: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20
+    marginRight: 20,
   },
   drawerPaper: {
     position: 'relative',
-    width: drawerWidth
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     marginTop: '60px',
     padding: theme.spacing.unit * 3,
-    minWidth: 0 // So the Typography noWrap works
+    minWidth: 0, // So the Typography noWrap works
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: theme.mixins.toolbar,
 });
 
 class MenuBar extends Component {
-  state = {
-    auth: true,
-    anchorEl: null
-  };
-
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
   handleLogOut = () => {
     logOutUser();
     window.location.href = '/';
@@ -68,42 +53,18 @@ class MenuBar extends Component {
 
   render() {
     const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
 
     return (
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.flex}>
             TimeClock
           </Typography>
-          {auth && (
-            <div>
-              <IconButton
-                aria-owns={open ? 'menu-appbar' : null}
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                open={open}
-                onClose={this.handleClose}
-              >
-                <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
-              </Menu>
-            </div>
+
+          {isAuthenticated() && (
+            <Button variant="raised" onClick={this.handleLogOut}>
+              Logout
+            </Button>
           )}
         </Toolbar>
       </AppBar>
@@ -112,7 +73,7 @@ class MenuBar extends Component {
 }
 
 MenuBar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.shape().isRequired,
 };
 
 export default withRouter(withStyles(styles)(MenuBar));

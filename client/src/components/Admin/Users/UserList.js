@@ -74,25 +74,33 @@ class UserList extends Component {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {users.filter(user => user.active).map(user => (
-                              <TableRow
-                                hover
-                                key={user.id}
-                                selected={user.id === selectedId}
-                                onClick={() => {
-                                  this.handleRowSelect(user.id);
-                                }}
-                              >
-                                <TableCell component="th" scope="row">
-                                  {user.netId}
-                                </TableCell>
-                                <TableCell numeric>{user.firstName}</TableCell>
-                                <TableCell numeric>{user.lastName}</TableCell>
-                                <TableCell numeric>
-                                  {user.admin ? 'Y' : '--'}
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                            {users
+                              .filter(user => user.active)
+                              .slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                              )
+                              .map(user => (
+                                <TableRow
+                                  hover
+                                  key={user.id}
+                                  selected={user.id === selectedId}
+                                  onClick={() => {
+                                    this.handleRowSelect(user.id);
+                                  }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {user.netId}
+                                  </TableCell>
+                                  <TableCell numeric>
+                                    {user.firstName}
+                                  </TableCell>
+                                  <TableCell numeric>{user.lastName}</TableCell>
+                                  <TableCell numeric>
+                                    {user.admin ? 'Y' : '--'}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
                           </TableBody>
                         </Table>
                         <TablePagination
@@ -131,25 +139,31 @@ class UserList extends Component {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {users.filter(user => !user.active).map(user => (
-                          <TableRow
-                            hover
-                            key={user.id}
-                            selected={user.id === selectedId}
-                            onClick={() => {
-                              this.handleRowSelect(user.id);
-                            }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {user.netId}
-                            </TableCell>
-                            <TableCell numeric>{user.firstName}</TableCell>
-                            <TableCell numeric>{user.lastName}</TableCell>
-                            <TableCell numeric>
-                              {user.admin ? 'Y' : '--'}
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {users
+                          .filter(user => !user.active)
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                          .map(user => (
+                            <TableRow
+                              hover
+                              key={user.id}
+                              selected={user.id === selectedId}
+                              onClick={() => {
+                                this.handleRowSelect(user.id);
+                              }}
+                            >
+                              <TableCell component="th" scope="row">
+                                {user.netId}
+                              </TableCell>
+                              <TableCell numeric>{user.firstName}</TableCell>
+                              <TableCell numeric>{user.lastName}</TableCell>
+                              <TableCell numeric>
+                                {user.admin ? 'Y' : '--'}
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </TableBody>
                     </Table>
                   </Paper>

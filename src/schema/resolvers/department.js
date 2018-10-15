@@ -6,17 +6,17 @@ module.exports = {
       if (!user) {
         throw new Error('Not authorized');
       }
-      return await Department.findOne({ _id: id }).exec();
+      return Department.findOne({ _id: id }).exec();
     },
     departments: async (parent, args, { user }) => {
       if (!user) {
         throw new Error('Not authorized');
       }
 
-      const departments = await Department.find().exec();
-
-      return await Department.find().exec();
-    }
+      return Department.find()
+        .sort('name')
+        .exec();
+    },
   },
 
   Mutation: {
@@ -27,7 +27,7 @@ module.exports = {
 
       const newDepartment = new Department({ ...args });
 
-      return await newDepartment.save();
+      return newDepartment.save();
     },
 
     updateDepartment: async (parent, args, { user }) => {
@@ -40,7 +40,7 @@ module.exports = {
       const updatedDepartment = await Department.findOneAndUpdate(
         { _id: id },
         {
-          $set: { ...updatedProperties }
+          $set: { ...updatedProperties },
         },
         { new: true }
       ).exec();
@@ -56,14 +56,14 @@ module.exports = {
         throw new Error('Not authorized');
       }
       const removedDepartment = await Department.findOneAndRemove({
-        _id: id
+        _id: id,
       }).exec();
 
       if (!removedDepartment) {
         throw new Error('Department not found');
       }
 
-      return removedDepartment._id;
-    }
-  }
+      return removedDepartment.id;
+    },
+  },
 };

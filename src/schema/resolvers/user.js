@@ -1,7 +1,7 @@
-const { User, Department, Punch } = require('../../models');
 const { AuthenticationError } = require('apollo-server');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { User, Department, Punch } = require('../../models');
 require('dotenv').config();
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
       const parentUser = await User.findOne({ _id: parent.id }).exec();
 
       // user is authenticated
-      return await Department.where('_id')
+      return Department.where('_id')
         .in(parentUser.departments)
         .exec();
     },
@@ -24,36 +24,32 @@ module.exports = {
       }
 
       // user is authenticated
-      return await Punch.where('userId')
+      return Punch.where('userId')
         .equals(parent.id)
         .exec();
-    }
+    },
   },
   Query: {
     me: async (parent, args, { user }) => {
-      try {
-        if (!user) {
-          throw new AuthenticationError('You are not authenticated!');
-        }
-
-        // user is authenticated
-        return await User.findOne({ _id: user.id }).exec();
-      } catch (err) {
-        console.error(err.message);
+      if (!user) {
+        throw new AuthenticationError('You are not authenticated!');
       }
+
+      // user is authenticated
+      return User.findById(user.id).exec();
     },
     user: async (parent, { id }, { user }) => {
       if (!user.id === id && !user.admin) {
         throw new Error('Not authorized');
       }
-      return await User.findOne({ _id: id }).exec();
+      return User.findOne({ _id: id }).exec();
     },
     users: async (parent, args, { user }) => {
       if (!user.admin) {
         throw new Error('Not authorized');
       }
-      return await User.find().exec();
-    }
+      return User.find().exec();
+    },
   },
 
   Mutation: {
@@ -78,13 +74,13 @@ module.exports = {
 
       const newUser = new User({ ...userProperties });
 
-      return await newUser.save();
+      return newUser.save();
     },
     login: async (parent, { netId, password }) => {
       const user = await User.findOne({ netId }).exec();
 
       if (!user) {
-        throw new Error("User doesn't exist");
+        throw new Error("User doesn't exist"); // eslint-disable-line quotes
       }
 
       const valid = await bcrypt.compare(password, user.password);
@@ -129,7 +125,7 @@ module.exports = {
       const updatedUser = await User.findOneAndUpdate(
         { _id: id },
         {
-          $set: { ...updatedProperties }
+          $set: { ...updatedProperties },
         },
         { new: true }
       ).exec();
@@ -150,7 +146,7 @@ module.exports = {
         throw new Error('User not found');
       }
 
-      return removedUser._id;
+      return removedUser.id;
     },
     deactivateUser: async (parent, { id }, { user }) => {
       if (!user.admin) {
@@ -159,7 +155,7 @@ module.exports = {
       const deactivatedUser = await User.findOneAndUpdate(
         { _id: id },
         {
-          $set: { active: false }
+          $set: { active: false },
         },
         { new: true }
       ).exec();
@@ -168,7 +164,7 @@ module.exports = {
         throw new Error('User not found');
       }
 
-      return deactivatedUser._id;
+      return deactivatedUser.id;
     },
     activateUser: async (parent, { id }, { user }) => {
       if (!user.admin) {
@@ -177,7 +173,7 @@ module.exports = {
       const activatedUser = await User.findOneAndUpdate(
         { _id: id },
         {
-          $set: { active: true }
+          $set: { active: true },
         },
         { new: true }
       ).exec();
@@ -186,7 +182,7 @@ module.exports = {
         throw new Error('User not found');
       }
 
-      return activatedUser._id;
-    }
-  }
+      return activatedUser.id;
+    },
+  },
 };
