@@ -144,6 +144,31 @@ const DEPARTMENT_QUERY = gql`
   }
 `;
 
+// Pay Periods
+const PAY_PERIODS_QUERY = gql`
+  query PayPeriodsQuery($fiscalYear: Int) {
+    payPeriods(fiscalYear: $fiscalYear) {
+      id
+      startDate
+      endDate
+      payPeriodId
+      fiscalYear
+    }
+  }
+`;
+
+const PAY_PERIOD_QUERY = gql`
+  query PayPeriodQuery($id: ID, $payPeriodId: ID, $fiscalYear: Int) {
+    payPeriod(id: $id, payPeriodId: $payPeriodId, fiscalYear: $fiscalYear) {
+      id
+      startDate
+      endDate
+      payPeriodId
+      fiscalYear
+    }
+  }
+`;
+
 export {
   AUTH_QUERY,
   REDIRECT_QUERY,
@@ -155,4 +180,6 @@ export {
   LAST_PUNCH_QUERY,
   DEPARTMENTS_QUERY,
   DEPARTMENT_QUERY,
+  PAY_PERIODS_QUERY,
+  PAY_PERIOD_QUERY,
 };

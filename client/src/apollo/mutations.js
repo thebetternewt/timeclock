@@ -178,6 +178,53 @@ const UPDATE_DEPARTMENT = gql`
   }
 `;
 
+// Pay Periods
+const ADD_PAY_PERIOD = gql`
+  mutation AddPayPeriod(
+    $startDate: String!
+    $endDate: String!
+    $payPeriodId: ID!
+    $fiscalYear: Int!
+  ) {
+    addPayPeriod(
+      startDate: $startDate
+      endDate: $endDate
+      payPeriodId: $payPeriodId
+      fiscalYear: $fiscalYear
+    ) {
+      id
+      startDate
+      endDate
+      payPeriodId
+      fiscalYear
+    }
+  }
+`;
+
+const UPDATE_PAY_PERIOD = gql`
+  mutation UpdatePayPeriod(
+    $id: ID!
+    $startDate: String
+    $endDate: String
+    $payPeriodId: ID
+    $fiscalYear: Int
+  ) {
+    updatePayPeriod(
+      id: $id
+      startDate: $startDate
+      endDate: $endDate
+      payPeriodId: $payPeriodId
+      fiscalYear: $fiscalYear
+    ) {
+      id
+      startDate
+      endDate
+      payPeriodId
+      fiscalYear
+    }
+  }
+`;
+
 export {
   LOGIN,
   CLOCK_IN,
@@ -190,4 +237,6 @@ export {
   UPDATE_PUNCH,
   ADD_DEPARTMENT,
   UPDATE_DEPARTMENT,
+  ADD_PAY_PERIOD,
+  UPDATE_PAY_PERIOD,
 };

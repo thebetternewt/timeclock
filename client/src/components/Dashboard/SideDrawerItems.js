@@ -9,6 +9,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import BusinessIcon from '@material-ui/icons/Business';
 import TimerIcon from '@material-ui/icons/Timer';
 import TimelineIcon from '@material-ui/icons/Timeline';
+import EventIcon from '@material-ui/icons/Event';
 
 export const userItems = path => (
   <div>
@@ -62,6 +63,14 @@ export const adminItems = path => (
           <BusinessIcon />
         </ListItemIcon>
         <ListItemText primary="Departments" />
+      </ListItem>
+    </Link>
+    <Link to={`${path}/pay-periods`}>
+      <ListItem button>
+        <ListItemIcon>
+          <EventIcon />
+        </ListItemIcon>
+        <ListItemText primary="Pay Periods" />
       </ListItem>
     </Link>
   </div>

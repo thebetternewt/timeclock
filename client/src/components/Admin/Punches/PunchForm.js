@@ -39,22 +39,15 @@ class PunchForm extends Component {
   // DateTime picker returns a moment object
   // Docs: https://material-ui-pickers.firebaseapp.com/
   // Convert datetime to msTime format
-  handleClockInTimeChange = date => {
-    console.log(date);
+  handleClockInTimeChange = date =>
     this.setState({ clockInMsTime: date.format('x') });
-  };
 
   // DateTime picker returns a moment object
   // Convert datetime to msTime format
-  handleClockOutTimeChange = date => {
-    console.log(date);
+  handleClockOutTimeChange = date =>
     this.setState({ clockOutMsTime: date.format('x') });
-  };
 
   handleDepartmentSelect = e => this.setState({ departmentId: e.target.value });
-
-  // Convert msTime to format for datetime picker
-  toInputTime = msTime => moment(msTime, 'x').format('YYYY-MM-DDTHH:mm');
 
   render() {
     const {

@@ -3,16 +3,24 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 module.exports = mongoose.model(
-  'Department',
+  'PayPeriod',
   new Schema(
     {
-      name: {
+      startDate: {
         type: String,
         required: true,
-        unique: true,
       },
-      representativeId: {
+      endDate: {
         type: String,
+        required: true,
+      },
+      payPeriodId: {
+        type: Number,
+        required: true,
+      },
+      fiscalYear: {
+        type: Number,
+        required: true,
       },
     },
     {

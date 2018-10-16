@@ -7,6 +7,7 @@ import SideDrawer from './SideDrawer';
 import TimeClock from '../TimeClock';
 import Users from '../Admin/Users';
 import Departments from '../Admin/Departments';
+import PayPeriods from '../Admin/PayPeriods';
 
 const drawerWidth = 240;
 
@@ -41,6 +42,11 @@ const Dashboard = props => {
           exact
           path={`${match.path}/departments`}
           component={Departments}
+        />
+        <Route
+          exact
+          path={`${match.path}/pay-periods`}
+          component={PayPeriods}
         />
       </main>
     </div>

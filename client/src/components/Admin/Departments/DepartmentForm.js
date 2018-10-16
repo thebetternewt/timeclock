@@ -29,16 +29,6 @@ class DepartmentForm extends Component {
 
   handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  // state = {
-  //   id: this.props.department.id || '',
-  //   name: this.props.department.name || '',
-  //   representativeId: this.props.department.representativeId || '',
-  // };
-
-  handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
   render() {
     const { id, name, representativeId } = this.state;
     const { classes, submit, close, error } = this.props;
