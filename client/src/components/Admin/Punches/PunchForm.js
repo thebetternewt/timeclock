@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { TextField, Button } from '@material-ui/core';
+
+import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { DateTimePicker } from 'material-ui-pickers';
 import DepartmentSelect from '../../common/DepartmentSelect';
 
 const styles = theme => ({
@@ -24,8 +26,8 @@ class PunchForm extends Component {
     return (
       punch || {
         id: '',
-        clockInMsTime: '',
-        clockOutMsTime: '',
+        clockInMsTime: null,
+        clockOutMsTime: null,
         departmentId: '',
         user,
       }
@@ -34,9 +36,19 @@ class PunchForm extends Component {
 
   handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  handleDateTimeChange = ({ target: { name, value } }) => {
-    // Convert time back to msTime format
-    this.setState({ [name]: moment(value, 'YYYY-MM-DDTHH:mm').format('x') });
+  // DateTime picker returns a moment object
+  // Docs: https://material-ui-pickers.firebaseapp.com/
+  // Convert datetime to msTime format
+  handleClockInTimeChange = date => {
+    console.log(date);
+    this.setState({ clockInMsTime: date.format('x') });
+  };
+
+  // DateTime picker returns a moment object
+  // Convert datetime to msTime format
+  handleClockOutTimeChange = date => {
+    console.log(date);
+    this.setState({ clockOutMsTime: date.format('x') });
   };
 
   handleDepartmentSelect = e => this.setState({ departmentId: e.target.value });
@@ -70,7 +82,7 @@ class PunchForm extends Component {
             refetchQueries: ['PunchesQuery'],
           })
             .then(() => close())
-            .catch(err => console.log(err));
+            .catch(console.error);
         }}
       >
         {error && (
@@ -82,32 +94,28 @@ class PunchForm extends Component {
           </pre>
         )}
 
-        <TextField
-          id="clock-in-time"
+        <DateTimePicker
           name="clockInMsTime"
+          value={moment(clockInMsTime, 'x')}
+          onChange={this.handleClockInTimeChange}
           label="Clock-in Time"
-          type="datetime-local"
-          value={this.toInputTime(clockInMsTime)}
-          onChange={this.handleDateTimeChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          showTodayButton
           fullWidth
-          className={classes.FormControl}
+          allowKeyboardControl
+          autoSubmit={false}
+          invalidLabel="Choose DateTime"
         />
 
-        <TextField
-          id="clock-out-time"
+        <DateTimePicker
           name="clockOutMsTime"
+          value={moment(clockOutMsTime, 'x')}
+          onChange={this.handleClockOutTimeChange}
           label="Clock-out Time"
-          type="datetime-local"
-          value={this.toInputTime(clockOutMsTime)}
-          onChange={this.handleDateTimeChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          showTodayButton
           fullWidth
-          className={classes.FormControl}
+          allowKeyboardControl
+          autoSubmit={false}
+          invalidLabel="Choose DateTime"
         />
 
         <DepartmentSelect
