@@ -7,10 +7,17 @@ module.exports = gql`
     endDate: String!
     payPeriodId: ID!
     fiscalYear: Int!
+    punches(userId: String): [Punch!]!
   }
+
   extend type Query {
-    payPeriod(id: ID, payPeriodId: ID, fiscalYear: Int): PayPeriod
-    payPeriods(fiscalYear: Int): [PayPeriod!]!
+    payPeriod(
+      id: ID
+      payPeriodId: ID
+      fiscalYear: Int
+      userId: String
+    ): PayPeriod
+    payPeriods(fiscalYear: Int, userId: String): [PayPeriod!]!
   }
   extend type Mutation {
     addPayPeriod(

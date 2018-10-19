@@ -1,4 +1,5 @@
-const { Punch, Department, User } = require('../../models');
+const moment = require('moment');
+const { Punch, Department, User, PayPeriod } = require('../../models');
 
 module.exports = {
   Punch: {
@@ -11,6 +12,7 @@ module.exports = {
         name: department.name,
       };
     },
+    payPeriod: async parent => PayPeriod.findById(parent.payPeriod).exec(),
   },
   Query: {
     lastPunch: async (parent, args, { user }) => {
@@ -100,10 +102,23 @@ module.exports = {
       // Else clock user into selected department
       const msTime = new Date().getTime();
 
+      // Get clock in date from msTime
+      const clockInDate = moment(msTime, 'x').format('YYYY-MM-DD');
+      console.log('clockInDate:', clockInDate);
+
+      // Find pay period that contains clock in date.
+      const payPeriod = await PayPeriod.findOne({
+        $and: [
+          { startDate: { $lte: clockInDate } },
+          { endDate: { $gte: clockInDate } },
+        ],
+      }).exec();
+
       const newPunch = new Punch({
         userId: user.id,
         departmentId,
         clockInMsTime: msTime,
+        payPeriod: payPeriod.id,
       });
 
       return newPunch.save();
@@ -137,7 +152,18 @@ module.exports = {
         throw new Error('Not authorized');
       }
 
-      const punch = new Punch(args);
+      // Get clock in date from msTime
+      const clockInDate = moment(args.clockInMsTime, 'x').format('YYYY-MM-DD');
+
+      // Find pay period that contains clock-in date.
+      const payPeriod = await PayPeriod.findOne({
+        $and: [
+          { startDate: { $lte: clockInDate } },
+          { endDate: { $gte: clockInDate } },
+        ],
+      }).exec();
+
+      const punch = new Punch({ ...args, payPeriod: payPeriod.id });
 
       return punch.save();
     },
@@ -147,6 +173,24 @@ module.exports = {
       }
 
       const { id, ...updatedProperties } = args;
+
+      // Update pay period id if new clockInMsTime given
+      if (updatedProperties.clockInMsTime) {
+        // Get clock in date from msTime
+        const clockInDate = moment(args.clockInMsTime, 'x').format(
+          'YYYY-MM-DD'
+        );
+
+        // Find pay period that contains clock-in date.
+        const payPeriod = await PayPeriod.findOne({
+          $and: [
+            { startDate: { $lte: clockInDate } },
+            { endDate: { $gte: clockInDate } },
+          ],
+        }).exec();
+
+        updatedProperties.payPeriod = payPeriod.id;
+      }
 
       const updatedPunch = await Punch.findOneAndUpdate(
         { _id: id },

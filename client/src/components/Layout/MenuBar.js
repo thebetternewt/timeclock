@@ -35,7 +35,7 @@ class MenuBar extends Component {
           </Typography>
 
           {isAuthenticated() && (
-            <Button variant="raised" onClick={this.handleLogOut}>
+            <Button variant="contained" onClick={this.handleLogOut}>
               Logout
             </Button>
           )}

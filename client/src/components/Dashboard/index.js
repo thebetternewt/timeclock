@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SideDrawer from './SideDrawer';
 import TimeClock from '../TimeClock';
+import TimeSheets from '../common/Timesheets';
 import Users from '../Admin/Users';
 import Departments from '../Admin/Departments';
 import PayPeriods from '../Admin/PayPeriods';
@@ -37,6 +38,7 @@ const Dashboard = props => {
       <SideDrawer width={drawerWidth} />
       <main className={classes.content}>
         <Route exact path={`${match.path}/timeclock`} component={TimeClock} />
+        <Route exact path={`${match.path}/stats`} component={TimeSheets} />
         <Route exact path={`${match.path}/users`} component={Users} />
         <Route
           exact

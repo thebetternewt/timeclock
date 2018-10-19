@@ -17,6 +17,7 @@ const CURRENT_USER_QUERY = gql`
   query CurrentUserQuery {
     me {
       id
+      idNumber
       netId
       admin
       firstName
@@ -169,6 +170,33 @@ const PAY_PERIOD_QUERY = gql`
   }
 `;
 
+const TIMESHEET_QUERY = gql`
+  query TimeSheetQuery($payPeriodId: ID!, $fiscalYear: Int!, $userId: String!) {
+    payPeriod(
+      payPeriodId: $payPeriodId
+      fiscalYear: $fiscalYear
+      userId: $userId
+    ) {
+      id
+      startDate
+      endDate
+      payPeriodId
+      fiscalYear
+      punches {
+        id
+        userId
+        departmentId
+        clockInMsTime
+        clockOutMsTime
+        department {
+          name
+          id
+        }
+      }
+    }
+  }
+`;
+
 export {
   AUTH_QUERY,
   REDIRECT_QUERY,
@@ -182,4 +210,5 @@ export {
   DEPARTMENT_QUERY,
   PAY_PERIODS_QUERY,
   PAY_PERIOD_QUERY,
+  TIMESHEET_QUERY,
 };

@@ -11,11 +11,14 @@ const theme = createMuiTheme({
     secondary: {
       main: '#777777',
       // dark: will be calculated from palette.secondary.main,
-      contrastText: '#111111',
+      // contrastText: '#111111',
     },
     // error: will use the default color
+    // type: 'dark',
   },
-  type: 'dark',
+  typography: {
+    useNextVariants: true,
+  },
 });
 
 console.log(theme);

@@ -21,6 +21,11 @@ module.exports = mongoose.model(
       clockOutMsTime: {
         type: Number,
       },
+      payPeriod: {
+        type: Schema.Types.ObjectId,
+        ref: 'PayPeriod',
+        required: true,
+      },
     },
     {
       timestamps: true,

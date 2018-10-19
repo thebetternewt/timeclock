@@ -2,21 +2,28 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { isAuthenticated, setRedirectPath } from '../../apollo/client';
+import checkToken from '../../util/checkToken';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => {
-      if (isAuthenticated()) {
-        return <Component {...props} />;
-      }
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  // Check for expired token in LS
+  checkToken();
 
-      setRedirectPath(props.location.pathname);
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        // Check to see if authenticated
+        if (isAuthenticated()) {
+          return <Component {...props} />;
+        }
 
-      return <Redirect to="/" />;
-    }}
-  />
-);
+        setRedirectPath(props.location.pathname);
+
+        return <Redirect to="/" />;
+      }}
+    />
+  );
+};
 
 PrivateRoute.propTypes = {
   component: PropTypes.func.isRequired,

@@ -1,6 +1,18 @@
-const { PayPeriod } = require('../../models');
+const { PayPeriod, Punch } = require('../../models');
 
 module.exports = {
+  PayPeriod: {
+    punches: async (parent, args, { user }, { variableValues: { userId } }) => {
+      if (user.admin) {
+        return Punch.where({ userId, payPeriod: parent.id }).exec();
+      }
+      if (user.id !== userId) {
+        return [];
+      }
+
+      return Punch.where({ userId: user.id, payPeriod: parent.id }).exec();
+    },
+  },
   Query: {
     payPeriod: async (parent, { id, payPeriodId, fiscalYear }, { user }) => {
       if (!user) {

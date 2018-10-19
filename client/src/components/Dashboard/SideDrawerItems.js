@@ -21,12 +21,14 @@ export const userItems = path => (
         <ListItemText primary="TimeClock" />
       </ListItem>
     </Link>
-    <ListItem button>
-      <ListItemIcon>
-        <TimelineIcon />
-      </ListItemIcon>
-      <ListItemText primary="Stats" />
-    </ListItem>
+    <Link to={`${path}/stats`}>
+      <ListItem button>
+        <ListItemIcon>
+          <TimelineIcon />
+        </ListItemIcon>
+        <ListItemText primary="Stats" />
+      </ListItem>
+    </Link>
   </div>
 );
 
