@@ -38,7 +38,7 @@ const Dashboard = props => {
       <SideDrawer width={drawerWidth} />
       <main className={classes.content}>
         <Route exact path={`${match.path}/timeclock`} component={TimeClock} />
-        <Route exact path={`${match.path}/stats`} component={TimeSheets} />
+        <Route exact path={`${match.path}/timesheets`} component={TimeSheets} />
         <Route exact path={`${match.path}/users`} component={Users} />
         <Route
           exact

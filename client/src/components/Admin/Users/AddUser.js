@@ -26,7 +26,7 @@ class AddUser extends Component {
 
     return (
       <Fragment>
-        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+        <Button variant="contained" color="primary" onClick={this.handleToggle}>
           Add User
         </Button>
         <Dialog

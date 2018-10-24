@@ -39,8 +39,10 @@ const TimesheetForm = props => {
   const {
     classes,
     payPeriodId,
+    departmentId,
     fiscalYear,
     onSelect,
+    onDepartmentSelect,
     onChange,
     onSubmit,
     error,
@@ -66,6 +68,8 @@ const TimesheetForm = props => {
               <DepartmentSelect
                 departments={data.departments}
                 classes={classes.FormControl}
+                handleSelect={onDepartmentSelect}
+                selectedDepartmentId={departmentId}
               />
             );
           }
@@ -105,7 +109,7 @@ const TimesheetForm = props => {
         className={classes.Button}
         onClick={onSubmit}
       >
-        Build Timesheet
+        Print Timesheet
       </Button>
     </form>
   );
@@ -119,7 +123,9 @@ TimesheetForm.propTypes = {
   classes: PropTypes.shape().isRequired,
   payPeriodId: PropTypes.number.isRequired,
   fiscalYear: PropTypes.number.isRequired,
+  departmentId: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
+  onDepartmentSelect: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   error: PropTypes.shape(),

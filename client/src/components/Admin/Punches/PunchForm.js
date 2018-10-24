@@ -120,7 +120,7 @@ class PunchForm extends Component {
 
         <Button
           type="submit"
-          variant="raised"
+          variant="contained"
           color="primary"
           className={classes.Button}
         >
@@ -129,7 +129,7 @@ class PunchForm extends Component {
 
         <Button
           type="button"
-          variant="raised"
+          variant="contained"
           onClick={close}
           className={classes.Button}
         >

@@ -2,15 +2,34 @@ const { PayPeriod, Punch } = require('../../models');
 
 module.exports = {
   PayPeriod: {
-    punches: async (parent, args, { user }, { variableValues: { userId } }) => {
+    punches: async (
+      parent,
+      args,
+      { user },
+      { variableValues: { userId, departmentId } }
+    ) => {
+      const searchParams = { payPeriod: parent.id };
+
       if (user.admin) {
-        return Punch.where({ userId, payPeriod: parent.id }).exec();
-      }
-      if (user.id !== userId) {
+        console.log('admin');
+        // return Punch.where({ userId, payPeriod: parent.id }).exec();
+        searchParams.userId = userId;
+      } else if (user.id !== userId) {
+        console.log('user doesnt match');
         return [];
+      } else {
+        searchParams.userId = user.id;
+        console.log('user  match');
       }
 
-      return Punch.where({ userId: user.id, payPeriod: parent.id }).exec();
+      console.log('searchParams:', searchParams);
+      console.log('departmentId:', departmentId);
+
+      if (departmentId) {
+        searchParams.departmentId = departmentId;
+      }
+
+      return Punch.where(searchParams).exec();
     },
   },
   Query: {

@@ -171,11 +171,17 @@ const PAY_PERIOD_QUERY = gql`
 `;
 
 const TIMESHEET_QUERY = gql`
-  query TimeSheetQuery($payPeriodId: ID!, $fiscalYear: Int!, $userId: String!) {
+  query TimeSheetQuery(
+    $payPeriodId: ID!
+    $fiscalYear: Int!
+    $userId: ID!
+    $departmentId: ID!
+  ) {
     payPeriod(
       payPeriodId: $payPeriodId
       fiscalYear: $fiscalYear
       userId: $userId
+      departmentId: $departmentId
     ) {
       id
       startDate

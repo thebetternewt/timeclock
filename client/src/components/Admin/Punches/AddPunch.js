@@ -27,7 +27,7 @@ class AddPunch extends Component {
 
     return (
       <Fragment>
-        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+        <Button variant="contained" color="primary" onClick={this.handleToggle}>
           Add Punch
         </Button>
         <Dialog

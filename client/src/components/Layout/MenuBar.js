@@ -30,7 +30,7 @@ class MenuBar extends Component {
     return (
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography variant="h6" color="inherit" className={classes.flex}>
             TimeClock
           </Typography>
 

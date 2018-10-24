@@ -81,7 +81,7 @@ class SignIn extends Component {
             <Avatar className={classes.avatar}>
               <LockIcon />
             </Avatar>
-            <Typography variant="headline">Sign in</Typography>
+            <Typography variant="h5">Sign in</Typography>
             <Mutation mutation={LOGIN}>
               {(login, { data, loading, error }) => {
                 if (loading) {

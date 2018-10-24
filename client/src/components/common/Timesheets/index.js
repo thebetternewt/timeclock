@@ -8,15 +8,19 @@ import Timesheet from './Timesheet';
 
 class TimeSheets extends Component {
   state = {
-    payPeriodId: '',
+    payPeriodId: 1,
     fiscalYear: moment()
       .add(5, 'months')
       .year(),
+    departmentId: '',
     getPunches: false,
   };
 
   handleSelect = ({ target: { name, value } }) =>
     this.setState({ [name]: value, getPunches: false });
+
+  handleDepartmentSelect = ({ target: { value } }) =>
+    this.setState({ departmentId: value, getPunches: false });
 
   handleChange = name => ({ target: { value } }) =>
     this.setState({
@@ -30,7 +34,7 @@ class TimeSheets extends Component {
   };
 
   render() {
-    const { payPeriodId, fiscalYear, getPunches } = this.state;
+    const { payPeriodId, fiscalYear, departmentId, getPunches } = this.state;
 
     return (
       <div>
@@ -40,7 +44,9 @@ class TimeSheets extends Component {
         <TimesheetForm
           payPeriodId={payPeriodId}
           fiscalYear={fiscalYear}
+          departmentId={departmentId}
           onSelect={this.handleSelect}
+          onDepartmentSelect={this.handleDepartmentSelect}
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}
         />
@@ -56,7 +62,13 @@ class TimeSheets extends Component {
                 return (
                   <Query
                     query={TIMESHEET_QUERY}
-                    variables={{ payPeriodId, fiscalYear, userId: me.id }}
+                    variables={{
+                      payPeriodId,
+                      fiscalYear,
+                      departmentId,
+                      userId: me.id,
+                    }}
+                    fetchPolicy="network-only"
                   >
                     {({ data, loading }) => {
                       if (loading) {

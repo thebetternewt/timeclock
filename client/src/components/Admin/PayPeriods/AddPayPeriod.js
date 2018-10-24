@@ -25,7 +25,7 @@ class AddPayPeriod extends Component {
 
     return (
       <Fragment>
-        <Button variant="raised" color="primary" onClick={this.handleToggle}>
+        <Button variant="contained" color="primary" onClick={this.handleToggle}>
           Add Pay Period
         </Button>
         <Dialog

@@ -125,13 +125,13 @@ class PayPeriodForm extends Component {
 
         <Button
           type="submit"
-          variant="raised"
+          variant="contained"
           color="primary"
           className={classes.Button}
         >
           Submit
         </Button>
-        <Button variant="raised" onClick={close} className={classes.Button}>
+        <Button variant="contained" onClick={close} className={classes.Button}>
           Cancel
         </Button>
       </form>

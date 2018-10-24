@@ -1,9 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Button } from '@material-ui/core';
 
 // Import logo as dataURL
 import logo from './logo';
@@ -11,9 +9,6 @@ import logo from './logo';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const Timesheet = ({ payPeriod, user }) => {
-  console.log(payPeriod);
-  console.log(user);
-
   const { punches } = payPeriod;
   const punchRows = [];
 
@@ -219,15 +214,10 @@ const Timesheet = ({ payPeriod, user }) => {
     },
   };
 
-  return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => pdfMake.createPdf(docDefinition).open()}
-    >
-      Get Timesheet
-    </Button>
-  );
+  // Open Timesheet PDF in new tab
+  pdfMake.createPdf(docDefinition).open();
+
+  return null;
 };
 
 Timesheet.propTypes = {
