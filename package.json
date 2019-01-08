@@ -1,10 +1,6 @@
 {
   "name": "timeclock_3",
   "version": "1.0.0",
-  "engines": {
-    "node": "10",
-    "yarn": "1.9.4"
-  },
   "description": "A better timeclock application for the Mississippi State Mitchell Memorial Library",
   "main": "index.js",
   "scripts": {

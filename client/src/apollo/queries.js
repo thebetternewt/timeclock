@@ -1,16 +1,16 @@
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 const AUTH_QUERY = gql`
   query AuthQuery {
     isAuthenticated @client
   }
-`;
+`
 
 const REDIRECT_QUERY = gql`
   query RedirectQuery {
     redirectPath @client
   }
-`;
+`
 
 // Users
 const CURRENT_USER_QUERY = gql`
@@ -28,7 +28,7 @@ const CURRENT_USER_QUERY = gql`
       }
     }
   }
-`;
+`
 
 const USERS_QUERY = gql`
   query UsersQuery {
@@ -46,7 +46,7 @@ const USERS_QUERY = gql`
       }
     }
   }
-`;
+`
 
 const USER_QUERY = gql`
   query UserQuery($id: ID!) {
@@ -64,7 +64,7 @@ const USER_QUERY = gql`
       }
     }
   }
-`;
+`
 
 // Punches
 
@@ -82,7 +82,7 @@ const PUNCHES_QUERY = gql`
       }
     }
   }
-`;
+`
 
 const PUNCH_QUERY = gql`
   query PunchQuery($id: ID!) {
@@ -106,7 +106,7 @@ const PUNCH_QUERY = gql`
       }
     }
   }
-`;
+`
 
 const LAST_PUNCH_QUERY = gql`
   query LastPunchQuery {
@@ -122,7 +122,7 @@ const LAST_PUNCH_QUERY = gql`
       }
     }
   }
-`;
+`
 
 // Departments
 const DEPARTMENTS_QUERY = gql`
@@ -133,7 +133,7 @@ const DEPARTMENTS_QUERY = gql`
       representativeId
     }
   }
-`;
+`
 
 const DEPARTMENT_QUERY = gql`
   query DepartmentsQuery($id: ID!) {
@@ -143,7 +143,7 @@ const DEPARTMENT_QUERY = gql`
       representativeId
     }
   }
-`;
+`
 
 // Pay Periods
 const PAY_PERIODS_QUERY = gql`
@@ -156,7 +156,7 @@ const PAY_PERIODS_QUERY = gql`
       fiscalYear
     }
   }
-`;
+`
 
 const PAY_PERIOD_QUERY = gql`
   query PayPeriodQuery($id: ID, $payPeriodId: ID, $fiscalYear: Int) {
@@ -168,7 +168,7 @@ const PAY_PERIOD_QUERY = gql`
       fiscalYear
     }
   }
-`;
+`
 
 const TIMESHEET_QUERY = gql`
   query TimeSheetQuery(
@@ -201,7 +201,7 @@ const TIMESHEET_QUERY = gql`
       }
     }
   }
-`;
+`
 
 export {
   AUTH_QUERY,
@@ -217,4 +217,4 @@ export {
   PAY_PERIODS_QUERY,
   PAY_PERIOD_QUERY,
   TIMESHEET_QUERY,
-};
+}

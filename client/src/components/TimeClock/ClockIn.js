@@ -1,38 +1,41 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Mutation, Query } from 'react-apollo';
-import { Button, CircularProgress } from '@material-ui/core';
-import moment from 'moment';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Mutation, Query } from 'react-apollo'
+import { Button, CircularProgress } from '@material-ui/core'
+import moment from 'moment'
 
-import { CURRENT_USER_QUERY, LAST_PUNCH_QUERY } from '../../apollo/queries';
-import { CLOCK_IN } from '../../apollo/mutations';
-import DepartmentSelect from '../common/DepartmentSelect';
+import { CURRENT_USER_QUERY, LAST_PUNCH_QUERY } from '../../apollo/queries'
+import { CLOCK_IN } from '../../apollo/mutations'
+import DepartmentSelect from '../common/DepartmentSelect'
 
 class ClockIn extends Component {
   state = {
-    selectedDepartmentId: ''
-  };
+    selectedDepartmentId: '',
+  }
 
   handleDepartmentSelect = e => {
-    this.setState({ selectedDepartmentId: e.target.value });
-  };
+    this.setState({ selectedDepartmentId: e.target.value })
+  }
 
   render() {
-    const { selectedDepartmentId } = this.state;
+    const { selectedDepartmentId } = this.state
 
-    let lastPunch, department, clockInMoment, clockOutMoment;
+    let lastPunch
+    let department
+    let clockInMoment
+    let clockOutMoment
 
     if (this.props.lastPunch) {
-      const { clockInMsTime, clockOutMsTime } = this.props.lastPunch;
-      department = this.props.lastPunch.department.name;
-      clockInMoment = moment(clockInMsTime, 'x');
-      clockOutMoment = moment(clockOutMsTime, 'x');
+      const { clockInMsTime, clockOutMsTime } = this.props.lastPunch
+      department = this.props.lastPunch.department.name
+      clockInMoment = moment(clockInMsTime, 'x')
+      clockOutMoment = moment(clockOutMsTime, 'x')
     }
 
     return (
       <div>
         {lastPunch && (
-          <Fragment>
+          <>
             <h3>Last Shift:</h3>
             <p>
               {clockInMoment.format('YYYY-MM-DD hh:mm:ssa')} -{' '}
@@ -41,24 +44,24 @@ class ClockIn extends Component {
               <strong>Department: </strong>
               {department}
             </p>
-          </Fragment>
+          </>
         )}
         <Mutation
           mutation={CLOCK_IN}
           update={(cache, { data: { clockIn } }) => {
             cache.writeQuery({
               query: LAST_PUNCH_QUERY,
-              data: { lastPunch: clockIn }
-            });
+              data: { lastPunch: clockIn },
+            })
           }}
         >
           {(clockIn, { loading, error }) => {
             if (loading) {
-              return <CircularProgress size={50} />;
+              return <CircularProgress size={50} />
             }
 
             return (
-              <Fragment>
+              <>
                 {error && (
                   <pre>
                     Error:{' '}
@@ -69,10 +72,10 @@ class ClockIn extends Component {
                 )}
                 <form
                   onSubmit={e => {
-                    e.preventDefault();
+                    e.preventDefault()
                     clockIn({
-                      variables: { departmentId: selectedDepartmentId }
-                    }).catch(err => console.log(err.message));
+                      variables: { departmentId: selectedDepartmentId },
+                    }).catch(err => console.log(err.message))
                   }}
                 >
                   <Query query={CURRENT_USER_QUERY}>
@@ -84,10 +87,10 @@ class ClockIn extends Component {
                             handleSelect={this.handleDepartmentSelect}
                             selectedDepartmentId={selectedDepartmentId}
                           />
-                        );
+                        )
                       }
 
-                      return null;
+                      return null
                     }}
                   </Query>
                   <Button
@@ -99,21 +102,21 @@ class ClockIn extends Component {
                     Clock In
                   </Button>
                 </form>
-              </Fragment>
-            );
+              </>
+            )
           }}
         </Mutation>
       </div>
-    );
+    )
   }
 }
 
 ClockIn.defaultProps = {
-  lastPunch: {}
-};
+  lastPunch: {},
+}
 
 ClockIn.propTypes = {
-  lastPunch: PropTypes.shape()
-};
+  lastPunch: PropTypes.shape(),
+}
 
-export default ClockIn;
+export default ClockIn

@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Query, Mutation } from 'react-apollo';
-import { Paper, CircularProgress, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import DepartmentForm from './DepartmentForm';
-import { DEPARTMENT_QUERY } from '../../../apollo/queries';
-import { UPDATE_DEPARTMENT } from '../../../apollo/mutations';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query, Mutation } from 'react-apollo'
+import { Paper, CircularProgress, Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import DepartmentForm from './DepartmentForm'
+import { DEPARTMENT_QUERY } from '../../../apollo/queries'
+import { UPDATE_DEPARTMENT } from '../../../apollo/mutations'
 
 const styles = theme => ({
   Paper: {
@@ -14,21 +14,21 @@ const styles = theme => ({
   Button: {
     marginRight: theme.spacing.unit * 2,
   },
-});
+})
 
 class Department extends Component {
   state = {
     id: this.props.id,
     editMode: false,
-  };
+  }
 
   toggleEditMode = () => {
-    this.setState(({ editMode }) => ({ editMode: !editMode }));
-  };
+    this.setState(({ editMode }) => ({ editMode: !editMode }))
+  }
 
   render() {
-    const { id, editMode } = this.state;
-    const { classes, cancelEdit } = this.props;
+    const { id, editMode } = this.state
+    const { classes, cancelEdit } = this.props
 
     return (
       <Paper elevation={12} className={classes.Paper}>
@@ -36,18 +36,18 @@ class Department extends Component {
         <Query query={DEPARTMENT_QUERY} variables={{ id }}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircularProgress />;
+              return <CircularProgress />
             }
 
             if (data && data.department) {
-              const { name, representativeId } = data.department;
+              const { name, representativeId } = data.department
 
               if (editMode) {
                 return (
                   <Mutation mutation={UPDATE_DEPARTMENT}>
                     {(updateDepartment, { loading: updating, error }) => {
                       if (updating) {
-                        return <CircularProgress />;
+                        return <CircularProgress />
                       }
 
                       return (
@@ -57,13 +57,13 @@ class Department extends Component {
                           department={data.department}
                           close={this.toggleEditMode}
                         />
-                      );
+                      )
                     }}
                   </Mutation>
-                );
+                )
               }
               return (
-                <Fragment>
+                <>
                   <p>
                     <strong>Name:</strong> {name}
                   </p>
@@ -86,15 +86,15 @@ class Department extends Component {
                   >
                     Back
                   </Button>
-                </Fragment>
-              );
+                </>
+              )
             }
 
-            return <p>Department not found.</p>;
+            return <p>Department not found.</p>
           }}
         </Query>
       </Paper>
-    );
+    )
   }
 }
 
@@ -102,6 +102,6 @@ Department.propTypes = {
   classes: PropTypes.shape().isRequired,
   id: PropTypes.string.isRequired,
   cancelEdit: PropTypes.func.isRequired,
-};
+}
 
-export default withStyles(styles)(Department);
+export default withStyles(styles)(Department)

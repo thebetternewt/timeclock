@@ -1,25 +1,25 @@
 /* eslint-disable no-console */
 
-require('dotenv').config();
-const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const path = require('path');
+require('dotenv').config()
+const express = require('express')
+const { ApolloServer } = require('apollo-server-express')
+const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+const path = require('path')
 
-const { typeDefs, resolvers } = require('./schema');
-const { User } = require('./models');
+const { typeDefs, resolvers } = require('./schema')
+const { User } = require('./models')
 
-const app = express();
+const app = express()
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  app.use(express.static('client/build'));
+  app.use(express.static('client/build'))
 
   app.get('*', (req, res) => {
-    res.sendfile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
+    res.sendfile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
 }
 
 mongoose
@@ -32,7 +32,7 @@ mongoose
       settings: {
         'editor.cursorShape': 'block',
       },
-    };
+    }
 
     const server = new ApolloServer({
       typeDefs,
@@ -40,31 +40,31 @@ mongoose
       playground,
       context: async ({ req }) => {
         // get the user token from the headers
-        const authorization = req.headers.authorization || '';
-        const bearerLength = 'Bearer '.length;
-        const token = authorization.slice(bearerLength) || '';
+        const authorization = req.headers.authorization || ''
+        const bearerLength = 'Bearer '.length
+        const token = authorization.slice(bearerLength) || ''
 
         // try to retrieve a user with the token
-        const user = await getUser(token);
+        const user = await getUser(token)
 
         // add the user to the context
-        return { user };
+        return { user }
       },
-    });
+    })
 
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app })
 
-    const port = process.env.PORT || 4000;
+    const port = process.env.PORT || 4000
 
     app.listen(port, () => {
-      console.log(`🚀  Server ready at localhost:${port}${server.graphqlPath}`);
-    });
+      console.log(`🚀  Server ready at localhost:${port}${server.graphqlPath}`)
+    })
   })
-  .catch(console.error);
+  .catch(console.error)
 
 const getUser = async token => {
   if (!token) {
-    return null;
+    return null
   }
 
   const { ok, result } = await new Promise(resolve =>
@@ -73,19 +73,19 @@ const getUser = async token => {
         resolve({
           ok: false,
           result: err,
-        });
+        })
       } else {
         resolve({
           ok: true,
           result: jwtResult,
-        });
+        })
       }
     })
-  );
+  )
 
   if (ok) {
-    const user = await User.findOne({ _id: result.id });
-    return user;
+    const user = await User.findOne({ _id: result.id })
+    return user
   }
-  return null;
-};
+  return null
+}

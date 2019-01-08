@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
-import moment from 'moment';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
+import moment from 'moment'
 
 import {
   Paper,
@@ -11,52 +11,52 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { PUNCHES_QUERY } from '../../../apollo/queries';
-import CircleLoader from '../../common/CircleLoader';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { PUNCHES_QUERY } from '../../../apollo/queries'
+import CircleLoader from '../../common/CircleLoader'
 
 const styles = {
   selected: {
     backgroundColor: 'green',
   },
-};
+}
 
 class PunchList extends Component {
   state = {
     selectedId: '',
     page: 0,
     rowsPerPage: 10,
-  };
+  }
 
   handleRowSelect = id => {
-    const { selectPunch } = this.props;
-    this.setState({ selectedId: id });
-    selectPunch(id);
-  };
+    const { selectPunch } = this.props
+    this.setState({ selectedId: id })
+    selectPunch(id)
+  }
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
+    this.setState({ page })
+  }
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
+    this.setState({ rowsPerPage: event.target.value })
+  }
 
   render() {
-    const { userId } = this.props;
-    const { selectedId, page, rowsPerPage } = this.state;
+    const { userId } = this.props
+    const { selectedId, page, rowsPerPage } = this.state
 
     return (
       <div>
         <Query query={PUNCHES_QUERY} variables={{ userId }}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircleLoader />;
+              return <CircleLoader />
             }
 
             if (data) {
-              const { punches } = data;
+              const { punches } = data
 
               return (
                 <div>
@@ -89,7 +89,7 @@ class PunchList extends Component {
                                   key={punch.id}
                                   selected={punch.id === selectedId}
                                   onClick={() => {
-                                    this.handleRowSelect(punch.id);
+                                    this.handleRowSelect(punch.id)
                                   }}
                                 >
                                   <TableCell component="th" scope="row">
@@ -136,20 +136,20 @@ class PunchList extends Component {
                     )}
                   </Paper>
                 </div>
-              );
+              )
             }
 
-            return null;
+            return null
           }}
         </Query>
       </div>
-    );
+    )
   }
 }
 
 PunchList.propTypes = {
   selectPunch: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
-};
+}
 
-export default withStyles(styles)(PunchList);
+export default withStyles(styles)(PunchList)

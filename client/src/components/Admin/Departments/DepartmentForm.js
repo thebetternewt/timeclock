@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Input, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { FormControl, InputLabel, Input, Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
   FormControl: {
@@ -11,32 +11,32 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 class DepartmentForm extends Component {
-  state = this.getInitState();
+  state = this.getInitState()
 
   getInitState() {
-    const { department } = this.props;
+    const { department } = this.props
 
     return (
       department || {
         name: '',
         representativeId: '',
       }
-    );
+    )
   }
 
-  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value })
 
   render() {
-    const { id, name, representativeId } = this.state;
-    const { classes, submit, close, error } = this.props;
+    const { id, name, representativeId } = this.state
+    const { classes, submit, close, error } = this.props
 
     return (
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           submit({
             variables: {
               id,
@@ -46,7 +46,7 @@ class DepartmentForm extends Component {
             refetchQueries: ['DepartmentsQuery'],
           })
             .then(() => close())
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
         }}
       >
         {error && (
@@ -93,14 +93,14 @@ class DepartmentForm extends Component {
           Cancel
         </Button>
       </form>
-    );
+    )
   }
 }
 
 DepartmentForm.defaultProps = {
   department: null,
   error: null,
-};
+}
 
 DepartmentForm.propTypes = {
   classes: PropTypes.shape().isRequired,
@@ -108,6 +108,6 @@ DepartmentForm.propTypes = {
   close: PropTypes.func.isRequired,
   department: PropTypes.shape(),
   error: PropTypes.shape(),
-};
+}
 
-export default withStyles(styles)(DepartmentForm);
+export default withStyles(styles)(DepartmentForm)

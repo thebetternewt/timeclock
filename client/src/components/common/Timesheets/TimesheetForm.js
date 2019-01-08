@@ -1,6 +1,6 @@
-import React from 'react';
-import { Query } from 'react-apollo';
-import PropTypes from 'prop-types';
+import React from 'react'
+import { Query } from 'react-apollo'
+import PropTypes from 'prop-types'
 import {
   FormControl,
   InputLabel,
@@ -9,10 +9,10 @@ import {
   FormHelperText,
   TextField,
   Button,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { DEPARTMENTS_QUERY } from '../../../apollo/queries';
-import DepartmentSelect from '../DepartmentSelect';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { DEPARTMENTS_QUERY } from '../../../apollo/queries'
+import DepartmentSelect from '../DepartmentSelect'
 
 const styles = theme => ({
   Form: {
@@ -25,7 +25,7 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 const TimesheetForm = props => {
   // Generate pay period menu items for periods 1-24
@@ -34,7 +34,7 @@ const TimesheetForm = props => {
       <MenuItem key={i + 1} value={i + 1}>
         {i + 1}
       </MenuItem>
-    ));
+    ))
 
   const {
     classes,
@@ -46,7 +46,7 @@ const TimesheetForm = props => {
     onChange,
     onSubmit,
     error,
-  } = props;
+  } = props
 
   return (
     <form className={classes.Form}>
@@ -61,7 +61,7 @@ const TimesheetForm = props => {
       <Query query={DEPARTMENTS_QUERY}>
         {({ data, loading }) => {
           if (loading) {
-            return <span>Loading departments...</span>;
+            return <span>Loading departments...</span>
           }
           if (data && data.departments) {
             return (
@@ -71,10 +71,10 @@ const TimesheetForm = props => {
                 handleSelect={onDepartmentSelect}
                 selectedDepartmentId={departmentId}
               />
-            );
+            )
           }
 
-          return null;
+          return null
         }}
       </Query>
       <FormControl className={classes.FormControl} fullWidth>
@@ -99,7 +99,7 @@ const TimesheetForm = props => {
         value={fiscalYear}
         onChange={onChange}
         fullWidth
-        helperText="e.g. &quot;2019&quot;"
+        helperText='e.g. "2019"'
       />
 
       <Button
@@ -112,12 +112,12 @@ const TimesheetForm = props => {
         Print Timesheet
       </Button>
     </form>
-  );
-};
+  )
+}
 
 TimesheetForm.defaultProps = {
   error: null,
-};
+}
 
 TimesheetForm.propTypes = {
   classes: PropTypes.shape().isRequired,
@@ -129,6 +129,6 @@ TimesheetForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   error: PropTypes.shape(),
-};
+}
 
-export default withStyles(styles)(TimesheetForm);
+export default withStyles(styles)(TimesheetForm)

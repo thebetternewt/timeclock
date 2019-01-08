@@ -1,36 +1,36 @@
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
+import PropTypes from 'prop-types'
+import moment from 'moment'
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
 
 // Import logo as dataURL
-import logo from './logo';
+import logo from './logo'
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 
 const Timesheet = ({ payPeriod, user }) => {
-  const { punches } = payPeriod;
-  const punchRows = [];
+  const { punches } = payPeriod
+  const punchRows = []
 
-  let wageHours = 0;
-  let workStudyHours = 0;
-  let nightOwlHours = 0;
-  let totalHours = 0;
+  let wageHours = 0
+  let workStudyHours = 0
+  let nightOwlHours = 0
+  let totalHours = 0
 
   punches.forEach(punch => {
     const punchWageHours = moment
       .duration(punch.clockOutMsTime - punch.clockInMsTime)
-      .asHours();
-    const punchWorkStudyHours = 0;
-    const punchNightOwlHours = 0;
+      .asHours()
+    const punchWorkStudyHours = 0
+    const punchNightOwlHours = 0
     const punchTotalHours = moment
       .duration(punch.clockOutMsTime - punch.clockInMsTime)
-      .asHours();
+      .asHours()
 
-    wageHours += punchWageHours;
-    workStudyHours += punchWorkStudyHours;
-    nightOwlHours += punchNightOwlHours;
-    totalHours += punchTotalHours;
+    wageHours += punchWageHours
+    workStudyHours += punchWorkStudyHours
+    nightOwlHours += punchNightOwlHours
+    totalHours += punchTotalHours
 
     const punchRow = [
       // Date
@@ -48,17 +48,17 @@ const Timesheet = ({ payPeriod, user }) => {
       '--',
       // Total
       punchTotalHours.toFixed(2),
-    ];
+    ]
 
-    punchRows.push(punchRow);
-  });
+    punchRows.push(punchRow)
+  })
 
-  console.log(punchRows);
+  console.log(punchRows)
 
-  const wagePay = wageHours * 7.25;
-  const workStudyPay = workStudyHours * 7.25;
-  const nightOwlPay = nightOwlHours * 8.25;
-  const totalPay = wagePay + workStudyPay + nightOwlPay;
+  const wagePay = wageHours * 7.25
+  const workStudyPay = workStudyHours * 7.25
+  const nightOwlPay = nightOwlHours * 8.25
+  const totalPay = wagePay + workStudyPay + nightOwlPay
 
   const docDefinition = {
     content: [
@@ -212,17 +212,17 @@ const Timesheet = ({ payPeriod, user }) => {
     images: {
       logo,
     },
-  };
+  }
 
   // Open Timesheet PDF in new tab
-  pdfMake.createPdf(docDefinition).open();
+  pdfMake.createPdf(docDefinition).open()
 
-  return null;
-};
+  return null
+}
 
 Timesheet.propTypes = {
   user: PropTypes.shape().isRequired,
   payPeriod: PropTypes.shape().isRequired,
-};
+}
 
-export default Timesheet;
+export default Timesheet

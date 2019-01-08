@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Route } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
 
-import SideDrawer from './SideDrawer';
-import TimeClock from '../TimeClock';
-import TimeSheets from '../common/Timesheets';
-import Users from '../Admin/Users';
-import Departments from '../Admin/Departments';
-import PayPeriods from '../Admin/PayPeriods';
+import SideDrawer from './SideDrawer'
+import TimeClock from '../TimeClock'
+import TimeSheets from '../common/Timesheets'
+import Users from '../Admin/Users'
+import Departments from '../Admin/Departments'
+import PayPeriods from '../Admin/PayPeriods'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
@@ -28,10 +28,10 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     minWidth: 0, // So the Typography noWrap works
   },
-});
+})
 
 const Dashboard = props => {
-  const { classes, match } = props;
+  const { classes, match } = props
 
   return (
     <div className={classes.root}>
@@ -52,12 +52,12 @@ const Dashboard = props => {
         />
       </main>
     </div>
-  );
-};
+  )
+}
 
 Dashboard.propTypes = {
   classes: PropTypes.shape().isRequired,
   match: PropTypes.shape().isRequired,
-};
+}
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(Dashboard)

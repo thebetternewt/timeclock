@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 module.exports = gql`
   type PayPeriod {
@@ -36,4 +36,4 @@ module.exports = gql`
     ): PayPeriod!
     removePayPeriod(id: ID!): String!
   }
-`;
+`

@@ -4,4 +4,4 @@ module.exports = {
   Department: require('./department'),
   Punch: require('./punch'),
   PayPeriod: require('./payPeriod'),
-};
+}

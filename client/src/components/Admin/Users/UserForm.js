@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
 import {
   FormControl,
   FormControlLabel,
@@ -8,10 +8,10 @@ import {
   Input,
   Button,
   Checkbox,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { CURRENT_USER_QUERY, DEPARTMENTS_QUERY } from '../../../apollo/queries';
-import DepartmentSelect from '../../common/DepartmentSelect';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { CURRENT_USER_QUERY, DEPARTMENTS_QUERY } from '../../../apollo/queries'
+import DepartmentSelect from '../../common/DepartmentSelect'
 
 const styles = theme => ({
   FormControl: {
@@ -21,19 +21,19 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 class UserForm extends Component {
-  state = this.getInitState();
+  state = this.getInitState()
 
   getInitState() {
-    const { user } = this.props;
+    const { user } = this.props
 
     if (user) {
       return {
         ...user,
         departmentIds: user.departments.map(dept => dept.id),
-      };
+      }
     }
 
     return {
@@ -45,23 +45,23 @@ class UserForm extends Component {
       departmentIds: [],
       admin: false,
       active: true,
-    };
+    }
   }
 
   handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+    this.setState({ [e.target.name]: e.target.value })
+  }
 
   handleCheck = e => {
-    this.setState({ [e.target.value]: e.target.checked });
-  };
+    this.setState({ [e.target.value]: e.target.checked })
+  }
 
   handleDepartmentSelect = e => {
-    this.setState({ departmentIds: e.target.value });
-  };
+    this.setState({ departmentIds: e.target.value })
+  }
 
   render() {
-    const { classes, submit, close, error } = this.props;
+    const { classes, submit, close, error } = this.props
     const {
       id,
       netId,
@@ -72,12 +72,12 @@ class UserForm extends Component {
       admin,
       active,
       departmentIds,
-    } = this.state;
+    } = this.state
 
     return (
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           const variables = {
             id,
             netId,
@@ -87,11 +87,11 @@ class UserForm extends Component {
             admin,
             active,
             departments: departmentIds.join(', '),
-          };
+          }
 
           // Only submit password if value in state
           if (password && password.trim().length > 0) {
-            variables.password = password;
+            variables.password = password
           }
 
           submit({
@@ -99,7 +99,7 @@ class UserForm extends Component {
             refetchQueries: ['UsersQuery'],
           })
             .then(() => close())
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
         }}
       >
         {error && (
@@ -174,16 +174,16 @@ class UserForm extends Component {
                   multiple
                   className={classes.FormControl}
                 />
-              );
+              )
             }
-            return null;
+            return null
           }}
         </Query>
         <Query query={CURRENT_USER_QUERY}>
           {({ data }) => {
             if (data && data.me.admin) {
               return (
-                <Fragment>
+                <>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -209,11 +209,11 @@ class UserForm extends Component {
                     }
                     label="Active"
                   />
-                </Fragment>
-              );
+                </>
+              )
             }
 
-            return null;
+            return null
           }}
         </Query>
 
@@ -234,14 +234,14 @@ class UserForm extends Component {
           Cancel
         </Button>
       </form>
-    );
+    )
   }
 }
 
 UserForm.defaultProps = {
   user: null,
   error: null,
-};
+}
 
 UserForm.propTypes = {
   classes: PropTypes.shape().isRequired,
@@ -249,6 +249,6 @@ UserForm.propTypes = {
   close: PropTypes.func.isRequired,
   user: PropTypes.shape(),
   error: PropTypes.shape(),
-};
+}
 
-export default withStyles(styles)(UserForm);
+export default withStyles(styles)(UserForm)

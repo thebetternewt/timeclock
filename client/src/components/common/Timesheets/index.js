@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import { Query } from 'react-apollo';
-import { Typography, CircularProgress } from '@material-ui/core';
-import { CURRENT_USER_QUERY, TIMESHEET_QUERY } from '../../../apollo/queries';
-import TimesheetForm from './TimesheetForm';
-import Timesheet from './Timesheet';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { Query } from 'react-apollo'
+import { Typography, CircularProgress } from '@material-ui/core'
+import { CURRENT_USER_QUERY, TIMESHEET_QUERY } from '../../../apollo/queries'
+import TimesheetForm from './TimesheetForm'
+import Timesheet from './Timesheet'
 
 class TimeSheets extends Component {
   state = {
@@ -14,27 +14,27 @@ class TimeSheets extends Component {
       .year(),
     departmentId: '',
     getPunches: false,
-  };
+  }
 
   handleSelect = ({ target: { name, value } }) =>
-    this.setState({ [name]: value, getPunches: false });
+    this.setState({ [name]: value, getPunches: false })
 
   handleDepartmentSelect = ({ target: { value } }) =>
-    this.setState({ departmentId: value, getPunches: false });
+    this.setState({ departmentId: value, getPunches: false })
 
   handleChange = name => ({ target: { value } }) =>
     this.setState({
       [name]: value,
       getPunches: false,
-    });
+    })
 
   handleSubmit = e => {
-    e.preventDefault();
-    this.setState({ getPunches: true });
-  };
+    e.preventDefault()
+    this.setState({ getPunches: true })
+  }
 
   render() {
-    const { payPeriodId, fiscalYear, departmentId, getPunches } = this.state;
+    const { payPeriodId, fiscalYear, departmentId, getPunches } = this.state
 
     return (
       <div>
@@ -55,10 +55,10 @@ class TimeSheets extends Component {
           <Query query={CURRENT_USER_QUERY}>
             {({ data: currentUserData, loading: userLoading }) => {
               if (userLoading) {
-                return <CircularProgress />;
+                return <CircularProgress />
               }
               if (currentUserData && currentUserData.me) {
-                const { me } = currentUserData;
+                const { me } = currentUserData
                 return (
                   <Query
                     query={TIMESHEET_QUERY}
@@ -72,31 +72,31 @@ class TimeSheets extends Component {
                   >
                     {({ data, loading }) => {
                       if (loading) {
-                        return <CircularProgress />;
+                        return <CircularProgress />
                       }
 
                       if (data && data.payPeriod) {
                         return (
                           <Timesheet payPeriod={data.payPeriod} user={me} />
-                        );
+                        )
                       }
 
                       return (
                         <Typography variant="p" color="textPrimary">
                           No punches found for this pay period!
                         </Typography>
-                      );
+                      )
                     }}
                   </Query>
-                );
+                )
               }
-              return null;
+              return null
             }}
           </Query>
         )}
       </div>
-    );
+    )
   }
 }
 
-export default TimeSheets;
+export default TimeSheets

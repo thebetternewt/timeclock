@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 module.exports = mongoose.model(
   'Punch',
@@ -31,4 +31,4 @@ module.exports = mongoose.model(
       timestamps: true,
     }
   )
-);
+)

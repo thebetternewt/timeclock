@@ -1,27 +1,27 @@
-import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { Mutation } from 'react-apollo'
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { CircularProgress } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles/withStyles';
-import jwtDecode from 'jwt-decode';
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import FormControl from '@material-ui/core/FormControl'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import LockIcon from '@material-ui/icons/LockOutlined'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import { CircularProgress } from '@material-ui/core'
+import withStyles from '@material-ui/core/styles/withStyles'
+import jwtDecode from 'jwt-decode'
 import {
   isAuthenticated,
   setAuthenticatedUser,
   getRedirectPath,
   setRedirectPath,
-} from '../../apollo/client';
-import { LOGIN } from '../../apollo/mutations';
+} from '../../apollo/client'
+import { LOGIN } from '../../apollo/mutations'
 
 const styles = theme => ({
   layout: {
@@ -54,27 +54,27 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
-});
+})
 
 class SignIn extends Component {
   state = {
     netId: '',
     password: '',
-  };
+  }
 
   handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+    this.setState({ [e.target.name]: e.target.value })
+  }
 
   render() {
-    const { classes } = this.props;
-    const { netId, password } = this.state;
+    const { classes } = this.props
+    const { netId, password } = this.state
     if (isAuthenticated()) {
-      return <Redirect to="/dashboard/timeclock" />;
+      return <Redirect to="/dashboard/timeclock" />
     }
 
     return (
-      <Fragment>
+      <>
         <CssBaseline />
         <main className={classes.layout}>
           <Paper className={classes.paper}>
@@ -90,22 +90,22 @@ class SignIn extends Component {
                       color="secondary"
                       style={{ margin: '1rem 0' }}
                     />
-                  );
+                  )
                 }
 
                 if (data) {
-                  const token = data.login;
-                  localStorage.setItem('token', token);
-                  setAuthenticatedUser(jwtDecode(token));
-                  const path = getRedirectPath();
+                  const token = data.login
+                  localStorage.setItem('token', token)
+                  setAuthenticatedUser(jwtDecode(token))
+                  const path = getRedirectPath()
                   if (path) {
-                    setRedirectPath(null);
-                    return <Redirect to={path} />;
+                    setRedirectPath(null)
+                    return <Redirect to={path} />
                   }
-                  return <Redirect to="/dashboard/timeclock" />;
+                  return <Redirect to="/dashboard/timeclock" />
                 }
                 return (
-                  <Fragment>
+                  <>
                     {error && (
                       <pre>
                         Bad:{' '}
@@ -117,11 +117,11 @@ class SignIn extends Component {
                     <form
                       className={classes.form}
                       onSubmit={e => {
-                        e.preventDefault();
+                        e.preventDefault()
                         login({
                           variables: { netId, password },
-                        }).catch(err => console.log(err.message));
-                        this.setState({ netId: '', password: '' });
+                        }).catch(err => console.log(err.message))
+                        this.setState({ netId: '', password: '' })
                       }}
                     >
                       <FormControl margin="normal" required fullWidth>
@@ -156,19 +156,19 @@ class SignIn extends Component {
                         Sign in
                       </Button>
                     </form>
-                  </Fragment>
-                );
+                  </>
+                )
               }}
             </Mutation>
           </Paper>
         </main>
-      </Fragment>
-    );
+      </>
+    )
   }
 }
 
 SignIn.propTypes = {
   classes: PropTypes.shape().isRequired,
-};
+}
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(SignIn)

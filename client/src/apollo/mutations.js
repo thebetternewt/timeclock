@@ -1,10 +1,10 @@
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 const LOGIN = gql`
   mutation login($netId: String!, $password: String!) {
     login(netId: $netId, password: $password)
   }
-`;
+`
 
 const CLOCK_IN = gql`
   mutation ClockInMutation($departmentId: ID!) {
@@ -20,7 +20,7 @@ const CLOCK_IN = gql`
       }
     }
   }
-`;
+`
 
 const CLOCK_OUT = gql`
   mutation ClockOutMutation {
@@ -36,7 +36,7 @@ const CLOCK_OUT = gql`
       }
     }
   }
-`;
+`
 
 const ADD_USER = gql`
   mutation AddUser(
@@ -58,7 +58,7 @@ const ADD_USER = gql`
       id
     }
   }
-`;
+`
 
 const UPDATE_USER = gql`
   mutation UpdateUser(
@@ -86,19 +86,19 @@ const UPDATE_USER = gql`
       id
     }
   }
-`;
+`
 
 const DEACTIVATE_USER = gql`
   mutation DeactivateUser($id: ID!) {
     deactivateUser(id: $id)
   }
-`;
+`
 
 const ACTIVATE_USER = gql`
   mutation ActivateUser($id: ID!) {
     activateUser(id: $id)
   }
-`;
+`
 
 // Punches
 const ADD_PUNCH = gql`
@@ -125,7 +125,7 @@ const ADD_PUNCH = gql`
       }
     }
   }
-`;
+`
 
 const UPDATE_PUNCH = gql`
   mutation UpdatePunch(
@@ -151,7 +151,7 @@ const UPDATE_PUNCH = gql`
       }
     }
   }
-`;
+`
 
 // Departments
 const ADD_DEPARTMENT = gql`
@@ -162,7 +162,7 @@ const ADD_DEPARTMENT = gql`
       representativeId
     }
   }
-`;
+`
 
 const UPDATE_DEPARTMENT = gql`
   mutation UpdateDepartment($id: ID!, $name: String!, $representativeId: ID!) {
@@ -176,7 +176,7 @@ const UPDATE_DEPARTMENT = gql`
       representativeId
     }
   }
-`;
+`
 
 // Pay Periods
 const ADD_PAY_PERIOD = gql`
@@ -199,7 +199,7 @@ const ADD_PAY_PERIOD = gql`
       fiscalYear
     }
   }
-`;
+`
 
 const UPDATE_PAY_PERIOD = gql`
   mutation UpdatePayPeriod(
@@ -223,7 +223,7 @@ const UPDATE_PAY_PERIOD = gql`
       fiscalYear
     }
   }
-`;
+`
 
 export {
   LOGIN,
@@ -239,4 +239,4 @@ export {
   UPDATE_DEPARTMENT,
   ADD_PAY_PERIOD,
   UPDATE_PAY_PERIOD,
-};
+}

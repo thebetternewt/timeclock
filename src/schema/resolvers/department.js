@@ -1,41 +1,41 @@
-const { Department } = require('../../models');
+const { Department } = require('../../models')
 
 module.exports = {
   Query: {
     department: async (parent, { id }, { user }) => {
       if (!user) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
-      return Department.findOne({ _id: id }).exec();
+      return Department.findOne({ _id: id }).exec()
     },
     departments: async (parent, args, { user }) => {
       if (!user) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
       return Department.find()
         .sort('name')
-        .exec();
+        .exec()
     },
   },
 
   Mutation: {
     addDepartment: async (parent, args, { user }) => {
       if (!user || !user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
-      const newDepartment = new Department({ ...args });
+      const newDepartment = new Department({ ...args })
 
-      return newDepartment.save();
+      return newDepartment.save()
     },
 
     updateDepartment: async (parent, args, { user }) => {
       if (!user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
-      const { id, admin, ...updatedProperties } = args;
+      const { id, admin, ...updatedProperties } = args
 
       const updatedDepartment = await Department.findOneAndUpdate(
         { _id: id },
@@ -43,27 +43,27 @@ module.exports = {
           $set: { ...updatedProperties },
         },
         { new: true }
-      ).exec();
+      ).exec()
 
       if (!updatedDepartment) {
-        throw new Error('Department not found');
+        throw new Error('Department not found')
       }
 
-      return updatedDepartment;
+      return updatedDepartment
     },
     removeDepartment: async (parent, { id }, { user }) => {
       if (!user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
       const removedDepartment = await Department.findOneAndRemove({
         _id: id,
-      }).exec();
+      }).exec()
 
       if (!removedDepartment) {
-        throw new Error('Department not found');
+        throw new Error('Department not found')
       }
 
-      return removedDepartment.id;
+      return removedDepartment.id
     },
   },
-};
+}

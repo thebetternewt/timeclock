@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 module.exports = gql`
   type Punch {
@@ -39,4 +39,4 @@ module.exports = gql`
       clockOutMsTime: String
     ): Punch!
   }
-`;
+`

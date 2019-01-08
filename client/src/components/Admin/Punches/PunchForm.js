@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import moment from 'moment'
 
-import { Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { DateTimePicker } from 'material-ui-pickers';
-import DepartmentSelect from '../../common/DepartmentSelect';
+import { Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { DateTimePicker } from 'material-ui-pickers'
+import DepartmentSelect from '../../common/DepartmentSelect'
 
 const styles = theme => ({
   FormControl: {
@@ -15,13 +15,13 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 class PunchForm extends Component {
-  state = this.getInitState();
+  state = this.getInitState()
 
   getInitState() {
-    const { punch, user } = this.props;
+    const { punch, user } = this.props
 
     return (
       punch || {
@@ -31,39 +31,33 @@ class PunchForm extends Component {
         departmentId: '',
         user,
       }
-    );
+    )
   }
 
-  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value })
 
   // DateTime picker returns a moment object
   // Docs: https://material-ui-pickers.firebaseapp.com/
   // Convert datetime to msTime format
   handleClockInTimeChange = date =>
-    this.setState({ clockInMsTime: date.format('x') });
+    this.setState({ clockInMsTime: date.format('x') })
 
   // DateTime picker returns a moment object
   // Convert datetime to msTime format
   handleClockOutTimeChange = date =>
-    this.setState({ clockOutMsTime: date.format('x') });
+    this.setState({ clockOutMsTime: date.format('x') })
 
-  handleDepartmentSelect = e => this.setState({ departmentId: e.target.value });
+  handleDepartmentSelect = e => this.setState({ departmentId: e.target.value })
 
   render() {
-    const {
-      id,
-      user,
-      clockInMsTime,
-      clockOutMsTime,
-      departmentId,
-    } = this.state;
+    const { id, user, clockInMsTime, clockOutMsTime, departmentId } = this.state
 
-    const { classes, submit, close, error } = this.props;
+    const { classes, submit, close, error } = this.props
 
     return (
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           submit({
             variables: {
               id,
@@ -75,7 +69,7 @@ class PunchForm extends Component {
             refetchQueries: ['PunchesQuery'],
           })
             .then(() => close())
-            .catch(console.error);
+            .catch(console.error)
         }}
       >
         {error && (
@@ -136,14 +130,14 @@ class PunchForm extends Component {
           Cancel
         </Button>
       </form>
-    );
+    )
   }
 }
 
 PunchForm.defaultProps = {
   punch: null,
   error: null,
-};
+}
 
 PunchForm.propTypes = {
   classes: PropTypes.shape().isRequired,
@@ -152,6 +146,6 @@ PunchForm.propTypes = {
   user: PropTypes.shape().isRequired,
   punch: PropTypes.shape(),
   error: PropTypes.shape(),
-};
+}
 
-export default withStyles(styles)(PunchForm);
+export default withStyles(styles)(PunchForm)

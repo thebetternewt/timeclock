@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
 
 import {
   CircularProgress,
@@ -11,40 +11,40 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { PAY_PERIODS_QUERY } from '../../../apollo/queries';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { PAY_PERIODS_QUERY } from '../../../apollo/queries'
 
 const styles = {
   selected: {
     backgroundColor: 'green',
   },
-};
+}
 
 class PayPeriodList extends Component {
   state = {
     selectedId: '',
     page: 0,
     rowsPerPage: 10,
-  };
+  }
 
   handleRowSelect = id => {
-    const { selectPayPeriod } = this.props;
+    const { selectPayPeriod } = this.props
 
-    this.setState({ selectedId: id });
-    selectPayPeriod(id);
-  };
+    this.setState({ selectedId: id })
+    selectPayPeriod(id)
+  }
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
+    this.setState({ page })
+  }
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
+    this.setState({ rowsPerPage: event.target.value })
+  }
 
   render() {
-    const { selectedId, page, rowsPerPage } = this.state;
+    const { selectedId, page, rowsPerPage } = this.state
 
     return (
       <div>
@@ -53,11 +53,11 @@ class PayPeriodList extends Component {
         <Query query={PAY_PERIODS_QUERY}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircularProgress size={50} />;
+              return <CircularProgress size={50} />
             }
 
             if (data) {
-              const { payPeriods } = data;
+              const { payPeriods } = data
               return (
                 <Paper elevation={12} style={{ margin: '2rem 0', padding: 15 }}>
                   {payPeriods.length > 0 ? (
@@ -78,7 +78,7 @@ class PayPeriodList extends Component {
                               key={pp.id}
                               selected={pp.id === selectedId}
                               onClick={() => {
-                                this.handleRowSelect(pp.id);
+                                this.handleRowSelect(pp.id)
                               }}
                             >
                               <TableCell component="th" scope="row">
@@ -110,19 +110,19 @@ class PayPeriodList extends Component {
                     <p>Not pay periods yet!</p>
                   )}
                 </Paper>
-              );
+              )
             }
 
-            return null;
+            return null
           }}
         </Query>
       </div>
-    );
+    )
   }
 }
 
 PayPeriodList.propTypes = {
   selectPayPeriod: PropTypes.func.isRequired,
-};
+}
 
-export default withStyles(styles)(PayPeriodList);
+export default withStyles(styles)(PayPeriodList)

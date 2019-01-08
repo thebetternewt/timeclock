@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Query, Mutation } from 'react-apollo';
-import { Paper, CircularProgress, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import PayPeriodForm from './PayPeriodForm';
-import { PAY_PERIOD_QUERY } from '../../../apollo/queries';
-import { UPDATE_PAY_PERIOD } from '../../../apollo/mutations';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query, Mutation } from 'react-apollo'
+import { Paper, CircularProgress, Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import PayPeriodForm from './PayPeriodForm'
+import { PAY_PERIOD_QUERY } from '../../../apollo/queries'
+import { UPDATE_PAY_PERIOD } from '../../../apollo/mutations'
 
 const styles = theme => ({
   Paper: {
@@ -14,21 +14,21 @@ const styles = theme => ({
   Button: {
     marginRight: theme.spacing.unit * 2,
   },
-});
+})
 
 class PayPeriod extends Component {
   state = {
     id: this.props.id,
     editMode: false,
-  };
+  }
 
   toggleEditMode = () => {
-    this.setState(({ editMode }) => ({ editMode: !editMode }));
-  };
+    this.setState(({ editMode }) => ({ editMode: !editMode }))
+  }
 
   render() {
-    const { id, editMode } = this.state;
-    const { classes, cancelEdit } = this.props;
+    const { id, editMode } = this.state
+    const { classes, cancelEdit } = this.props
 
     return (
       <Paper elevation={12} className={classes.Paper}>
@@ -36,7 +36,7 @@ class PayPeriod extends Component {
         <Query query={PAY_PERIOD_QUERY} variables={{ id }}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircularProgress />;
+              return <CircularProgress />
             }
 
             if (data && data.payPeriod) {
@@ -45,14 +45,14 @@ class PayPeriod extends Component {
                 endDate,
                 payPeriodId,
                 fiscalYear,
-              } = data.payPeriod;
+              } = data.payPeriod
 
               if (editMode) {
                 return (
                   <Mutation mutation={UPDATE_PAY_PERIOD}>
                     {(updatePayPeriod, { loading: updating, error }) => {
                       if (updating) {
-                        return <CircularProgress />;
+                        return <CircularProgress />
                       }
 
                       return (
@@ -62,13 +62,13 @@ class PayPeriod extends Component {
                           payPeriod={data.payPeriod}
                           close={this.toggleEditMode}
                         />
-                      );
+                      )
                     }}
                   </Mutation>
-                );
+                )
               }
               return (
-                <Fragment>
+                <>
                   <p>
                     <strong>Start Date:</strong> {startDate}
                   </p>
@@ -97,15 +97,15 @@ class PayPeriod extends Component {
                   >
                     Back
                   </Button>
-                </Fragment>
-              );
+                </>
+              )
             }
 
-            return <p>PayPeriod not found.</p>;
+            return <p>PayPeriod not found.</p>
           }}
         </Query>
       </Paper>
-    );
+    )
   }
 }
 
@@ -113,6 +113,6 @@ PayPeriod.propTypes = {
   classes: PropTypes.shape().isRequired,
   id: PropTypes.string.isRequired,
   cancelEdit: PropTypes.func.isRequired,
-};
+}
 
-export default withStyles(styles)(PayPeriod);
+export default withStyles(styles)(PayPeriod)

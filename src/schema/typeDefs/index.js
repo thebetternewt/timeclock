@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 const base = gql`
   type Query {
@@ -10,7 +10,7 @@ const base = gql`
   type Mutation {
     _: String
   }
-`;
+`
 
 module.exports = [
   base,
@@ -18,4 +18,4 @@ module.exports = [
   require('./department'),
   require('./punch'),
   require('./payPeriod'),
-];
+]

@@ -1,32 +1,32 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Mutation } from 'react-apollo'
 import {
   CircularProgress,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-} from '@material-ui/core';
-import PunchForm from './PunchForm';
-import { ADD_PUNCH } from '../../../apollo/mutations';
+} from '@material-ui/core'
+import PunchForm from './PunchForm'
+import { ADD_PUNCH } from '../../../apollo/mutations'
 
 class AddPunch extends Component {
   state = {
     isOpen: false,
-  };
+  }
 
   handleToggle = () =>
     this.setState(({ isOpen }) => ({
       isOpen: !isOpen, // eslint-disable-line
-    }));
+    }))
 
   render() {
-    const { isOpen } = this.state;
-    const { user } = this.props;
+    const { isOpen } = this.state
+    const { user } = this.props
 
     return (
-      <Fragment>
+      <>
         <Button variant="contained" color="primary" onClick={this.handleToggle}>
           Add Punch
         </Button>
@@ -42,7 +42,7 @@ class AddPunch extends Component {
             <Mutation mutation={ADD_PUNCH}>
               {(addPunch, { loading, error }) => {
                 if (loading) {
-                  return <CircularProgress />;
+                  return <CircularProgress />
                 }
 
                 return (
@@ -52,18 +52,18 @@ class AddPunch extends Component {
                     close={this.handleToggle}
                     user={user}
                   />
-                );
+                )
               }}
             </Mutation>
           </DialogContent>
         </Dialog>
-      </Fragment>
-    );
+      </>
+    )
   }
 }
 
 AddPunch.propTypes = {
   user: PropTypes.shape().isRequired,
-};
+}
 
-export default AddPunch;
+export default AddPunch

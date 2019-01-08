@@ -1,4 +1,4 @@
-const { PayPeriod, Punch } = require('../../models');
+const { PayPeriod, Punch } = require('../../models')
 
 module.exports = {
   PayPeriod: {
@@ -8,74 +8,74 @@ module.exports = {
       { user },
       { variableValues: { userId, departmentId } }
     ) => {
-      const searchParams = { payPeriod: parent.id };
+      const searchParams = { payPeriod: parent.id }
 
       if (user.admin) {
-        console.log('admin');
+        console.log('admin')
         // return Punch.where({ userId, payPeriod: parent.id }).exec();
-        searchParams.userId = userId;
+        searchParams.userId = userId
       } else if (user.id !== userId) {
-        console.log('user doesnt match');
-        return [];
+        console.log('user doesnt match')
+        return []
       } else {
-        searchParams.userId = user.id;
-        console.log('user  match');
+        searchParams.userId = user.id
+        console.log('user  match')
       }
 
-      console.log('searchParams:', searchParams);
-      console.log('departmentId:', departmentId);
+      console.log('searchParams:', searchParams)
+      console.log('departmentId:', departmentId)
 
       if (departmentId) {
-        searchParams.departmentId = departmentId;
+        searchParams.departmentId = departmentId
       }
 
-      return Punch.where(searchParams).exec();
+      return Punch.where(searchParams).exec()
     },
   },
   Query: {
     payPeriod: async (parent, { id, payPeriodId, fiscalYear }, { user }) => {
       if (!user) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
       // Find PayPeriod based on id or by payPeriodId + fiscalYear
       return PayPeriod.findOne({
         $or: [{ _id: id }, { $and: [{ payPeriodId }, { fiscalYear }] }],
-      }).exec();
+      }).exec()
     },
     payPeriods: async (parent, { fiscalYear }, { user }) => {
       if (!user) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
-      const searchParams = {};
+      const searchParams = {}
       if (fiscalYear) {
-        searchParams.fiscalYear = fiscalYear;
+        searchParams.fiscalYear = fiscalYear
       }
 
       return PayPeriod.where(searchParams)
         .sort('startDate')
-        .exec();
+        .exec()
     },
   },
 
   Mutation: {
     addPayPeriod: async (parent, args, { user }) => {
       if (!user || !user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
-      const newPayPeriod = new PayPeriod({ ...args });
+      const newPayPeriod = new PayPeriod({ ...args })
 
-      return newPayPeriod.save();
+      return newPayPeriod.save()
     },
 
     updatePayPeriod: async (parent, args, { user }) => {
       if (!user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
 
-      const { id, admin, ...updatedProperties } = args;
+      const { id, admin, ...updatedProperties } = args
 
       const updatedPayPeriod = await PayPeriod.findOneAndUpdate(
         { _id: id },
@@ -83,27 +83,27 @@ module.exports = {
           $set: { ...updatedProperties },
         },
         { new: true }
-      ).exec();
+      ).exec()
 
       if (!updatedPayPeriod) {
-        throw new Error('PayPeriod not found');
+        throw new Error('PayPeriod not found')
       }
 
-      return updatedPayPeriod;
+      return updatedPayPeriod
     },
     removePayPeriod: async (parent, { id }, { user }) => {
       if (!user.admin) {
-        throw new Error('Not authorized');
+        throw new Error('Not authorized')
       }
       const removedPayPeriod = await PayPeriod.findOneAndRemove({
         _id: id,
-      }).exec();
+      }).exec()
 
       if (!removedPayPeriod) {
-        throw new Error('PayPeriod not found');
+        throw new Error('PayPeriod not found')
       }
 
-      return removedPayPeriod.id;
+      return removedPayPeriod.id
     },
   },
-};
+}

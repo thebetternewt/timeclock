@@ -1,41 +1,41 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { Query, Mutation } from 'react-apollo';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import moment from 'moment'
+import { Query, Mutation } from 'react-apollo'
 import {
   CircularProgress,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import PunchForm from './PunchForm';
-import { UPDATE_PUNCH } from '../../../apollo/mutations';
-import { PUNCH_QUERY } from '../../../apollo/queries';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import PunchForm from './PunchForm'
+import { UPDATE_PUNCH } from '../../../apollo/mutations'
+import { PUNCH_QUERY } from '../../../apollo/queries'
 
 const styles = theme => ({
   Button: {
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 class Punch extends Component {
   state = {
     id: this.props.id,
     editMode: false,
-  };
+  }
 
   toggleEditMode = () => {
     this.setState(({ editMode }) => ({
       editMode: !editMode,
-    }));
-  };
+    }))
+  }
 
   render() {
-    const { id, editMode } = this.state;
-    const { classes, close, isOpen } = this.props;
+    const { id, editMode } = this.state
+    const { classes, close, isOpen } = this.props
 
     return (
       <Dialog
@@ -52,7 +52,7 @@ class Punch extends Component {
           <Query query={PUNCH_QUERY} variables={{ id }}>
             {({ data, loading }) => {
               if (loading) {
-                return <CircularProgress />;
+                return <CircularProgress />
               }
 
               if (data && data.punch) {
@@ -61,14 +61,14 @@ class Punch extends Component {
                   clockOutMsTime,
                   department: { name: deptName },
                   user,
-                } = data.punch;
+                } = data.punch
 
                 if (editMode) {
                   return (
                     <Mutation mutation={UPDATE_PUNCH}>
                       {(updatePunch, { loading: updating, error }) => {
                         if (updating) {
-                          return <CircularProgress />;
+                          return <CircularProgress />
                         }
 
                         return (
@@ -79,14 +79,14 @@ class Punch extends Component {
                             punch={data.punch}
                             close={this.toggleEditMode}
                           />
-                        );
+                        )
                       }}
                     </Mutation>
-                  );
+                  )
                 }
 
                 return (
-                  <Fragment>
+                  <>
                     <p>
                       <strong>Clock In:</strong>{' '}
                       {moment(clockInMsTime, 'x').format('YYYY-MM-DD h:mm A')}
@@ -114,16 +114,16 @@ class Punch extends Component {
                     >
                       Back
                     </Button>
-                  </Fragment>
-                );
+                  </>
+                )
               }
 
-              return <p>Punch not found.</p>;
+              return <p>Punch not found.</p>
             }}
           </Query>
         </DialogContent>
       </Dialog>
-    );
+    )
   }
 }
 
@@ -132,6 +132,6 @@ Punch.propTypes = {
   id: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-};
+}
 
-export default withStyles(styles)(Punch);
+export default withStyles(styles)(Punch)

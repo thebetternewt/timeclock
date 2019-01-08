@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListIcon from '@material-ui/icons/ListAlt';
-import InsertChartIcon from '@material-ui/icons/InsertChart';
-import GroupIcon from '@material-ui/icons/Group';
-import BusinessIcon from '@material-ui/icons/Business';
-import TimerIcon from '@material-ui/icons/Timer';
-import TimelineIcon from '@material-ui/icons/Timeline';
-import EventIcon from '@material-ui/icons/Event';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListIcon from '@material-ui/icons/ListAlt'
+import InsertChartIcon from '@material-ui/icons/InsertChart'
+import GroupIcon from '@material-ui/icons/Group'
+import BusinessIcon from '@material-ui/icons/Business'
+import TimerIcon from '@material-ui/icons/Timer'
+import TimelineIcon from '@material-ui/icons/Timeline'
+import EventIcon from '@material-ui/icons/Event'
 
 export const userItems = path => (
   <div>
@@ -30,7 +30,7 @@ export const userItems = path => (
       </ListItem>
     </Link>
   </div>
-);
+)
 
 export const supervisorItems = path => (
   <div>
@@ -47,7 +47,7 @@ export const supervisorItems = path => (
       <ListItemText primary="Stats" />
     </ListItem>
   </div>
-);
+)
 
 export const adminItems = path => (
   <div>
@@ -76,4 +76,4 @@ export const adminItems = path => (
       </ListItem>
     </Link>
   </div>
-);
+)

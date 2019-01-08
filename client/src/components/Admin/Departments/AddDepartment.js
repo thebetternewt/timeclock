@@ -1,30 +1,30 @@
-import React, { Component, Fragment } from 'react';
-import { Mutation } from 'react-apollo';
+import React, { Component } from 'react'
+import { Mutation } from 'react-apollo'
 import {
   CircularProgress,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
-} from '@material-ui/core';
-import DepartmentForm from './DepartmentForm';
-import { ADD_DEPARTMENT } from '../../../apollo/mutations';
+} from '@material-ui/core'
+import DepartmentForm from './DepartmentForm'
+import { ADD_DEPARTMENT } from '../../../apollo/mutations'
 
 class AddDepartment extends Component {
   state = {
     isOpen: false,
-  };
+  }
 
   handleToggle = () =>
     this.setState(({ isOpen }) => ({
       isOpen: !isOpen, // eslint-disable-line
-    }));
+    }))
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen } = this.state
 
     return (
-      <Fragment>
+      <>
         <Button variant="contained" color="primary" onClick={this.handleToggle}>
           Add Department
         </Button>
@@ -40,7 +40,7 @@ class AddDepartment extends Component {
             <Mutation mutation={ADD_DEPARTMENT}>
               {(addDepartment, { loading, error }) => {
                 if (loading) {
-                  return <CircularProgress />;
+                  return <CircularProgress />
                 }
 
                 return (
@@ -49,14 +49,14 @@ class AddDepartment extends Component {
                     error={error}
                     close={this.handleToggle}
                   />
-                );
+                )
               }}
             </Mutation>
           </DialogContent>
         </Dialog>
-      </Fragment>
-    );
+      </>
+    )
   }
 }
 
-export default AddDepartment;
+export default AddDepartment

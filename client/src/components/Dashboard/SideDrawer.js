@@ -1,18 +1,18 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
 
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Divider from '@material-ui/core/Divider';
-import { withRouter } from 'react-router-dom';
-import { CURRENT_USER_QUERY } from '../../apollo/queries';
+import { withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import List from '@material-ui/core/List'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import Divider from '@material-ui/core/Divider'
+import { withRouter } from 'react-router-dom'
+import { CURRENT_USER_QUERY } from '../../apollo/queries'
 
-import { userItems, supervisorItems, adminItems } from './SideDrawerItems';
+import { userItems, supervisorItems, adminItems } from './SideDrawerItems'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   drawerPaper: {
@@ -25,10 +25,10 @@ const styles = theme => ({
   subheader: {
     textTransform: 'uppercase',
   },
-});
+})
 
 const SideDrawer = props => {
-  const { classes, match } = props;
+  const { classes, match } = props
 
   return (
     <Drawer
@@ -52,7 +52,7 @@ const SideDrawer = props => {
         {({ data }) => {
           if (data && data.me && data.me.admin) {
             return (
-              <Fragment>
+              <>
                 <Divider />
                 <List
                   component="nav"
@@ -81,20 +81,20 @@ const SideDrawer = props => {
                 >
                   {adminItems(match.url)}
                 </List>
-              </Fragment>
-            );
+              </>
+            )
           }
 
-          return null;
+          return null
         }}
       </Query>
     </Drawer>
-  );
-};
+  )
+}
 
 SideDrawer.propTypes = {
   classes: PropTypes.shape().isRequired,
   match: PropTypes.shape().isRequired,
-};
+}
 
-export default withRouter(withStyles(styles)(SideDrawer));
+export default withRouter(withStyles(styles)(SideDrawer))

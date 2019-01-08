@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   FormControl,
   InputLabel,
@@ -8,7 +8,7 @@ import {
   FormHelperText,
   Checkbox,
   ListItemText,
-} from '@material-ui/core';
+} from '@material-ui/core'
 
 const DepartmentSelect = props => {
   const {
@@ -18,18 +18,18 @@ const DepartmentSelect = props => {
     departments,
     multiple,
     className,
-  } = props;
+  } = props
 
   const departmentMenuItems = departments.map(dept => (
     <MenuItem key={dept.id} value={dept.id}>
       {dept.name}
     </MenuItem>
-  ));
+  ))
 
   return (
     <FormControl fullWidth required className={className}>
       {multiple ? (
-        <Fragment>
+        <>
           <InputLabel htmlFor="departments">Departments</InputLabel>
 
           <Select
@@ -58,9 +58,9 @@ const DepartmentSelect = props => {
               </MenuItem>
             ))}
           </Select>
-        </Fragment>
+        </>
       ) : (
-        <Fragment>
+        <>
           <InputLabel shrink htmlFor="departments">
             Department
           </InputLabel>
@@ -77,18 +77,18 @@ const DepartmentSelect = props => {
             {departmentMenuItems}
           </Select>
           <FormHelperText>Required</FormHelperText>
-        </Fragment>
+        </>
       )}
     </FormControl>
-  );
-};
+  )
+}
 
 DepartmentSelect.defaultProps = {
   className: '',
   selectedDepartmentId: '',
   selectedDepartmentIds: [],
   multiple: false,
-};
+}
 
 DepartmentSelect.propTypes = {
   className: PropTypes.string,
@@ -97,6 +97,6 @@ DepartmentSelect.propTypes = {
   selectedDepartmentId: PropTypes.string,
   selectedDepartmentIds: PropTypes.arrayOf(PropTypes.string),
   multiple: PropTypes.bool,
-};
+}
 
-export default DepartmentSelect;
+export default DepartmentSelect

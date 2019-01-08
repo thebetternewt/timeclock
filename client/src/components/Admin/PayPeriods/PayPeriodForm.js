@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { TextField, Button } from '@material-ui/core';
-import { DatePicker } from 'material-ui-pickers';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import moment from 'moment'
+import { TextField, Button } from '@material-ui/core'
+import { DatePicker } from 'material-ui-pickers'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
   FormControl: {
@@ -13,13 +13,13 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     marginLeft: 0,
   },
-});
+})
 
 class PayPeriodForm extends Component {
-  state = this.getInitState();
+  state = this.getInitState()
 
   getInitState() {
-    const { payPeriod } = this.props;
+    const { payPeriod } = this.props
 
     return (
       payPeriod || {
@@ -28,30 +28,30 @@ class PayPeriodForm extends Component {
         payPeriodId: '',
         fiscalYear: '',
       }
-    );
+    )
   }
 
-  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value })
 
   // DateTime picker returns a moment object
   // Docs: https://material-ui-pickers.firebaseapp.com/
   // Convert date to string format
   handleStartDateChange = date =>
-    this.setState({ startDate: date.format('YYYY-MM-DD') });
+    this.setState({ startDate: date.format('YYYY-MM-DD') })
 
   // DateTime picker returns a moment object
   // Convert date to string format
   handleEndDateChange = date =>
-    this.setState({ endDate: date.format('YYYY-MM-DD') });
+    this.setState({ endDate: date.format('YYYY-MM-DD') })
 
   render() {
-    const { id, startDate, endDate, payPeriodId, fiscalYear } = this.state;
-    const { classes, submit, close, error } = this.props;
+    const { id, startDate, endDate, payPeriodId, fiscalYear } = this.state
+    const { classes, submit, close, error } = this.props
 
     return (
       <form
         onSubmit={e => {
-          e.preventDefault();
+          e.preventDefault()
           submit({
             variables: {
               id,
@@ -63,7 +63,7 @@ class PayPeriodForm extends Component {
             refetchQueries: ['PayPeriodsQuery'],
           })
             .then(() => close())
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
         }}
       >
         {error && (
@@ -135,14 +135,14 @@ class PayPeriodForm extends Component {
           Cancel
         </Button>
       </form>
-    );
+    )
   }
 }
 
 PayPeriodForm.defaultProps = {
   payPeriod: null,
   error: null,
-};
+}
 
 PayPeriodForm.propTypes = {
   classes: PropTypes.shape().isRequired,
@@ -150,6 +150,6 @@ PayPeriodForm.propTypes = {
   close: PropTypes.func.isRequired,
   payPeriod: PropTypes.shape(),
   error: PropTypes.shape(),
-};
+}
 
-export default withStyles(styles)(PayPeriodForm);
+export default withStyles(styles)(PayPeriodForm)

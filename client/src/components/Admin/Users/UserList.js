@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Query } from 'react-apollo';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
 
 import {
   Paper,
@@ -10,51 +10,51 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { USERS_QUERY } from '../../../apollo/queries';
-import CircleLoader from '../../common/CircleLoader';
+} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { USERS_QUERY } from '../../../apollo/queries'
+import CircleLoader from '../../common/CircleLoader'
 
 const styles = {
   selected: {
     backgroundColor: 'green',
   },
-};
+}
 
 class UserList extends Component {
   state = {
     selectedId: '',
     page: 0,
     rowsPerPage: 10,
-  };
+  }
 
   handleRowSelect = id => {
-    const { selectUser } = this.props;
-    this.setState({ selectedId: id });
-    selectUser(id);
-  };
+    const { selectUser } = this.props
+    this.setState({ selectedId: id })
+    selectUser(id)
+  }
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
+    this.setState({ page })
+  }
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
+    this.setState({ rowsPerPage: event.target.value })
+  }
 
   render() {
-    const { selectedId, page, rowsPerPage } = this.state;
+    const { selectedId, page, rowsPerPage } = this.state
 
     return (
       <div>
         <Query query={USERS_QUERY}>
           {({ data, loading }) => {
             if (loading) {
-              return <CircleLoader />;
+              return <CircleLoader />
             }
 
             if (data) {
-              const { users } = data;
+              const { users } = data
               return (
                 <div>
                   <p>Click on a user to view or edit.</p>
@@ -68,9 +68,9 @@ class UserList extends Component {
                           <TableHead>
                             <TableRow>
                               <TableCell>NetId</TableCell>
-                              <TableCell numeric>First Name</TableCell>
-                              <TableCell numeric>Last Name</TableCell>
-                              <TableCell numeric>Admin</TableCell>
+                              <TableCell>First Name</TableCell>
+                              <TableCell>Last Name</TableCell>
+                              <TableCell>Admin</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -86,17 +86,15 @@ class UserList extends Component {
                                   key={user.id}
                                   selected={user.id === selectedId}
                                   onClick={() => {
-                                    this.handleRowSelect(user.id);
+                                    this.handleRowSelect(user.id)
                                   }}
                                 >
                                   <TableCell component="th" scope="row">
                                     {user.netId}
                                   </TableCell>
-                                  <TableCell numeric>
-                                    {user.firstName}
-                                  </TableCell>
-                                  <TableCell numeric>{user.lastName}</TableCell>
-                                  <TableCell numeric>
+                                  <TableCell>{user.firstName}</TableCell>
+                                  <TableCell>{user.lastName}</TableCell>
+                                  <TableCell>
                                     {user.admin ? 'Y' : '--'}
                                   </TableCell>
                                 </TableRow>
@@ -133,9 +131,9 @@ class UserList extends Component {
                       <TableHead>
                         <TableRow>
                           <TableCell>NetId</TableCell>
-                          <TableCell numeric>First Name</TableCell>
-                          <TableCell numeric>Last Name</TableCell>
-                          <TableCell numeric>Admin</TableCell>
+                          <TableCell>First Name</TableCell>
+                          <TableCell>Last Name</TableCell>
+                          <TableCell>Admin</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -151,36 +149,34 @@ class UserList extends Component {
                               key={user.id}
                               selected={user.id === selectedId}
                               onClick={() => {
-                                this.handleRowSelect(user.id);
+                                this.handleRowSelect(user.id)
                               }}
                             >
                               <TableCell component="th" scope="row">
                                 {user.netId}
                               </TableCell>
-                              <TableCell numeric>{user.firstName}</TableCell>
-                              <TableCell numeric>{user.lastName}</TableCell>
-                              <TableCell numeric>
-                                {user.admin ? 'Y' : '--'}
-                              </TableCell>
+                              <TableCell>{user.firstName}</TableCell>
+                              <TableCell>{user.lastName}</TableCell>
+                              <TableCell>{user.admin ? 'Y' : '--'}</TableCell>
                             </TableRow>
                           ))}
                       </TableBody>
                     </Table>
                   </Paper>
                 </div>
-              );
+              )
             }
 
-            return null;
+            return null
           }}
         </Query>
       </div>
-    );
+    )
   }
 }
 
 UserList.propTypes = {
   selectUser: PropTypes.func.isRequired,
-};
+}
 
-export default withStyles(styles)(UserList);
+export default withStyles(styles)(UserList)
